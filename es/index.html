@@ -282,7 +282,7 @@
             <span class="label">Híbrida BM25 + vectores, fusionada con RRF</span>
             <p>Con preguntas reales de clientes recuperó 0 de 5 casos que fallaban: en español, una consulta por palabras clave se comporta como un Y lógico y vacía los candidatos.</p>
             <span class="big">3,6 puntos</span>
-            <p>Todas las variantes de búsqueda cupieron en ese margen. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 12,5 puntos. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
+            <p>Todas las variantes de búsqueda cupieron en ese margen. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 9,7 a 12,5 puntos, según el juez. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
           </div>
           <div class="pane content-pane" data-reveal data-d="1">
             <h3>El contenido</h3>
@@ -481,8 +481,8 @@
         <span class="badge"><i></i>Versión pública</span>
         <h3>rag-eval-bench</h3>
         <p>Un banco de pruebas que decide si un cambio a un RAG sale a producción: un golden set con preguntas que la documentación no responde, un juez LLM, un validador que detecta citas y números inventados y una prueba de McNemar pareada detrás de una compuerta en CI. Corre sobre la documentación pública de Odoo 18.</p>
-        <p>Lo que encontró: la búsqueda híbrida le ganó a la densa por 12,5 puntos, p&nbsp;=&nbsp;0,02. Un reranker sumó 1,4 puntos y subió la latencia p95 de 2,5 s a 8,3 s, así que no sale.</p>
-        <p class="vs-prod">A diferencia de producción, aquí un mismo modelo responde y califica, y el golden set lo redactó un modelo y todavía no lo revisa una persona. El README declara ambos límites.</p>
+        <p>Lo que encontró: la búsqueda híbrida le ganó a la densa por 12,5 puntos, p&nbsp;=&nbsp;0,02. Un segundo juez de otra familia de modelos coincidió en el 94% o más de los veredictos, pero midió la ganancia en 9,7 puntos, p&nbsp;=&nbsp;0,07. La dirección se sostiene y la prueba depende del juez. Un reranker no sumó nada medible y subió la latencia p95 de 2,5 s a 8,3 s, así que no sale.</p>
+        <p class="vs-prod">A diferencia de producción, el juez principal es el mismo modelo que responde, y el golden set lo redactó un modelo y todavía no lo revisa una persona. El README declara ambos límites.</p>
         <div class="facts"><span class="chip">Python</span><span class="chip">BM25 + RRF</span><span class="chip">LLM-as-judge</span><span class="chip">GitHub Actions</span></div>
         <a class="link" href="https://github.com/JessidC/rag-eval-bench" target="_blank" rel="noopener">Código <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
         <a class="link" href="../bench/">Informe <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>

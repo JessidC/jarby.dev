@@ -282,7 +282,7 @@
             <span class="label">Hybrid BM25 + vectors, fused with RRF</span>
             <p>With real customer queries it recovered 0 of 5 failing cases: in Spanish, a keyword query behaves like an AND and empties the candidate pool.</p>
             <span class="big">3.6 points</span>
-            <p>Every retrieval variant fit inside that margin. On the English Odoo docs in <a href="#bench">rag-eval-bench</a> the same technique won by 12.5 points. Same idea, opposite result, which is why every change gets measured on its own data.</p>
+            <p>Every retrieval variant fit inside that margin. On the English Odoo docs in <a href="#bench">rag-eval-bench</a> the same technique won by 9.7 to 12.5 points, depending on the judge. Same idea, opposite result, which is why every change gets measured on its own data.</p>
           </div>
           <div class="pane content-pane" data-reveal data-d="1">
             <h3>The content</h3>
@@ -481,8 +481,8 @@
         <span class="badge"><i></i>Public rebuild</span>
         <h3>rag-eval-bench</h3>
         <p>A bench that decides whether a RAG change ships: a golden set with questions the docs can't answer, an LLM judge, a validator that catches invented citations and numbers, and a paired McNemar test behind a CI gate. It runs on the public Odoo 18 docs.</p>
-        <p>What it found: hybrid retrieval beat dense by 12.5 points, p&nbsp;=&nbsp;0.02. A reranker added 1.4 points and pushed p95 latency from 2.5 s to 8.3 s, so it doesn't ship.</p>
-        <p class="vs-prod">Unlike production, one model answers and judges here, and the golden set was drafted by a model and not yet reviewed by a person. The README lists both limits.</p>
+        <p>What it found: hybrid retrieval beat dense by 12.5 points, p&nbsp;=&nbsp;0.02. A second judge from another model family agreed on 94% or more of the verdicts but put the gain at 9.7 points, p&nbsp;=&nbsp;0.07, so the direction holds and the proof depends on the judge. A reranker added nothing measurable and pushed p95 latency from 2.5 s to 8.3 s, so it doesn't ship.</p>
+        <p class="vs-prod">Unlike production, the main judge is the same model that answers, and the golden set was drafted by a model and not yet reviewed by a person. The README lists both limits.</p>
         <div class="facts"><span class="chip">Python</span><span class="chip">BM25 + RRF</span><span class="chip">LLM-as-judge</span><span class="chip">GitHub Actions</span></div>
         <a class="link" href="https://github.com/JessidC/rag-eval-bench" target="_blank" rel="noopener">Code <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
         <a class="link" href="bench/">Report <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
