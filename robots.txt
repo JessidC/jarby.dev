@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://jarby.dev/sitemap.xml

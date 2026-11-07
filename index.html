@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Jarby Jessid Cosme | Software and AI engineer</title>
 <meta name="description" content="Software and AI engineer in Cali, Colombia. I own the AI that answers SIESA's ERP support chat, about 1,000 conversations a day.">
 <link rel="canonical" href="https://jarby.dev/">
@@ -18,7 +20,7 @@
 <meta name="theme-color" content="#121416" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script src="assets/theme-init.js"></script>
 <link rel="stylesheet" href="assets/site.css">
 </head>
 <body>
@@ -45,14 +47,14 @@
   <section class="hero" aria-labelledby="name">
     <div class="wrap">
       <div>
-        <h1 id="name" data-reveal style="--d:0">Jarby Jessid Cosme</h1>
-        <p class="role" data-reveal style="--d:1">Software and AI engineer. I built and run the AI that answers SIESA's ERP support chat, about 1,000 conversations a day.</p>
-        <div class="cta" data-reveal style="--d:2">
+        <h1 id="name" data-reveal data-d="0">Jarby Jessid Cosme</h1>
+        <p class="role" data-reveal data-d="1">Software and AI engineer. I built and run the AI that answers SIESA's ERP support chat, about 1,000 conversations a day.</p>
+        <div class="cta" data-reveal data-d="2">
           <a class="btn btn-primary" href="#rag">Read the RAG story</a>
           <a class="btn btn-ghost" href="#projects">See the projects</a>
         </div>
       </div>
-      <dl class="now" data-reveal style="--d:3">
+      <dl class="now" data-reveal data-d="3">
         <dt>Now</dt>
         <dd>Running SIESA's support RAG across 15 ERP modules, and Jarvis on top of it</dd>
         <dt>Building</dt>
@@ -70,7 +72,7 @@
         <p class="lead" data-reveal>I've built software for seven years. Full-stack .NET first, and now the AI behind customer support at SIESA, one of the largest ERP vendors in Colombia.</p>
         <div class="prose" data-reveal>
           <p>I like owning a system from the first look at the data to the day it runs without me. At SIESA that meant studying 90 days of conversations, taking a plan to leadership, building the engine and rolling it out one module at a time. The language is whatever the system needs. Mostly Python, C# and TypeScript, with SQL everywhere.</p>
-          <p>I also teach. I trained 16 people and worked with 3 teams as they started using AI in their own work.</p>
+          <p>I also teach and explain. I trained 16 people and worked with 3 teams as they started using AI in their own work, and when the support system changes I brief the support floor, around 90 agents, on what changes for them.</p>
         </div>
         <dl class="facts" data-reveal>
           <div><dt>Now</dt><dd><b>Sole technical owner, AI support platform</b>, SIESA. I designed it, built it and run it in production. At SIESA since March 2022.</dd></div>
@@ -145,18 +147,32 @@
 
         <div class="chapter" data-reveal>
           <h3>It learns from the agents every week</h3>
-          <div class="loop" aria-label="Improvement loop">
-            <div class="box"><b>An agent solves a case</b>One the bot had handed over</div>
-            <div class="box"><b>A judge model reviews it</b>Keeps answers that are correct and reusable</div>
-            <div class="box key"><b>An expert approves it</b>One click in the curation console</div>
-            <div class="box"><b>The next customer gets it</b>Indexed and served by the RAG</div>
+          <p class="prose">When the engine hands a chat to a person, the agent's answer is the best signal of what it was missing. A separate pipeline turns those answers into new knowledge, with an expert deciding what goes in.</p>
+          <div class="loop2">
+            <ol class="pipe">
+              <li><b>An agent closes the chat</b><span>Resolutions reach the engine through a data bridge from the support portal every 30 minutes.</span></li>
+              <li><b>Only real gaps continue</b><span>Handoffs caused by staffing, frustration or risk are dropped before any model call.</span></li>
+              <li><b>A judge reads the agent's turns</b><span>It comes from a different model family than the one that answers. It rebuilds the question and the reusable answer with its evidence, and rejects what can't be documented, like "open a ticket".</span></li>
+              <li><b>Compared with what the engine knows</b><span>Already covered is skipped. A repeat adds demand to the pending item. An answer that contradicts indexed content is flagged as outdated.</span></li>
+              <li class="key"><b>An expert approves or edits it</b><span>From the curation console. Approved answers are served right away, with no reindex.</span></li>
+            </ol>
+            <aside class="guards" aria-label="Guards">
+              <h4>What it never does</h4>
+              <ul>
+                <li>Publish anything an expert hasn't approved</li>
+                <li>Let the answering model grade its own work</li>
+                <li>Pay to judge the same content twice, thanks to a content fingerprint</li>
+                <li>Learn from handoffs that were a staffing problem</li>
+              </ul>
+              <p class="mono-note">About 30 to 60 minutes from a closed chat to a candidate in the queue.</p>
+            </aside>
           </div>
           <div class="loop-result">
             <div class="n"><span class="from">50%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">40%</span></div>
             <p>Human escalation in Commercial, in round numbers, after the loop started feeding it.</p>
           </div>
           <div class="prose">
-            <p>Every handoff to a person becomes material for the next answer. The loop adds about 150 approved answers a week for roughly US$10 a month in model cost, and 44 agent accounts curate from the console, with roles and permissions per module. It is the main reason the engine keeps getting better between releases.</p>
+            <p>It adds about 150 approved answers a week for roughly US$10 a month in model cost, and 44 agent accounts curate from the console with roles and permissions per module. It is the main reason the engine keeps getting better between releases.</p>
           </div>
         </div>
 
@@ -215,7 +231,7 @@
             <span class="status part"><i></i>Under construction</span>
             <h3>Online triage</h3>
             <p>Today a customer picks an ERP module before the chat starts, and that choice is where the bouncing between channels begins. The triage becomes the single entrance. It reads the problem and the customer's open tickets, then sends the case to the RAG or to an L1, L2 or L3 agent with a summary, so nobody starts over.</p>
-            <div class="flow" aria-label="Triage flow">
+            <div class="flow" role="group" aria-label="Triage flow">
               <div class="box"><b>Customer</b>Writes the problem in their own words</div>
               <div class="arrow">then</div>
               <div class="box key"><b>Triage</b>Classifies the request and reads the open tickets</div>
@@ -228,7 +244,7 @@
             <span class="status plan"><i></i>Designed, planned for later</span>
             <h3>RAG v2, tools on customer systems</h3>
             <p>Today the RAG explains the fix and the customer applies it. The second version runs the fix on the customer's installation, a service restart or an update, and every action has its own permission level.</p>
-            <div class="flow" aria-label="RAG v2 flow">
+            <div class="flow" role="group" aria-label="RAG v2 flow">
               <div class="box"><b>Customer problem</b>Arrives through the chat</div>
               <div class="arrow">then</div>
               <div class="box"><b>RAG finds the fix</b>From the docs, as it does today</div>
@@ -241,7 +257,7 @@
           </article>
         </div>
 
-        <div class="small" data-reveal style="margin-top: clamp(64px, 8vw, 96px);">
+        <div class="small small-gap" data-reveal>
           <h3>Smaller things</h3>
           <div class="small-list">
             <div>

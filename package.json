@@ -1,0 +1,16 @@
+{
+  "name": "jarby.dev",
+  "private": true,
+  "description": "Source of jarby.dev. Static HTML and CSS, minified at build time and checked before deploy.",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs _site && html-validate _site/index.html _site/es/index.html _site/404.html",
+    "verify": "npm run build && npm run check"
+  },
+  "devDependencies": {
+    "esbuild": "0.24.2",
+    "html-minifier-terser": "7.2.0",
+    "html-validate": "8.29.0"
+  }
+}

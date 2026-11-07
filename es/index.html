@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Jarby Jessid Cosme | Ingeniero de software e IA</title>
 <meta name="description" content="Ingeniero de software e IA en Cali, Colombia. Soy el responsable de la IA que atiende el chat de soporte del ERP de SIESA, unas 1.000 conversaciones al día.">
 <link rel="canonical" href="https://jarby.dev/es/">
@@ -18,7 +20,7 @@
 <meta name="theme-color" content="#121416" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../assets/fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
-<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<script src="../assets/theme-init.js"></script>
 <link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
@@ -45,14 +47,14 @@
   <section class="hero" aria-labelledby="name">
     <div class="wrap">
       <div>
-        <h1 id="name" data-reveal style="--d:0">Jarby Jessid Cosme</h1>
-        <p class="role" data-reveal style="--d:1">Ingeniero de software e IA. Construí y opero la IA que atiende el chat de soporte del ERP de SIESA, unas 1.000 conversaciones al día.</p>
-        <div class="cta" data-reveal style="--d:2">
+        <h1 id="name" data-reveal data-d="0">Jarby Jessid Cosme</h1>
+        <p class="role" data-reveal data-d="1">Ingeniero de software e IA. Construí y opero la IA que atiende el chat de soporte del ERP de SIESA, unas 1.000 conversaciones al día.</p>
+        <div class="cta" data-reveal data-d="2">
           <a class="btn btn-primary" href="#rag">Leer la historia del RAG</a>
           <a class="btn btn-ghost" href="#proyectos">Ver los proyectos</a>
         </div>
       </div>
-      <dl class="now" data-reveal style="--d:3">
+      <dl class="now" data-reveal data-d="3">
         <dt>Ahora</dt>
         <dd>Opero el RAG de soporte de SIESA en 15 módulos del ERP, y Jarvis encima de él</dd>
         <dt>Construyendo</dt>
@@ -70,7 +72,7 @@
         <p class="lead" data-reveal>Llevo siete años haciendo software. Primero full-stack en .NET y ahora la IA del soporte al cliente de SIESA, uno de los ERP más grandes de Colombia.</p>
         <div class="prose" data-reveal>
           <p>Me gusta hacerme cargo de un sistema desde la primera mirada a los datos hasta el día en que corre sin mí. En SIESA eso fue estudiar 90 días de conversaciones, llevarle un plan a la dirección, construir el motor y salir a producción módulo por módulo. El lenguaje es el que pida el sistema. Sobre todo Python, C# y TypeScript, con SQL en todas partes.</p>
-          <p>También enseño. Formé a 16 personas y acompañé a 3 equipos mientras empezaban a usar IA en su trabajo.</p>
+          <p>También enseño y explico. Formé a 16 personas, acompañé a 3 equipos mientras empezaban a usar IA en su trabajo y, cuando cambia el sistema de soporte, se lo presento a los agentes, unos 90, con lo que cambia para ellos.</p>
         </div>
         <dl class="facts" data-reveal>
           <div><dt>Hoy</dt><dd><b>Único responsable técnico de la plataforma de IA de soporte</b>, SIESA. La diseñé, la construí y la opero en producción. En SIESA desde marzo de 2022.</dd></div>
@@ -145,18 +147,32 @@
 
         <div class="chapter" data-reveal>
           <h3>Aprende de los agentes cada semana</h3>
-          <div class="loop" aria-label="Ciclo de mejora">
-            <div class="box"><b>Un agente resuelve un caso</b>Uno que el bot le había pasado</div>
-            <div class="box"><b>Un modelo juez lo revisa</b>Deja las respuestas correctas y reutilizables</div>
-            <div class="box key"><b>Un experto lo aprueba</b>Un clic en la consola de curación</div>
-            <div class="box"><b>El siguiente cliente lo recibe</b>Queda indexado y el RAG lo usa</div>
+          <p class="prose">Cuando el motor le pasa un chat a una persona, la respuesta del agente es la mejor pista de lo que le faltaba. Un proceso aparte convierte esas respuestas en conocimiento nuevo, y un experto decide qué entra.</p>
+          <div class="loop2">
+            <ol class="pipe">
+              <li><b>El agente cierra el chat</b><span>Las resoluciones llegan al motor por un puente de datos desde el portal de soporte cada 30 minutos.</span></li>
+              <li><b>Solo siguen los vacíos reales</b><span>Los traspasos por falta de personal, frustración o riesgo se descartan antes de cualquier llamada a un modelo.</span></li>
+              <li><b>Un juez lee los turnos del agente</b><span>Es de una familia de modelos distinta a la que responde. Reconstruye la pregunta y la respuesta reutilizable con su evidencia, y descarta lo que no se puede documentar, como "abra un ticket".</span></li>
+              <li><b>Se compara con lo que el motor ya sabe</b><span>Lo que ya está cubierto se salta. Una repetición le suma demanda al pendiente. Una respuesta que contradice lo indexado queda marcada como desactualizada.</span></li>
+              <li class="key"><b>Un experto la aprueba o la edita</b><span>Desde la consola de curación. Lo aprobado se usa de inmediato, sin reindexar.</span></li>
+            </ol>
+            <aside class="guards" aria-label="Controles">
+              <h4>Lo que nunca hace</h4>
+              <ul>
+                <li>Publicar algo que un experto no haya aprobado</li>
+                <li>Dejar que el modelo que responde califique su propio trabajo</li>
+                <li>Pagar dos veces por juzgar el mismo contenido, gracias a una huella por contenido</li>
+                <li>Aprender de traspasos que fueron un problema de personal</li>
+              </ul>
+              <p class="mono-note">Entre 30 y 60 minutos desde que se cierra un chat hasta que hay un candidato en la cola.</p>
+            </aside>
           </div>
           <div class="loop-result">
             <div class="n"><span class="from">50%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">40%</span></div>
             <p>Escalación a humano en Comercial, en números redondos, desde que el ciclo empezó a alimentarlo.</p>
           </div>
           <div class="prose">
-            <p>Cada traspaso a una persona se vuelve material para la siguiente respuesta. El ciclo suma unas 150 respuestas aprobadas por semana por unos US$10 al mes de modelo, y 44 cuentas de agentes curan desde la consola, con roles y permisos por módulo. Es la razón principal de que el motor siga mejorando entre una salida y otra.</p>
+            <p>Suma unas 150 respuestas aprobadas por semana por unos US$10 al mes de modelo, y 44 cuentas de agentes curan desde la consola con roles y permisos por módulo. Es la razón principal de que el motor siga mejorando entre una salida y otra.</p>
           </div>
         </div>
 
@@ -215,7 +231,7 @@
             <span class="status part"><i></i>En construcción</span>
             <h3>Triage en línea</h3>
             <p>Hoy el cliente tiene que escoger un módulo del ERP antes de empezar el chat, y ahí empieza el peloteo entre canales. El triage pasa a ser la única entrada. Entiende el problema, revisa los tickets abiertos del cliente y manda el caso al RAG o a un agente de L1, L2 o L3 con un resumen, para que nadie empiece de cero.</p>
-            <div class="flow" aria-label="Flujo del triage">
+            <div class="flow" role="group" aria-label="Flujo del triage">
               <div class="box"><b>Cliente</b>Escribe el problema con sus palabras</div>
               <div class="arrow">luego</div>
               <div class="box key"><b>Triage</b>Clasifica el pedido y revisa los tickets abiertos</div>
@@ -228,7 +244,7 @@
             <span class="status plan"><i></i>Diseñado, para más adelante</span>
             <h3>RAG v2, herramientas sobre los sistemas del cliente</h3>
             <p>Hoy el RAG explica la solución y el cliente la aplica. La segunda versión la ejecuta en la instalación del cliente, un reinicio de servicio o una actualización, y cada acción tiene su propio nivel de permiso.</p>
-            <div class="flow" aria-label="Flujo del RAG v2">
+            <div class="flow" role="group" aria-label="Flujo del RAG v2">
               <div class="box"><b>Problema del cliente</b>Llega por el chat</div>
               <div class="arrow">luego</div>
               <div class="box"><b>El RAG encuentra la solución</b>En la documentación, como hoy</div>
@@ -241,7 +257,7 @@
           </article>
         </div>
 
-        <div class="small" data-reveal style="margin-top: clamp(64px, 8vw, 96px);">
+        <div class="small small-gap" data-reveal>
           <h3>Trabajos más pequeños</h3>
           <div class="small-list">
             <div>
