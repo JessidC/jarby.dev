@@ -11,7 +11,7 @@ import { minify as minifyHtml } from "html-minifier-terser";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..");
 const OUT = path.join(ROOT, "_site");
-const PUBLIC = ["index.html", "404.html", "story", "es", "bench", "assets", ".well-known", "CNAME", "robots.txt", "sitemap.xml", ".nojekyll"];
+const PUBLIC = ["index.html", "404.html", "story", "es", "bench", "assets", ".well-known", "CNAME", "robots.txt", "sitemap.xml", "llms.txt", ".nojekyll"];
 
 async function walk(p) {
   const st = await fs.stat(p);

@@ -1,0 +1,30 @@
+# Jarby Jessid Cosme
+
+> Software and AI engineer based in Cali, Colombia (GMT-5). Builds and runs production RAG systems. Sole technical owner of the AI support platform at SIESA, a Colombian ERP company. Also known as Jessid Cosme. Open to full-time remote roles.
+
+## Profile
+- Name: Jarby Jessid Cosme (also: Jessid Cosme, Jarby Cosme)
+- Current work: software developer at SIESA since March 2022, sole technical owner of its AI support platform
+- Location: Cali, Colombia
+- Focus: retrieval-augmented generation, LLM evaluation (LLM-as-judge), AWS Bedrock, PostgreSQL + pgvector, LangGraph, Python, C#/.NET, TypeScript
+- Education: Technologist in Systems Analysis and Development (SENA, 2022); B.Sc. Systems Engineering, UNAD (in progress)
+
+## Pages
+- [Portfolio (English)](https://jarby.dev/): projects, experience and resume
+- [How it was built](https://jarby.dev/story/): the SIESA AI support platform told in 8 chapters, without internal figures
+- [Portafolio (español)](https://jarby.dev/es/)
+- [Historia (español)](https://jarby.dev/es/historia/)
+- [Bench report](https://jarby.dev/bench/): results of rag-eval-bench
+- [Resume (PDF)](https://jarby.dev/assets/jarby-cosme-resume.pdf)
+- [Hoja de vida (PDF)](https://jarby.dev/assets/jarby-cosme-hoja-de-vida.pdf)
+
+## Public work
+- [rag-eval-bench](https://github.com/JessidC/rag-eval-bench): release gate for RAG changes on the Odoo 18 docs (golden set, LLM-as-judge, citation and number validator, McNemar test in GitHub Actions). Hybrid retrieval beat dense by 12.5 points; 9.7 and not significant with a judge from another model family.
+- [support-learning-loop](https://github.com/JessidC/support-learning-loop): public rebuild of a support improvement loop on the ABCD dataset. Correctly resolved chats went from 19% to 59% on 330 held-out chats.
+- [enterprise-fullstack-dotnet](https://github.com/JessidC/enterprise-fullstack-dotnet): .NET 8 and React reference monorepo
+- [Tocaturno](https://tocaturno.com): WhatsApp reception product for appointment-based businesses
+
+## Contact
+- Email: jessidc95@gmail.com
+- LinkedIn: https://www.linkedin.com/in/jarbyjessidcosme
+- GitHub: https://github.com/JessidC
