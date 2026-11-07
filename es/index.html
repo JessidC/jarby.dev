@@ -172,7 +172,7 @@
             <p>Escalación a humano en Comercial, en números redondos, desde que el ciclo empezó a alimentarlo.</p>
           </div>
           <div class="prose">
-            <p>Suma unas 150 respuestas aprobadas por semana por unos US$10 al mes de modelo, y 44 cuentas de agentes curan desde la consola con roles y permisos por módulo. Es la razón principal de que el motor siga mejorando entre una salida y otra.</p>
+            <p>Suma unas 150 respuestas aprobadas por semana por unos US$10 al mes de modelo, y 44 cuentas de agentes curan desde la consola con roles y permisos por módulo. Es la razón principal de que el motor siga mejorando entre una salida y otra. Lo rehíce en abierto como <a href="#learnloop">support-learning-loop</a>.</p>
           </div>
         </div>
 
@@ -196,6 +196,20 @@
             <ul class="tags"><li>Python</li><li>BM25 + RRF</li><li>LLM-as-judge</li><li>GitHub Actions</li></ul>
             <div class="links"><a href="https://github.com/JessidC/rag-eval-bench">Código</a><a href="../bench/">Informe</a></div>
           </div>
+        </article>
+
+        <article class="stacked" id="learnloop" data-reveal>
+          <span class="status live"><i></i>Código público</span>
+          <h3>support-learning-loop</h3>
+          <p class="prose">El ciclo de mejora del motor de SIESA, rehecho con datos públicos. Un bot de soporte le pasa a una persona los chats que no puede resolver. Un juez de otra familia de modelos convierte las respuestas de los agentes en candidatos, una verificación descarta lo que el agente no dijo y un experto aprueba cada uno antes de que el bot lo use.</p>
+          <div class="strip" role="group" aria-label="Resultados en 330 chats de prueba">
+            <div><div class="n"><span class="from">19%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">61%</span></div><p>Chats resueltos correctamente</p></div>
+            <div><div class="n"><span class="from">68%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">21%</span></div><p>Chats pasados a una persona</p></div>
+            <div><div class="n"><span class="from">41%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">23%</span></div><p>Parciales o erróneos entre los mostrados</p></div>
+          </div>
+          <p class="prose">Medido con 330 chats de prueba del dataset ABCD, el mismo bot y solo la base de conocimiento cambia. El README también muestra qué salió mal sin revisor: el bot empezó a contestar 5 de 80 casos que necesitaban a una persona.</p>
+          <ul class="tags"><li>Python</li><li>LLM-as-judge</li><li>fastembed</li><li>McNemar</li></ul>
+          <div class="links"><a href="https://github.com/JessidC/support-learning-loop">Código</a></div>
         </article>
 
         <article class="proj flip" data-reveal>

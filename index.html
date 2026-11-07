@@ -172,7 +172,7 @@
             <p>Human escalation in Commercial, in round numbers, after the loop started feeding it.</p>
           </div>
           <div class="prose">
-            <p>It adds about 150 approved answers a week for roughly US$10 a month in model cost, and 44 agent accounts curate from the console with roles and permissions per module. It is the main reason the engine keeps getting better between releases.</p>
+            <p>It adds about 150 approved answers a week for roughly US$10 a month in model cost, and 44 agent accounts curate from the console with roles and permissions per module. It is the main reason the engine keeps getting better between releases. I rebuilt it in the open as <a href="#learnloop">support-learning-loop</a>.</p>
           </div>
         </div>
 
@@ -196,6 +196,20 @@
             <ul class="tags"><li>Python</li><li>BM25 + RRF</li><li>LLM-as-judge</li><li>GitHub Actions</li></ul>
             <div class="links"><a href="https://github.com/JessidC/rag-eval-bench">Code</a><a href="bench/">Report</a></div>
           </div>
+        </article>
+
+        <article class="stacked" id="learnloop" data-reveal>
+          <span class="status live"><i></i>Public code</span>
+          <h3>support-learning-loop</h3>
+          <p class="prose">The improvement loop from the SIESA engine, rebuilt on public data. A support bot hands chats it can't solve to people. A judge from another model family turns the agents' answers into candidate entries, a grounding check rejects anything the agent didn't say, and an expert approves each one before the bot can use it.</p>
+          <div class="strip" role="group" aria-label="Results on 330 held-out chats">
+            <div><div class="n"><span class="from">19%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">61%</span></div><p>Chats resolved correctly</p></div>
+            <div><div class="n"><span class="from">68%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">21%</span></div><p>Chats handed to a person</p></div>
+            <div><div class="n"><span class="from">41%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">23%</span></div><p>Partial or wrong among answers shown</p></div>
+          </div>
+          <p class="prose">Measured on 330 held-out chats from the ABCD dataset, same bot, only the knowledge base changes. The README also shows what went wrong without a reviewer: the bot started answering 5 of 80 cases that needed a person.</p>
+          <ul class="tags"><li>Python</li><li>LLM-as-judge</li><li>fastembed</li><li>McNemar</li></ul>
+          <div class="links"><a href="https://github.com/JessidC/support-learning-loop">Code</a></div>
         </article>
 
         <article class="proj flip" data-reveal>
