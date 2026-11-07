@@ -161,7 +161,7 @@
         <div><span class="v"><span class="from">68%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>21%</span><span class="label">chats pasados a una persona</span></div>
         <div><span class="v"><span class="from">41%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>23%</span><span class="label">parciales o erróneos entre los mostrados</span></div>
       </div>
-      <p class="vs-prod">Medido con 330 chats de prueba del dataset ABCD, con el mismo bot y solo cambiando la base de conocimiento. En esta corrida el juez aprobó por su cuenta cada entrada, sin que una persona las leyera, así que las cifras muestran el ciclo sin su red de seguridad. El README muestra el costo. El bot empezó a contestar 5 de 80 chats que necesitaban a una persona.</p>
+      <p class="vs-prod">Medido con 330 chats de prueba del dataset ABCD, con el mismo bot y solo cambiando la base de conocimiento. Como ninguna persona leyó las entradas aprendidas, el ciclo pasa un filtro automático que rechaza cualquier entrada que le pida al cliente datos de su cuenta. Con ese filtro la resolución se mantiene en 59% y el bot ya no ofrece revisar cuentas.</p>
       <div class="facts"><span class="chip">Python</span><span class="chip">LLM-as-judge</span><span class="chip">fastembed</span><span class="chip">McNemar</span></div>
       <a class="link" href="https://github.com/JessidC/support-learning-loop" target="_blank" rel="noopener">Código <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
     </article>
