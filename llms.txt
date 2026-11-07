@@ -5,6 +5,7 @@
 ## Profile
 - Name: Jarby Jessid Cosme (also: Jessid Cosme, Jarby Cosme)
 - Role: Software and AI Engineer at SIESA (since March 2022)
+- Also described as: AI Engineer, Software Engineer, LLM Engineer, RAG Engineer, Backend Engineer (.NET, Python), Ingeniero de software e IA, Ingeniero de IA, Ingeniero de software
 - Location: Cali, Colombia
 - Focus: retrieval-augmented generation, LLM evaluation (LLM-as-judge), AWS Bedrock, PostgreSQL + pgvector, LangGraph, Python, C#/.NET, TypeScript
 - Education: Technologist in Systems Analysis and Development (SENA, 2022); B.Sc. Systems Engineering, UNAD (in progress)
