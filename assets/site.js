@@ -1,6 +1,13 @@
 // Page behavior. No scroll listeners: everything runs on IntersectionObserver.
 (function () {
   window.siteReady = true;
+
+  // The chapters moved to their own page; old links like /#ch5 still land on the right chapter.
+  var h = location.hash;
+  if (/^#ch[1-8]$/.test(h) && !document.getElementById(h.slice(1))) {
+    var mapLink = document.querySelector('.map a');
+    if (mapLink) { location.replace(mapLink.getAttribute('href').split('#')[0] + h); return; }
+  }
   var root = document.documentElement;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 

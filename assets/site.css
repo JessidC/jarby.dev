@@ -625,3 +625,21 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .toc-code a { display: inline-flex; align-items: center; gap: 6px; width: fit-content; font-family: var(--f-mono); font-size: 0.95rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
 .toc-code a:hover { color: var(--accent); border-color: var(--accent); }
 .toc-code span { color: var(--ink-2); font-size: 0.925rem; }
+
+/* Home: the story summary and its optional call to action */
+.story-cta { margin-top: 26px; display: grid; gap: 10px; justify-items: start; }
+.btn-story { background: var(--accent); border-color: var(--accent); color: var(--bg); font-weight: 600; }
+.btn-story:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); }
+.btn-story .icon { transition: transform .25s var(--ease); }
+.btn-story:hover .icon { transform: translateX(3px); }
+.toc .cta-note { margin-top: 0; font-size: 0.875rem; color: var(--ink-2); max-width: 40ch; }
+
+/* Story page: its own opening and a way back */
+.story-head { padding-block: clamp(56px, 9vw, 104px) clamp(24px, 4vw, 40px); }
+.story-head h1 { font-size: clamp(2.1rem, 3.7vw, 3.25rem); max-width: 20ch; line-height: 1.06; }
+.story-head .lead { margin-top: 20px; max-width: 62ch; color: var(--ink-2); font-size: 1.125rem; line-height: 1.6; }
+.story-head .meta { margin-top: 14px; font-family: var(--f-mono); font-size: 0.8125rem; color: var(--ink-2); }
+.story-end { padding-block: clamp(56px, 8vw, 96px); border-top: 1px solid var(--line); }
+.story-end h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); }
+.story-end p { margin-top: 12px; color: var(--ink-2); max-width: 52ch; }
+.story-end .hero-cta { margin-top: 24px; }
