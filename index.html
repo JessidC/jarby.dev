@@ -124,7 +124,7 @@
 
         <div class="chapter" data-reveal>
           <h3>What changed</h3>
-          <p class="prose">Payroll went first, so it has the longest series and the one I tested for significance. Financial, Commercial and Zeus, the other critical lines, have moved the same way and are tracked with the same metrics.</p>
+          <p class="prose">Payroll went first, so it has the longest series and the one I tested for significance. Financial, Commercial and Zeus, the other critical lines, have moved the same way and are tracked with the same metrics. Commercial's drop came mostly from the improvement loop further down.</p>
           <div class="figures">
             <div class="first"><div class="n"><span class="from">40.2%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">32.7%</span></div><p>Human escalation per chat in Payroll, the first module live. Statistically significant, p = 0.0005.</p></div>
             <div><div class="n"><span class="from">6.95%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">0.25%</span></div><p>Replies that tell the customer to contact support.</p></div>
@@ -138,8 +138,25 @@
           <h3>The fix was in the content</h3>
           <div class="prose">
             <p>Hybrid retrieval looked like the obvious upgrade. I built it, measured it twice on real customer queries and switched it off. In Spanish, a keyword query behaves like an AND and empties the candidate pool, so it recovered 0 of 5 failing cases, and every retrieval variant landed within 3.6 points of the others. On the English Odoo docs in <a href="#bench">rag-eval-bench</a> the same technique won by 12.5 points. Same idea, opposite result, which is why every change gets measured on its own data.</p>
-            <p>So the effort went to the documents. I reprocessed 1,027 of them with multimodal OCR and set up a curation loop where agents approve about 150 new answers a week, from a console 44 agent accounts use.</p>
+            <p>So the effort went to the content. I reprocessed 1,027 documents with multimodal OCR, isolating the fifth of the index an earlier OCR had damaged, and built a loop so the content keeps growing on its own.</p>
             <p>Every change now ships the same way. A golden set per module scored by an LLM judge, an A/B replay on real traces and a significance test before and after. I rebuilt that method in the open as rag-eval-bench.</p>
+          </div>
+        </div>
+
+        <div class="chapter" data-reveal>
+          <h3>It learns from the agents every week</h3>
+          <div class="loop" aria-label="Improvement loop">
+            <div class="box"><b>An agent solves a case</b>One the bot had handed over</div>
+            <div class="box"><b>A judge model reviews it</b>Keeps answers that are correct and reusable</div>
+            <div class="box key"><b>An expert approves it</b>One click in the curation console</div>
+            <div class="box"><b>The next customer gets it</b>Indexed and served by the RAG</div>
+          </div>
+          <div class="loop-result">
+            <div class="n"><span class="from">50%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">40%</span></div>
+            <p>Human escalation in Commercial, in round numbers, after the loop started feeding it.</p>
+          </div>
+          <div class="prose">
+            <p>Every handoff to a person becomes material for the next answer. The loop adds about 150 approved answers a week for roughly US$10 a month in model cost, and 44 agent accounts curate from the console, with roles and permissions per module. It is the main reason the engine keeps getting better between releases.</p>
           </div>
         </div>
 

@@ -124,7 +124,7 @@
 
         <div class="chapter" data-reveal>
           <h3>Lo que cambió</h3>
-          <p class="prose">Nómina salió primero, así que tiene la serie más larga y es la que pasé por una prueba de significancia. Financiero, Comercial y Zeus, las otras líneas críticas, van en la misma dirección y se miden con las mismas métricas.</p>
+          <p class="prose">Nómina salió primero, así que tiene la serie más larga y es la que pasé por una prueba de significancia. Financiero, Comercial y Zeus, las otras líneas críticas, van en la misma dirección y se miden con las mismas métricas. La baja de Comercial vino sobre todo del ciclo de mejora que aparece más abajo.</p>
           <div class="figures">
             <div class="first"><div class="n"><span class="from">40,2%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">32,7%</span></div><p>Escalación a humano por chat en Nómina, el primer módulo en producción. Estadísticamente significativa, p = 0,0005.</p></div>
             <div><div class="n"><span class="from">6,95%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">0,25%</span></div><p>Respuestas que mandan al cliente a contactar a soporte.</p></div>
@@ -138,8 +138,25 @@
           <h3>La solución estaba en el contenido</h3>
           <div class="prose">
             <p>La búsqueda híbrida parecía la mejora obvia. La construí, la medí dos veces con preguntas reales de clientes y la apagué. En español, una consulta por palabras clave se comporta como un Y lógico y vacía los candidatos, así que recuperó 0 de 5 casos que fallaban, y todas las variantes quedaron a menos de 3,6 puntos entre sí. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 12,5 puntos. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
-            <p>Entonces el esfuerzo se fue a los documentos. Reprocesé 1.027 con OCR multimodal y monté un ciclo de curación donde los agentes aprueban unas 150 respuestas nuevas por semana, desde una consola que usan 44 cuentas de agentes.</p>
+            <p>Entonces el esfuerzo se fue al contenido. Reprocesé 1.027 documentos con OCR multimodal, aislando la quinta parte del índice que un OCR anterior había dañado, y monté un ciclo para que el contenido siga creciendo solo.</p>
             <p>Desde entonces todo cambio sale igual. Un golden set por módulo calificado por un juez LLM, una repetición A/B sobre trazas reales y una prueba de significancia antes y después. Ese método lo rehíce en abierto como rag-eval-bench.</p>
+          </div>
+        </div>
+
+        <div class="chapter" data-reveal>
+          <h3>Aprende de los agentes cada semana</h3>
+          <div class="loop" aria-label="Ciclo de mejora">
+            <div class="box"><b>Un agente resuelve un caso</b>Uno que el bot le había pasado</div>
+            <div class="box"><b>Un modelo juez lo revisa</b>Deja las respuestas correctas y reutilizables</div>
+            <div class="box key"><b>Un experto lo aprueba</b>Un clic en la consola de curación</div>
+            <div class="box"><b>El siguiente cliente lo recibe</b>Queda indexado y el RAG lo usa</div>
+          </div>
+          <div class="loop-result">
+            <div class="n"><span class="from">50%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">40%</span></div>
+            <p>Escalación a humano en Comercial, en números redondos, desde que el ciclo empezó a alimentarlo.</p>
+          </div>
+          <div class="prose">
+            <p>Cada traspaso a una persona se vuelve material para la siguiente respuesta. El ciclo suma unas 150 respuestas aprobadas por semana por unos US$10 al mes de modelo, y 44 cuentas de agentes curan desde la consola, con roles y permisos por módulo. Es la razón principal de que el motor siga mejorando entre una salida y otra.</p>
           </div>
         </div>
 
