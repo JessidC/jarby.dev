@@ -581,8 +581,35 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .stakes .v, .stat .v, .cell .v, .cell.big .from, .ops .big-n, .attr .v, .loop-result .big-n, .strip .v, .lever .method-pane .big { font-variant-numeric: proportional-nums; }
 
 /* Narrow phones: the resume button keeps only its icon so the header fits */
+.nav .cv .cv-short { display: none; }
 @media (max-width: 430px) {
-  .nav .cv .cv-t { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .nav .cv .cv-long { display: none; }
+  .nav .cv .cv-short { display: inline; }
   .nav .cv { padding: 8px 10px; }
   .site-head .wrap { gap: 8px; }
+}
+
+/* Hero for a recruiter's first look: role, context, availability and proof */
+.hero h1 { font-size: clamp(2.1rem, 3.7vw, 3.25rem); max-width: 19ch; line-height: 1.06; }
+.hero .hero-kicker { color: var(--ink-2); }
+.hero-links { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 0.925rem; }
+.hero-links a { display: inline-flex; align-items: center; gap: 7px; color: var(--ink-2); text-decoration: none; }
+.hero-links a:hover { color: var(--accent); }
+.proof { margin: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.proof > div { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 16px; align-items: baseline; padding: 18px 22px; }
+.proof > div + div { border-top: 1px solid var(--line); }
+.proof dt { font-family: var(--f-display); font-weight: 650; font-size: 1.45rem; letter-spacing: -0.02em; line-height: 1.1; color: var(--ink); }
+.proof dd { margin: 0; color: var(--ink-2); font-size: 0.95rem; line-height: 1.5; }
+
+/* The chapter map, right before the story starts */
+.toc { padding-block: clamp(56px, 8vw, 88px); border-top: 1px solid var(--line); }
+.toc .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: clamp(32px, 6vw, 88px); align-items: start; }
+.toc h2 { font-size: clamp(1.75rem, 3vw, 2.4rem); max-width: 16ch; }
+.toc p { margin-top: 16px; color: var(--ink-2); max-width: 44ch; }
+@media (max-width: 900px) {
+  .toc .wrap { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 767px) {
+  .proof > div { grid-template-columns: 96px minmax(0, 1fr); padding: 14px 16px; gap: 12px; }
+  .proof dt { font-size: 1.2rem; }
 }
