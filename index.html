@@ -35,7 +35,7 @@
     </nav>
     <div class="tools">
       <a class="chip-btn" href="assets/jarby-cosme-resume.pdf">Resume</a>
-      <a class="chip-btn" href="es/index.html" hreflang="es" lang="es" aria-label="Ver en español">ES</a>
+      <a class="chip-btn" href="es/" hreflang="es" lang="es" aria-label="Ver en español">ES</a>
       <button class="chip-btn" id="theme" type="button" data-dark="Dark" data-light="Light" aria-label="Toggle dark mode">Dark</button>
     </div>
   </div>
@@ -46,7 +46,7 @@
     <div class="wrap">
       <div>
         <h1 id="name" data-reveal style="--d:0">Jarby Jessid Cosme</h1>
-        <p class="role" data-reveal style="--d:1">Software and AI engineer. I own the AI that answers SIESA's ERP support chat, about 1,000 conversations a day.</p>
+        <p class="role" data-reveal style="--d:1">Software and AI engineer. I built and run the AI that answers SIESA's ERP support chat, about 1,000 conversations a day.</p>
         <div class="cta" data-reveal style="--d:2">
           <a class="btn btn-primary" href="#rag">Read the RAG story</a>
           <a class="btn btn-ghost" href="#projects">See the projects</a>
@@ -54,7 +54,7 @@
       </div>
       <dl class="now" data-reveal style="--d:3">
         <dt>Now</dt>
-        <dd>Running SIESA's support RAG in production, 15 ERP modules</dd>
+        <dd>Running SIESA's support RAG, live in 15 ERP modules since July 2026</dd>
         <dt>Building</dt>
         <dd>The online triage that will be every customer's first contact</dd>
         <dt>Looking for</dt>
@@ -67,13 +67,13 @@
     <div class="wrap">
       <h2 class="sec-title" id="profile-t">Profile</h2>
       <div class="sec-body">
-        <p class="lead" data-reveal>I've built software for seven years. Full-stack .NET first, and since 2025 the AI behind customer support at SIESA, one of the largest ERP vendors in Colombia.</p>
+        <p class="lead" data-reveal>I've built software for seven years. Full-stack .NET first, and in 2026 the AI behind customer support at SIESA, one of the largest ERP vendors in Colombia.</p>
         <div class="prose" data-reveal>
-          <p>I like owning a system from the first look at the data to the day it runs without me. At SIESA that meant reading 90 days of chats, taking a business case to leadership, building the engine, shipping it and running it since. The language is whatever the system needs. Mostly Python, C# and TypeScript, with SQL everywhere.</p>
+          <p>I like owning a system from the first look at the data to the day it runs without me. At SIESA that meant studying 90 days of conversations, taking a plan to leadership, building the engine and rolling it out one module at a time. The language is whatever the system needs. Mostly Python, C# and TypeScript, with SQL everywhere.</p>
           <p>I also teach. I trained 16 people and worked with 3 teams as they started using AI in their own work.</p>
         </div>
         <dl class="facts" data-reveal>
-          <div><dt>Now</dt><dd><b>Sole technical owner, AI support platform</b>, SIESA, since May 2026. Software developer at SIESA since March 2022.</dd></div>
+          <div><dt>Now</dt><dd><b>Sole technical owner, AI support platform</b>, SIESA. Built from May 2026, in production since July 2026. Software developer at SIESA since March 2022.</dd></div>
           <div><dt>Before</dt><dd><b>Freelance full-stack developer</b>, 2019 to 2022. Six web apps for Colombian small businesses, one of them a PayU store with US$25K+ in first-year sales.</dd></div>
           <div><dt>Stack</dt><dd>Python, FastAPI, C# and .NET 8, TypeScript, React, SQL Server, PostgreSQL with pgvector, AWS Bedrock, LangGraph, n8n.</dd></div>
           <div><dt>On the side</dt><dd><b>Tocaturno</b>, my own product, plus AI classes and automations for clients.</dd></div>
@@ -88,13 +88,13 @@
     <div class="wrap">
       <h2 class="sec-title" id="rag-t">The RAG story</h2>
       <div class="sec-body">
-        <p class="lead" data-reveal>SIESA's support chat ran on a third-party chatbot nobody could audit. I replaced it with an engine the company owns and can measure. It now answers about 1,000 conversations a day.</p>
+        <p class="lead" data-reveal>SIESA's support chat ran on a third-party chatbot whose answers we couldn't measure or control. I built an engine the company owns. It now answers about 1,000 conversations a day across 15 ERP modules.</p>
 
         <div class="chapter" data-reveal>
           <h3>It started with the data</h3>
           <div class="prose">
-            <p>I pulled 90 days of production conversations, 55,350 chats and about 964K messages, and read what customers actually went through. There was no way to tell whether an answer was right. The model, the retrieval and the citations belonged to the vendor, so a no-invention policy couldn't be enforced from outside. And the worst moment came after the bot, when a customer asked for a person and the handoff stalled.</p>
-            <p>I took that to leadership as a business case with six decisions ranked by impact and cost. The main one was to build our own engine and fix the handoff in the same move.</p>
+            <p>I studied 90 days of production conversations, more than 55,000 chats, to see what customers actually went through. There was no way to tell whether an answer was right, and the model and the sources sat with the vendor, so we couldn't enforce a rule against invented answers. The handoff to a person needed a redesign as much as the bot did.</p>
+            <p>I took that to leadership as a plan with six decisions ranked by impact and cost. The main one was to build our own engine and redesign the handoff at the same time.</p>
           </div>
         </div>
 
@@ -106,25 +106,27 @@
             <li><h4>Retrieve wide, rerank narrow</h4><p>pgvector search filtered by ERP module, then Cohere Rerank keeps the five passages the model reads.</p></li>
             <li><h4>Checked before it goes out</h4><p>Every citation has to exist in what was retrieved. A number that isn't in the sources sends the chat to a person.</p></li>
             <li><h4>Rules before the model</h4><p>About 170 deterministic rules handle greetings, risk and requests for a person before any LLM call.</p></li>
-            <li><h4>Same contract as the old bot</h4><p>The support portal didn't change, so switching over and rolling back were both routine operations.</p></li>
+            <li><h4>Same contract as the old bot</h4><p>The support portal didn't change. Each module could switch to the new engine, or back, with one setting.</p></li>
           </ul>
         </div>
 
         <div class="chapter" data-reveal>
-          <h3>Shipping it, twice</h3>
+          <h3>One module at a time</h3>
           <ol class="timeline">
-            <li><time>Jul 4 to 6</time><b>Shadow run</b><span>772 real conversations, answers hidden. A separate judge preferred the new engine 44% of the time, the old one 40%.</span></li>
-            <li><time>Jul 9</time><b>Switch</b><span>Customers kept the same chat window.</span></li>
-            <li class="back"><time>Jul 14</time><b>Rollback</b><span>Back to the vendor after a complaint from the support desk.</span></li>
-            <li><time>Jul 16</time><b>Switch again</b><span>With the root cause fixed.</span></li>
-            <li class="here"><time>Today</time><b>15 ERP modules</b><span>About 1,000 conversations a day. Reported to leadership and to the CEO.</span></li>
+            <li><time>Jul 4 to 6</time><b>Shadow run</b><span>772 real conversations, answers hidden. An independent judge preferred the new engine 44% of the time, the old one 40%.</span></li>
+            <li><time>Jul 9</time><b>Payroll goes live</b><span>The busiest module first. Customers kept the same chat window.</span></li>
+            <li><time>August</time><b>Financial</b><span>Then the second wave, one module per window.</span></li>
+            <li><time>Sep to Oct</time><b>Commercial and Zeus</b><span>Plus e-invoicing, accounting and the rest.</span></li>
+            <li class="here"><time>Today</time><b>15 ERP modules</b><span>About 1,000 conversations a day.</span></li>
           </ol>
+          <p class="prose after-tl">No module switched without a golden-set score from an LLM judge, smoke tests on the live chat and a rollback that takes one setting.</p>
         </div>
 
         <div class="chapter" data-reveal>
           <h3>What changed</h3>
+          <p class="prose">Payroll went first, so it has the longest series and the one I tested for significance. Financial, Commercial and Zeus, the other critical lines, have moved the same way and are tracked with the same metrics.</p>
           <div class="figures">
-            <div class="first"><div class="n"><span class="from">40.2%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">32.7%</span></div><p>Human escalation per chat in Payroll, the busiest module. Statistically significant, p = 0.0005.</p></div>
+            <div class="first"><div class="n"><span class="from">40.2%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">32.7%</span></div><p>Human escalation per chat in Payroll, the first module live. Statistically significant, p = 0.0005.</p></div>
             <div><div class="n"><span class="from">6.95%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">0.25%</span></div><p>Replies that tell the customer to contact support.</p></div>
             <div><div class="n"><span class="from">71.6%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">89.6%</span></div><p>Answer correctness between evaluation cuts, scored by a human-validated LLM judge.</p></div>
             <div><div class="n"><span class="to">-16%</span></div><p>Cost per turn after adding prompt caching.</p></div>
@@ -135,13 +137,13 @@
         <div class="chapter" data-reveal>
           <h3>The fix was in the content</h3>
           <div class="prose">
-            <p>Hybrid retrieval looked like the obvious upgrade. I built it, measured it twice on real customer queries and switched it off. It recovered 0 of 5 failing cases, and every retrieval variant I tried landed within 3.6 points of the others.</p>
+            <p>Hybrid retrieval looked like the obvious upgrade. I built it, measured it twice on real customer queries and switched it off. In Spanish, a keyword query behaves like an AND and empties the candidate pool, so it recovered 0 of 5 failing cases, and every retrieval variant landed within 3.6 points of the others. On the English Odoo docs in <a href="#bench">rag-eval-bench</a> the same technique won by 12.5 points. Same idea, opposite result, which is why every change gets measured on its own data.</p>
             <p>So the effort went to the documents. I reprocessed 1,027 of them with multimodal OCR and set up a curation loop where agents approve about 150 new answers a week, from a console 44 agent accounts use.</p>
-            <p>Every change now ships the same way. A golden set per module scored by an LLM judge, an A/B replay on real traces and a significance test before and after. I rebuilt that method in the open as <a href="#bench">rag-eval-bench</a>.</p>
+            <p>Every change now ships the same way. A golden set per module scored by an LLM judge, an A/B replay on real traces and a significance test before and after. I rebuilt that method in the open as rag-eval-bench.</p>
           </div>
         </div>
 
-        <p class="note" data-reveal>The platform belongs to SIESA. Figures come from project reports to leadership, July to October 2026. I can walk through the architecture in an interview.</p>
+        <p class="note" data-reveal>The platform belongs to SIESA. Nothing here includes customer data or code. Figures are aggregate results from internal project reports, July to October 2026, and I can walk through the architecture in an interview.</p>
       </div>
     </div>
   </section>
@@ -152,14 +154,14 @@
       <div class="sec-body">
 
         <article class="proj" id="bench" data-reveal>
-          <a class="shot" href="bench/index.html" aria-label="Open the rag-eval-bench report"><img src="assets/img/rag-eval-bench.webp" width="1920" height="1200" alt="rag-eval-bench report comparing five retrieval configurations on accuracy, wrong answers shown, escalation, cost and latency." loading="lazy"></a>
+          <a class="shot" href="bench/" aria-label="Open the rag-eval-bench report"><img src="assets/img/rag-eval-bench.webp" width="1920" height="1200" alt="rag-eval-bench report comparing five retrieval configurations on accuracy, wrong answers shown, escalation, cost and latency." loading="lazy"></a>
           <div>
             <span class="status live"><i></i>Public code</span>
             <h3>rag-eval-bench</h3>
             <p>A bench that decides whether a RAG change ships. Golden set with questions the docs can't answer, an LLM judge, a validator that catches invented citations and numbers, and a paired McNemar test behind a CI gate. It runs on the public Odoo 18 docs.</p>
             <p>What it found. Hybrid retrieval beat dense by 12.5 points, p = 0.02. A reranker added 1.4 points and pushed p95 latency from 2.5 s to 8.3 s, so it doesn't ship.</p>
             <ul class="tags"><li>Python</li><li>BM25 + RRF</li><li>LLM-as-judge</li><li>GitHub Actions</li></ul>
-            <div class="links"><a href="https://github.com/JessidC/rag-eval-bench">Code</a><a href="bench/index.html">Report</a></div>
+            <div class="links"><a href="https://github.com/JessidC/rag-eval-bench">Code</a><a href="bench/">Report</a></div>
           </div>
         </article>
 
@@ -176,14 +178,14 @@
 
         <article class="jarvis" data-reveal>
             <div>
-              <div class="big">41.1%</div>
-              <p class="big-cap">How often the old bot's attribution matched a ticket-by-ticket audit. That gap is why Jarvis exists.</p>
+              <div class="big">$0.002</div>
+              <p class="big-cap">What it costs to judge one conversation with Claude Haiku. It reads all of them, every day.</p>
             </div>
             <div>
               <span class="status part"><i></i>In shadow</span>
               <h3>Jarvis</h3>
-              <p>A daily LLM judge that reads every support conversation and decides who resolved it, the AI, an agent or no one, with the same rule for both. At closing it also types the ticket, replacing the old bot.</p>
-              <p>In shadow since October 21 at about US$0.002 per chat. I rewrote its closing engine in LangGraph with parallel judges, PostgreSQL checkpoints and pauses for human review.</p>
+              <p>A daily LLM judge that reads every support conversation and decides who resolved it, the AI, an agent or no one, with the same rule for both. At closing it also types the ticket. It exists because the attribution we had didn't hold up against a ticket-by-ticket audit.</p>
+              <p>In shadow since October 21. I rewrote its closing engine in LangGraph with parallel judges, PostgreSQL checkpoints and pauses for human review.</p>
               <ul class="tags"><li>Claude Haiku</li><li>LangGraph</li><li>Power BI</li><li>n8n</li></ul>
               <span class="private">Internal to SIESA</span>
             </div>
@@ -241,6 +243,11 @@
               <div class="where">SIESA</div>
               <p>The Jira-style platform more than 500 employees use. I lead its development and merged three internal apps into it.</p>
             </div>
+            <div>
+              <h4>Internal AI assistant</h4>
+              <div class="where">SIESA, 2024 to 2025</div>
+              <p>Support staff, consultants and operations asked questions in plain language over SQL Server, the service platform and Freshdesk tickets. OpenAI with tool calling, prototyped in LangChain.</p>
+            </div>
           </div>
         </div>
 
@@ -266,7 +273,7 @@
 <footer>
   <div class="wrap">
     <span>&copy; 2026 Jarby Jessid Cosme</span>
-    <a href="es/index.html" hreflang="es" lang="es">Versión en español</a>
+    <a href="es/" hreflang="es" lang="es">Versión en español</a>
   </div>
 </footer>
 <script src="assets/site.js"></script>

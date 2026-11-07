@@ -238,7 +238,7 @@ h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.02em; line-height: 
 }
 
 .jarvis { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: clamp(24px, 4vw, 56px); align-items: start; padding: clamp(24px, 3vw, 36px); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
-.jarvis .big { font: 500 clamp(56px, 8vw, 96px)/1 var(--mono); letter-spacing: -0.05em; color: var(--ink); }
+.jarvis .big { font: 500 clamp(44px, 5.6vw, 72px)/1 var(--mono); letter-spacing: -0.05em; color: var(--ink); }
 .jarvis .big-cap { font-size: 15px; color: var(--ink-2); margin-top: 12px; max-width: 30ch; }
 @media (max-width: 860px) { .jarvis { grid-template-columns: 1fr; } }
 
@@ -261,7 +261,7 @@ h1, h2, h3 { margin: 0; font-weight: 700; letter-spacing: -0.02em; line-height: 
 
 /* Smaller work */
 .small h3 { font-size: clamp(20px, 2vw, 24px); margin-bottom: 8px; }
-.small-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px 36px; margin-top: 18px; }
+.small-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 36px; margin-top: 18px; }
 .small-list h4 { margin: 0 0 4px; font-size: 17px; font-weight: 650; letter-spacing: -0.01em; }
 .small-list .where { font: 500 12.5px/1.4 var(--mono); color: var(--muted); margin-bottom: 8px; }
 .small-list p { font-size: 15px; color: var(--ink-2); margin: 0 0 8px; }
@@ -293,3 +293,5 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
   .top .wrap { gap: 12px; }
   .tools { gap: 6px; }
 }
+
+.after-tl { margin-top: 22px; }
