@@ -82,7 +82,7 @@
     <dl class="proof" data-reveal data-d="2">
         <div><dt>7+ años</dt><dd>Haciendo software. Full-stack en .NET desde 2019, en SIESA desde 2022.</dd></div>
         <div><dt>~1.000/día</dt><dd>Conversaciones de clientes que atiende el RAG que construí, en 15 módulos del ERP.</dd></div>
-        <div><dt>&minus;7,5 pts</dt><dd>Escalación a humano en Nómina, de 40,2% a 32,7%, 19% menos. Comercial de 50% a 40%. CSAT de 30% a 64%.</dd></div>
+        <div><dt>&minus;7,5 pts</dt><dd>Escalación a humano en Nómina, de 40,2% a 32,7%, 19% menos. Comercial de 50% a 40%. CSAT de 30% a 64% tras rediseñar el traspaso.</dd></div>
         <div><dt>Stack</dt><dd>Python, AWS Bedrock, PostgreSQL + pgvector, LangGraph, C#/.NET, TypeScript.</dd></div>
     </dl>
   </div>
@@ -218,7 +218,7 @@
             <summary><span class="mono">07</span><h3>Modo sombra antes del cambio</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
             <div class="body">
               <div><span class="label">Por qué</span><p>Ningún cliente debía ser la prueba. El motor nuevo respondió tráfico real en paralelo, sin mostrar las respuestas, y un juez independiente comparó los dos.</p></div>
-              <div class="note"><span class="label">En la práctica</span><p>772 conversaciones reales antes de salir: el juez prefirió el motor nuevo el 44% de las veces y el anterior el 40%.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>772 conversaciones reales antes de salir: el juez prefirió el motor nuevo el 44% de las veces y el anterior el 40%. Esa diferencia no es significativa por sí sola. Alcanzó para empezar con un módulo, y la prueba de significancia vino después de salir, en el capítulo 5.</p></div>
             </div>
           </details>
         </div>
@@ -289,7 +289,7 @@
             <span class="label">Híbrida BM25 + vectores, fusionada con RRF</span>
             <p>Con preguntas reales de clientes recuperó 0 de 5 casos que fallaban: en español, una consulta por palabras clave se comporta como un Y lógico y vacía los candidatos.</p>
             <span class="big">3,6 puntos</span>
-            <p>Todas las variantes de búsqueda cupieron en ese margen. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 9,7 a 12,5 puntos, según el juez. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
+            <p>La mayor diferencia entre dos variantes de búsqueda con preguntas reales, muy poca para justificar el cambio. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 9,7 a 12,5 puntos según el juez, y solo fue significativa con el primero. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
           </div>
           <div class="pane content-pane" data-reveal data-d="1">
             <h3>El contenido</h3>
@@ -395,7 +395,7 @@
           </div>
           <div data-reveal data-d="1">
             <h3>Rediseñar el traspaso</h3>
-            <p>Un tope de chats simultáneos por agente, orden real de llegada y balanceo de carga entre equipos. El CSAT pasó de 30% a 64%, medido con la encuesta semanal que salió con el piloto.</p>
+            <p>Un tope de chats simultáneos por agente, orden real de llegada y balanceo de carga entre equipos. El CSAT pasó de 30% a 64%, medido con la encuesta semanal que salió con el piloto. Esa mejora viene del rediseño del servicio, no del modelo.</p>
             <p>El ruteo primario a agentes bajó la primera respuesta de 20,2 a 15,2 minutos y la carga máxima por agente de 27 a 20 chats.</p>
           </div>
         </div>
@@ -489,7 +489,7 @@
         <h3>rag-eval-bench</h3>
         <p>Un banco de pruebas que decide si un cambio a un RAG sale a producción: un golden set con preguntas que la documentación no responde, un juez LLM, un validador que detecta citas y números inventados y una prueba de McNemar pareada detrás de una compuerta en CI. Corre sobre la documentación pública de Odoo 18.</p>
         <p>Lo que encontró: la búsqueda híbrida le ganó a la densa por 12,5 puntos (p&nbsp;=&nbsp;0,02). Con un juez de otra familia de modelos la ganancia baja a 9,7 puntos y deja de ser significativa. Un reranker no sumó nada y subió la latencia p95 de 2,5&nbsp;s a 8,3&nbsp;s, así que no sale.</p>
-        <p class="vs-prod">A diferencia de producción, el juez principal es el mismo modelo que responde, y el golden set lo redactó un modelo y todavía no lo revisa una persona. El README declara ambos límites.</p>
+        <p class="vs-prod">A diferencia de producción, el juez principal es el mismo modelo que responde, y el golden set lo redactó un modelo y todavía no lo revisa una persona. El README declara ambos límites. Producción sí usa un reranker, sobre otro corpus: manuales en español con páginas escaneadas. Lo que muestra el bench es que esa decisión se mide en cada corpus.</p>
         <div class="facts"><span class="chip">Python</span><span class="chip">BM25 + RRF</span><span class="chip">LLM-as-judge</span><span class="chip">GitHub Actions</span></div>
         <a class="link" href="https://github.com/JessidC/rag-eval-bench" target="_blank" rel="noopener">Código <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
         <a class="link" href="../bench/">Informe <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
