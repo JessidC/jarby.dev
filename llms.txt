@@ -4,7 +4,7 @@
 
 ## Profile
 - Name: Jarby Jessid Cosme (also: Jessid Cosme, Jarby Cosme)
-- Current work: software developer at SIESA since March 2022, sole technical owner of its AI support platform
+- Role: Software and AI Engineer at SIESA (since March 2022)
 - Location: Cali, Colombia
 - Focus: retrieval-augmented generation, LLM evaluation (LLM-as-judge), AWS Bedrock, PostgreSQL + pgvector, LangGraph, Python, C#/.NET, TypeScript
 - Education: Technologist in Systems Analysis and Development (SENA, 2022); B.Sc. Systems Engineering, UNAD (in progress)
