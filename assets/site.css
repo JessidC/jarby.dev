@@ -616,3 +616,12 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 
 /* What a public rebuild changes compared with production */
 .vs-prod { margin-top: 14px; padding-left: 14px; border-left: 2px solid var(--line); color: var(--ink-2); font-size: 0.925rem; line-height: 1.55; }
+
+/* The public repos, visible right after the first screen */
+.toc-code { margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--line); max-width: 44ch; }
+.toc .toc-code .label { margin: 0 0 10px; }
+.toc-code ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.toc-code li { display: grid; gap: 2px; }
+.toc-code a { display: inline-flex; align-items: center; gap: 6px; width: fit-content; font-family: var(--f-mono); font-size: 0.95rem; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--line); }
+.toc-code a:hover { color: var(--accent); border-color: var(--accent); }
+.toc-code span { color: var(--ink-2); font-size: 0.925rem; }
