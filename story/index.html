@@ -6,14 +6,14 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>How it was built, in 8 chapters | Jarby Jessid Cosme</title>
-<meta name="description" content="How I built and run the AI behind SIESA's ERP support chat, decision by decision: the data, the engine, the rollout, the measurement, the loop that keeps it improving, and what comes next.">
+<meta name="description" content="How I built and run the AI behind an ERP support chat, decision by decision: the data, the engine, the rollout, the measurement, the loop that keeps it improving, and what comes next.">
 <link rel="canonical" href="https://jarby.dev/story/">
 <link rel="alternate" hreflang="en" href="https://jarby.dev/story/">
 <link rel="alternate" hreflang="es" href="https://jarby.dev/es/historia/">
 <link rel="alternate" hreflang="x-default" href="https://jarby.dev/story/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Jarby Jessid Cosme | One AI platform, decision by decision">
-<meta property="og:description" content="A production RAG across 15 ERP modules, the evaluation behind every release and the systems built on top of it, told as the chain of decisions behind them.">
+<meta property="og:description" content="A production RAG for an ERP support chat, the evaluation behind every release and the systems built on top of it, told as the chain of decisions behind them.">
 <meta property="og:url" content="https://jarby.dev/story/">
 <meta property="og:image" content="https://jarby.dev/assets/og-en.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -65,7 +65,7 @@
 <section class="story-head" id="top">
   <div class="wrap">
     <h1>One AI platform, decision by decision.</h1>
-    <p class="lead">SIESA's support chat ran on a third-party bot nobody could measure. I read 90 days of its conversations, built an engine the company owns, shipped it one module at a time and measured every release. Today the agents teach it every week, and the next step is one entrance for every customer.</p>
+    <p class="lead">The ERP support chat I work on ran on a bot nobody could measure. I read 90 days of its conversations, built an engine the company owns, shipped it one module at a time and measured every release. Today the agents teach it every week, and the next step is one entrance for every customer.</p>
     <p class="meta">8 chapters, about a minute each.</p>
   </div>
 </section>
@@ -91,17 +91,17 @@
         <p class="ch-num">01</p>
         <h2 id="ch1-t" data-reveal>Read the data before trusting any model.</h2>
         <div class="stakes" data-reveal data-d="1">
-          <div><span class="v">10,000+</span><span class="label">client companies, in Colombia and other countries</span></div>
+          <div><span class="v">ERP</span><span class="label">for large companies, in Colombia and other countries</span></div>
           <div>
-            <p><strong>What was at stake.</strong> SIESA is one of the largest ERP vendors in Colombia for large companies. Its software runs their payroll, finance and operations, so when a client gets stuck, the support chat decides whether that company's day moves or stops.</p>
+            <p><strong>What was at stake.</strong> The company builds ERP software for large companies. It runs their payroll, finance and operations, so when a client gets stuck, the support chat decides whether that company's day moves or stops.</p>
             <p>Support quality weighs on every renewal. I own the platform that answers those chats, so making that service better was my job.</p>
           </div>
         </div>
-        <p class="lead" data-reveal data-d="2">That chat ran on a third-party chatbot whose answers we couldn't measure or control. I started by pulling its production conversations and reading what clients actually went through.</p>
+        <p class="lead" data-reveal data-d="2">That chat ran on a chatbot whose answers we couldn't measure or control. I started by pulling its production conversations and reading what clients actually went through.</p>
 
         <div class="stats" data-reveal data-d="2">
           <div class="stat"><span class="v">90 days</span><span class="label">of production data</span></div>
-          <div class="stat"><span class="v">55,000+</span><span class="label">chats analyzed</span></div>
+          <div class="stat"><span class="v w">Every chat</span><span class="label">in that window, not a sample</span></div>
           <div class="stat"><span class="v">6</span><span class="label">proposals taken to leadership</span></div>
         </div>
 
@@ -109,7 +109,7 @@
           <h3 data-reveal>What the data showed</h3>
           <ol>
             <li data-reveal><p><strong>A black box.</strong> There was no way to know whether an answer was correct. Quality could not be managed, only guessed.</p></li>
-            <li data-reveal data-d="1"><p><strong>No control over sources.</strong> The model and the sources sat with the vendor, so a rule against invented answers could not be enforced from outside.</p></li>
+            <li data-reveal data-d="1"><p><strong>No control over sources.</strong> We couldn't see or change what it answered from, so a rule against invented answers could not be enforced.</p></li>
             <li data-reveal data-d="2"><p><strong>The handoff mattered as much as the bot.</strong> When customers asked for a person, the handoff to agents needed a redesign of its own.</p></li>
           </ol>
         </div>
@@ -130,14 +130,14 @@
             <summary><span class="mono">01</span><h3>No framework in the request path</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
             <div class="body">
               <div><span class="label">Why</span><p>I needed full control over latency, token cost and traceability. Every abstraction between me and the model is something I can't measure or debug.</p></div>
-              <div class="note"><span class="label">In practice</span><p>Python and FastAPI straight on the model API. Frameworks are great for orchestration around the engine, and Jarvis uses LangGraph, but the answer path had to be audited line by line.</p></div>
+              <div class="note"><span class="label">In practice</span><p>Plain Python straight on the model API. Frameworks are great for orchestration around the engine, and Jarvis uses LangGraph, but the answer path had to be audited line by line.</p></div>
             </div>
           </details>
           <details name="log">
-            <summary><span class="mono">02</span><h3>Claude on AWS Bedrock, running on EC2</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <summary><span class="mono">02</span><h3>A managed model inside the company's cloud</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
             <div class="body">
-              <div><span class="label">Why</span><p>SIESA already ran on AWS. Billing, permissions and secrets stayed inside the account the company already had, with no new vendor to bring in.</p></div>
-              <div class="note"><span class="label">In practice</span><p>Claude Sonnet answers the customer. Claude Haiku rewrites follow-up questions, writes context at ingestion and reads scanned pages. A Sonnet versus Haiku benchmark on quality, latency, cost and escalation backs the split.</p></div>
+              <div><span class="label">Why</span><p>Billing, permissions and secrets stayed inside the cloud account the company already had, with no new vendor to bring in.</p></div>
+              <div class="note"><span class="label">In practice</span><p>A larger model answers the customer. A smaller, faster one rewrites follow-up questions, writes context at ingestion and reads scanned pages. A benchmark between the two on quality, latency, cost and escalation backs the split.</p></div>
             </div>
           </details>
           <details name="log">
@@ -150,8 +150,8 @@
           <details name="log">
             <summary><span class="mono">04</span><h3>Dense retrieval, then a reranker</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
             <div class="body">
-              <div><span class="label">Why</span><p>Retrieval is cheap and wide; a cross-encoder is expensive and precise. Retrieve broadly, then let Cohere Rerank choose what the model actually reads.</p></div>
-              <div class="note"><span class="label">In practice</span><p>pgvector with an HNSW index, top 20 filtered by ERP module, reranked to the top 5 with reserved slots for curated answers and process templates. Chapter 4 covers the alternative I built and retired.</p></div>
+              <div><span class="label">Why</span><p>Retrieval is cheap and wide; a cross-encoder is expensive and precise. Retrieve broadly, then let a reranker choose what the model actually reads.</p></div>
+              <div class="note"><span class="label">In practice</span><p>A vector index filtered by ERP module returns a wide pool, and the reranker keeps the few passages the model reads, with reserved slots for curated answers and process templates. Chapter 4 covers the alternative I built and retired.</p></div>
             </div>
           </details>
           <details name="log">
@@ -165,14 +165,14 @@
             <summary><span class="mono">06</span><h3>Hand over honestly instead of inventing</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
             <div class="body">
               <div><span class="label">Why</span><p>A confident wrong answer is worse than a clean handoff. When the evidence is weak, the engine says so.</p></div>
-              <div class="note"><span class="label">In practice</span><p>About 170 deterministic rules decide before the model: asks for a person, closing, risk, out of scope. Below a confidence floor the engine rescues from the last useful turn, uses a process template or offers an advisor, and the model can hand over with a reason.</p></div>
+              <div class="note"><span class="label">In practice</span><p>Deterministic rules decide before the model: asks for a person, closing, risk, out of scope. Below a confidence floor the engine rescues from the last useful turn, uses a process template or offers an advisor, and the model can hand over with a reason.</p></div>
             </div>
           </details>
           <details name="log">
             <summary><span class="mono">07</span><h3>Shadow mode before the switch</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
             <div class="body">
               <div><span class="label">Why</span><p>No customer should be the test. The new engine answered real traffic in parallel, without being shown, and an independent judge compared both engines.</p></div>
-              <div class="note"><span class="label">In practice</span><p>772 real conversations before launch: the judge preferred the new engine 44% of the time, against 40% for the old one. That gap is not significant on its own. It was enough to start with one module, and the significance test came after launch, in chapter 5.</p></div>
+              <div class="note"><span class="label">In practice</span><p>Hundreds of real conversations before launch. The judge preferred the new engine a little more often than the old one, a gap that isn't significant on its own. It was enough to start with one module, and the significance test came after launch, in chapter 5.</p></div>
             </div>
           </details>
         </div>
@@ -191,11 +191,11 @@
             </div>
             <ol class="steps">
               <li class="step"><span class="dot"></span><span class="k">Rules</span><span class="d">Deterministic intent rules handle greetings, closings, risk and requests for a person before any model call.</span></li>
-              <li class="step"><span class="dot"></span><span class="k">Rewrite</span><span class="d">Haiku turns a follow-up like "it still fails" into a standalone question.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Rewrite</span><span class="d">A small model turns a follow-up like "it still fails" into a standalone question.</span></li>
               <li class="step branch"><span class="dot"></span><span class="k">Curated answer</span><span class="d">A close match with an expert-approved answer is returned as written, with no generation.</span></li>
-              <li class="step"><span class="dot"></span><span class="k">Retrieve</span><span class="d"><span class="mono">pgvector</span> search, filtered by ERP module.</span></li>
-              <li class="step"><span class="dot"></span><span class="k">Rerank</span><span class="d">Cohere Rerank keeps the top 5. Below a confidence floor, the engine rescues or hands over instead of guessing.</span></li>
-              <li class="step"><span class="dot"></span><span class="k">Generate</span><span class="d">Sonnet answers from the sources, with prompt caching and a tool to hand over to a person.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Retrieve</span><span class="d">Vector search, filtered by ERP module.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Rerank</span><span class="d">A reranker keeps the best few. Below a confidence floor, the engine rescues or hands over instead of guessing.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Generate</span><span class="d">The main model answers from the sources, with prompt caching and a tool to hand over to a person.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Validate</span><span class="d">Citations, numbers and grounding are checked against what was retrieved.</span></li>
             </ol>
             <div class="outs">
@@ -208,12 +208,12 @@
             <div data-reveal data-d="2">
               <h3>Ingestion</h3>
               <p>PDF and DOCX parsing, with multimodal OCR for scanned pages. Semantic chunking, and a line of document context written on every chunk before it is embedded. Documents are idempotent by hash, chunks are versioned, and dated figures carry a validity mark so expired values are never served.</p>
-              <div class="chips"><span class="chip">Titan Embeddings</span><span class="chip">Contextual retrieval</span></div>
+              <div class="chips"><span class="chip">Multimodal OCR</span><span class="chip">Contextual retrieval</span></div>
             </div>
             <div data-reveal data-d="3">
-              <h3>Infrastructure</h3>
-              <p>Python services on AWS, deployed with systemd. PostgreSQL holds the vectors.</p>
-              <div class="chips"><span class="chip">FastAPI</span><span class="chip">Bedrock</span><span class="chip">EC2</span><span class="chip">pgvector</span></div>
+              <h3>Operations</h3>
+              <p>Every stage is traced with latency, tokens and cost. Each module can move to the new engine, or back, with one setting.</p>
+              <div class="chips"><span class="chip">Tracing</span><span class="chip">Cost per turn</span><span class="chip">One-setting rollback</span></div>
             </div>
           </div>
         </div>
@@ -222,8 +222,8 @@
           <li><span class="when">Before launch</span><span class="what">Shadow run</span><span class="why">Real traffic, answers not shown.</span></li>
           <li><span class="when">Wave 1</span><span class="what">Payroll</span><span class="why">The busiest module first. Customers kept the same chat.</span></li>
           <li><span class="when">Wave 2</span><span class="what">Financial</span><span class="why">One module per release window.</span></li>
-          <li><span class="when">Wave 3</span><span class="what">Commercial and Zeus modules</span><span class="why">Plus e-invoicing, accounting and the rest.</span></li>
-          <li><span class="when">Now</span><span class="what">15 ERP modules</span><span class="why">About 1,000 conversations a day.</span></li>
+          <li><span class="when">Wave 3</span><span class="what">Commercial</span><span class="why">Then e-invoicing, accounting and the rest.</span></li>
+          <li><span class="when">Now</span><span class="what">Every ERP module</span><span class="why">The whole support chat runs on it.</span></li>
         </ol>
 
         <div class="exec" data-reveal>
@@ -241,18 +241,18 @@
           <div class="pane method-pane" data-reveal>
             <h3>The method</h3>
             <span class="label">Hybrid BM25 + vectors, fused with RRF</span>
-            <p>With real customer queries it recovered 0 of 5 failing cases: in Spanish, a keyword query behaves like an AND and empties the candidate pool.</p>
-            <span class="big">3.6 points</span>
-            <p>The widest gap between any two retrieval variants on real queries, too small to justify the change. On the English Odoo docs in <a href="../#bench">rag-eval-bench</a> the same technique won by 9.7 to 12.5 points depending on the judge, significant only with the first. Same idea, opposite result, which is why every change gets measured on its own data.</p>
+            <p>On real customer queries it didn't recover any of the failing cases I tested: in Spanish, a keyword query behaves like an AND and empties the candidate pool.</p>
+            <span class="big w">Within noise</span>
+            <p>Every retrieval variant I tried on real queries landed close to the others, too close to justify the change. On the English Odoo docs in <a href="../#bench">rag-eval-bench</a> the same technique won by 9.7 to 12.5 points depending on the judge, significant only with the first. Same idea, opposite result, which is why every change gets measured on its own data.</p>
           </div>
           <div class="pane content-pane" data-reveal data-d="1">
             <h3>The content</h3>
             <span class="label">Where the effort went instead</span>
             <ul>
-              <li><p><strong>1,027 documents reprocessed</strong> with multimodal OCR, isolating the fifth of the index an earlier OCR had damaged.</p></li>
+              <li><p><strong>The whole document base reprocessed</strong> with multimodal OCR, isolating the part of the index an earlier OCR had damaged.</p></li>
               <li><p><strong>An improvement loop</strong> that turns the agents' answers into new knowledge every week. <a href="#ch6">Chapter 6</a> tells how it works.</p></li>
-              <li><p><strong>A curation console</strong> with roles and per-module permissions, used by 44 agent accounts.</p></li>
-              <li><p><strong>Fixes found by replay.</strong> One corrected index setting made 15% of the low-confidence handoffs answerable, without a single case getting worse.</p></li>
+              <li><p><strong>A curation console</strong> with roles and per-module permissions, used by the support agents.</p></li>
+              <li><p><strong>Fixes found by replay.</strong> One corrected index setting turned part of the low-confidence handoffs into answers, without a single case getting worse.</p></li>
             </ul>
           </div>
         </div>
@@ -261,34 +261,31 @@
       <section class="chapter" id="ch5" aria-labelledby="ch5-t">
         <p class="ch-num">05</p>
         <h2 id="ch5-t" data-reveal>Measure every release like a product.</h2>
-        <p class="lead" data-reveal data-d="1">Nothing goes to production without a baseline, a replay and a way back. Payroll went first, so it has the longest series and the one I tested for significance. Financial, Commercial and the Zeus modules, the other critical lines, have moved the same way.</p>
+        <p class="lead" data-reveal data-d="1">Nothing goes to production without a baseline, a replay and a way back. Payroll went first, so it has the longest series and the one I tested for significance. Financial and Commercial, the other critical lines, have moved the same way.</p>
 
         <div class="score">
           <div class="cell big" data-reveal data-d="1">
-            <div>
-              <span class="from">40.2% <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
-              <span class="v"><span aria-hidden="true" data-count data-from="40.2" data-to="32.7" data-dec="1" data-suffix="%">32.7%</span><span class="sr">32.7%</span></span>
-            </div>
-            <p>Human escalation per chat in Payroll, the first module live. 19% fewer, statistically significant (p&nbsp;=&nbsp;0.0005).</p>
+            <span class="v w">Fewer chats need a person</span>
+            <p>Human escalation per chat fell in Payroll, the first module live, and the drop passed a significance test.</p>
           </div>
           <div class="cell" data-reveal data-d="2">
-            <span class="v">0.25%</span>
-            <p>Of replies now send the customer to "contact support", down from 6.95%.</p>
+            <span class="v w">Rare</span>
+            <p>Replies that send the customer to "contact support". Before the new engine they were a common way out.</p>
           </div>
           <div class="cell" data-reveal data-d="3">
-            <span class="v">89.6%</span>
-            <p>Answer correctness, up from 71.6% across two evaluation cuts of 257 and 548 conversations, scored by a human-validated LLM judge.</p>
+            <span class="v w">Correctness up</span>
+            <p>Answer correctness rose between two evaluation cuts of real conversations, scored by an LLM judge validated against people.</p>
           </div>
           <div class="cell wide" data-reveal data-d="4">
-            <span class="v">&minus;16%</span>
-            <p>Cost per turn after adding prompt caching. Every model call is metered.</p>
+            <span class="v w">Metered</span>
+            <p>Every model call. Prompt caching lowered the cost per turn, and the trace shows where each cent goes.</p>
           </div>
         </div>
 
         <div class="method">
           <h3 data-reveal>How it's measured</h3>
           <div data-reveal data-d="1">
-            <p>Each module has a golden set of 30 cases scored by an LLM judge, and the score gates the release. Every change is replayed A/B on real traces first, and before and after comparisons get significance tests.</p>
+            <p>Each module has a golden set scored by an LLM judge, and the score gates the release. Every change is replayed A/B on real traces first, and before and after comparisons get significance tests.</p>
             <p>Two judges, on purpose: a blind judge from a different model family, so the generator never grades its own family, and a judge anchored on the retrieved evidence. A simpler version of this method is public as <a href="../#bench">rag-eval-bench</a>. Its card below says what differs from production.</p>
           </div>
         </div>
@@ -306,7 +303,7 @@
               <button class="replay" type="button"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Replay</button>
             </div>
             <ol class="pipe">
-              <li><span><b>An agent closes the chat</b>Resolutions reach the engine through a data bridge from the support portal every 30 minutes.</span></li>
+              <li><span><b>An agent closes the chat</b>Resolutions reach the engine through a scheduled data bridge from the support portal.</span></li>
               <li><span><b>Only real gaps continue</b>Handoffs caused by staffing, frustration or risk are dropped before any model call.</span></li>
               <li><span><b>A judge reads the agent's turns</b>From a different model family than the one that answers. It rebuilds the question and the reusable answer with its evidence, and rejects what can't be documented, like "open a ticket".</span></li>
               <li><span><b>Compared with what the engine knows</b>Already covered is skipped. A repeat adds demand to the pending item. An answer that contradicts indexed content is flagged as outdated.</span></li>
@@ -321,17 +318,17 @@
               <li>Pay to judge the same content twice, thanks to a content fingerprint</li>
               <li>Learn from handoffs that were a staffing problem</li>
             </ul>
-            <span class="label">About 30 to 60 minutes from a closed chat to a candidate in the queue.</span>
+            <span class="label">Within the hour, a closed chat becomes a candidate in the queue.</span>
           </aside>
         </div>
 
         <div class="loop-result">
-          <div class="big-n" data-reveal>
-            <span class="from">50%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><span class="accent">40%</span>
-            <span class="label">human escalation in Commercial, in round numbers</span>
+          <div class="big-n w" data-reveal>
+            <span class="from">Handoffs</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><span class="accent">answers</span>
+            <span class="label">what the loop turns the agents' work into, every week</span>
           </div>
           <div data-reveal data-d="1">
-            <p>The loop was the main change in Commercial during that period. It adds about 150 approved answers a week for roughly US$10 a month in model cost, and 44 agent accounts curate from the console with roles and permissions per module.</p>
+            <p>Escalation in Commercial dropped while the loop was the main change there. New approved answers arrive every week for a model cost that barely shows on the bill, and the agents curate from the console with roles and permissions per module.</p>
             <p>It is the main reason the engine keeps improving between releases. I rebuilt it in the open as <a href="../#learnloop">support-learning-loop</a>.</p>
           </div>
         </div>
@@ -343,14 +340,14 @@
         <p class="lead" data-reveal data-d="1">An engine is one piece of a service. With the RAG live, I went after what happens around every conversation.</p>
 
         <div class="ops">
-          <div class="big-n" data-reveal>
-            <span class="from">30%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><span class="accent">64%</span>
-            <span class="label">customer-service CSAT</span>
+          <div class="big-n w" data-reveal>
+            <span class="from">CSAT</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><span class="accent">up</span>
+            <span class="label">customer satisfaction in the weekly survey, after the handoff redesign</span>
           </div>
           <div data-reveal data-d="1">
             <h3>Redesigning the handoff</h3>
-            <p>A cap on concurrent chats per agent, true first-in, first-out by arrival time, and load balancing across teams. CSAT went from 30% to 64%, measured with the weekly survey launched with the pilot. That gain comes from the service redesign, not from the model.</p>
-            <p>Primary routing to agents cut first response from 20.2 to 15.2 minutes and peak load per agent from 27 to 20 chats.</p>
+            <p>A cap on concurrent chats per agent, true first-in, first-out by arrival time, and load balancing across teams. Customer satisfaction rose clearly in the weekly survey launched with the pilot. That gain comes from the service redesign, not from the model.</p>
+            <p>Primary routing to agents shortened the first response and lowered the peak load per agent.</p>
           </div>
         </div>
 
@@ -359,15 +356,15 @@
           <p data-reveal data-d="1">The judge of the support service, in production. Every day it reads each conversation and decides who resolved it, the AI, an agent or no one, with the same rule for both. At closing it types the ticket, replacing a classifier whose attribution didn't hold up against a ticket-by-ticket audit.</p>
           <div class="jarvis-grid">
             <div class="attr" data-reveal>
-              <span class="v">$0.002</span>
-              <p>What it costs to judge one conversation. It reads all of them, every day.</p>
+              <span class="v w">Every chat</span>
+              <p>It reads all of them, every day, for a fraction of a cent each.</p>
             </div>
             <div data-reveal data-d="1">
-              <p>It grew out of the conversation judge I already ran on the RAG's data. Same engine, now orchestrated in LangGraph with typed state, parallel judges, PostgreSQL checkpoints and pauses for human review. Results go to Power BI and to a daily report the support team reads in Teams.</p>
-              <div class="facts-inline"><span class="chip">LLM-as-judge</span><span class="chip">LangGraph</span><span class="chip">Power BI</span><span class="chip">n8n + Teams</span></div>
+              <p>It grew out of the conversation judge I already ran on the RAG's data. Same engine, now orchestrated in LangGraph with typed state, parallel judges, PostgreSQL checkpoints and pauses for human review. Results go to a dashboard and to a daily report the support team reads.</p>
+              <div class="facts-inline"><span class="chip">LLM-as-judge</span><span class="chip">LangGraph</span><span class="chip">Checkpoints</span><span class="chip">Human review</span></div>
             </div>
           </div>
-          <p class="also-ops" data-reveal><span class="chip">n8n + Teams</span>A separate workflow warns L2 and L3 agents about their tickets on the in-house service platform, based on their SLA, TTR and FCR targets.</p>
+          <p class="also-ops" data-reveal><span class="chip">n8n</span>A separate workflow warns agents about tickets that are close to missing their service targets.</p>
         </div>
       </section>
 
@@ -404,7 +401,7 @@
           </div>
         </div>
 
-        <p class="goal" data-reveal>The goal: customers solve their problem in a single contact, with fewer escalations and no ping-pong. Before promising anything I estimated the ceiling from data, about 6 points off escalation.</p>
+        <p class="goal" data-reveal>The goal: customers solve their problem in a single contact, with fewer escalations and no ping-pong. Before promising anything I estimated from data how much escalation it could remove at most.</p>
 
         <div class="after" data-reveal>
           <p class="status later"><span class="live" aria-hidden="true"></span>Designed, planned for later</p>
@@ -442,7 +439,7 @@
       <a href="../assets/jarby-cosme-resume.pdf" download="Jarby-Jessid-Cosme-Resume.pdf"><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg>Download resume</a>
     </div>
     <footer class="foot">
-      <p>The platform belongs to SIESA. Nothing here includes customer data or code; figures are aggregate results from internal project reports, and I can walk through the architecture in an interview.</p>
+      <p>The platform belongs to SIESA. This site tells my approach and my decisions without internal figures, customer data or code. The metrics on it come from my public repos, which anyone can rerun.</p>
       <p>&copy; 2026 Jarby Jessid Cosme · <a href="../es/historia/" hreflang="es" lang="es">Versión en español</a></p>
     </footer>
   </div>
