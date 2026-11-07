@@ -337,13 +337,18 @@ footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; g
 .strip p { margin: 6px 0 0; font-size: 14.5px; color: var(--ink-2); }
 @media (max-width: 640px) { .strip { grid-template-columns: 1fr; gap: 16px; } }
 
-/* RAG story: chapter rail in the left column */
+/* RAG story: chapter rail in the left column (number, title, a short bar on the current one) */
 .sec-side { position: sticky; top: 96px; align-self: start; }
 .sec-side .sec-title { position: static; }
-.rail ol { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 2px; }
-.rail a { display: block; padding: 6px 0 6px 12px; border-left: 2px solid var(--line); color: var(--muted); text-decoration: none; font-size: 14px; line-height: 1.35; transition: color .25s ease, border-color .25s ease; }
+.rail ol { list-style: none; margin: 36px 0 0; padding: 0; }
+.rail a { display: grid; grid-template-columns: 30px 1fr; gap: 0 6px; padding: 8px 0; color: var(--muted); text-decoration: none; font-size: 14.5px; line-height: 1.35; transition: color .25s ease; }
+.rail .rn { font: 500 12px/1.6 var(--mono); }
 .rail a:hover { color: var(--ink); }
-.rail a[aria-current="true"] { color: var(--ink); border-left-color: var(--accent); }
+.rail a[aria-current="true"] { color: var(--ink); }
+.rail a[aria-current="true"] .rn { color: var(--accent); }
+.rail .bar { grid-column: 2; display: block; height: 2px; width: 0; margin-top: 7px; background: var(--accent); border-radius: 2px; transition: width .5s cubic-bezier(.16, 1, .3, 1); }
+.rail a[aria-current="true"] .bar { width: 36px; }
+@media (prefers-reduced-motion: reduce) { .rail a, .rail .bar { transition: none; } }
 @media (max-width: 860px) { .sec-side { position: static; } .rail { display: none; } }
 
 /* Improvement loop: the steps light up in order the first time they are seen */
