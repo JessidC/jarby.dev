@@ -6,338 +6,600 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; font-src 'self'; connect-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <title>Jarby Jessid Cosme | Ingeniero de software e IA</title>
-<meta name="description" content="Ingeniero de software e IA en Cali, Colombia. Soy el responsable de la IA que atiende el chat de soporte del ERP de SIESA, unas 1.000 conversaciones al día.">
+<meta name="description" content="Cómo construí y opero la IA del chat de soporte del ERP de SIESA, decisión por decisión: los datos, el motor, la salida por módulos, la medición, el ciclo que lo sigue mejorando y lo que viene.">
 <link rel="canonical" href="https://jarby.dev/es/">
 <link rel="alternate" hreflang="en" href="https://jarby.dev/">
 <link rel="alternate" hreflang="es" href="https://jarby.dev/es/">
+<link rel="alternate" hreflang="x-default" href="https://jarby.dev/">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Jarby Jessid Cosme | Ingeniero de software e IA">
-<meta property="og:description" content="Soy el responsable de la IA que atiende el chat de soporte de SIESA. La historia de ese RAG y los proyectos alrededor.">
+<meta property="og:title" content="Jarby Jessid Cosme | Una plataforma de IA, decisión por decisión">
+<meta property="og:description" content="Un RAG en producción en 15 módulos del ERP, la evaluación detrás de cada salida y los sistemas construidos encima, contados como la cadena de decisiones que los produjo.">
 <meta property="og:url" content="https://jarby.dev/es/">
 <meta property="og:image" content="https://jarby.dev/assets/og-es.png">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Jarby Jessid Cosme","jobTitle":"Software and AI Engineer","url":"https://jarby.dev/es/","email":"mailto:jessidc95@gmail.com","address":{"@type":"PostalAddress","addressLocality":"Cali","addressCountry":"CO"},"sameAs":["https://www.linkedin.com/in/jarbyjessidcosme","https://github.com/JessidC"]}</script>
 <meta name="theme-color" content="#f3f4f5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121416" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="../assets/fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <script src="../assets/theme-init.js"></script>
 <link rel="stylesheet" href="../assets/site.css">
 </head>
 <body>
+<svg class="sprite" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 256 256"><path fill="currentColor" d="M221.66,133.66l-72,72a8,8,0,0,1-11.32-11.32L196.69,136H40a8,8,0,0,1,0-16H196.69L138.34,61.66a8,8,0,0,1,11.32-11.32l72,72A8,8,0,0,1,221.66,133.66Z"/></symbol>
+  <symbol id="i-down" viewBox="0 0 256 256"><path fill="currentColor" d="M205.66,149.66l-72,72a8,8,0,0,1-11.32,0l-72-72a8,8,0,0,1,11.32-11.32L120,196.69V40a8,8,0,0,1,16,0V196.69l58.34-58.35a8,8,0,0,1,11.32,11.32Z"/></symbol>
+  <symbol id="i-out" viewBox="0 0 256 256"><path fill="currentColor" d="M200,64V168a8,8,0,0,1-16,0V83.31L69.66,197.66a8,8,0,0,1-11.32-11.32L172.69,72H88a8,8,0,0,1,0-16H192A8,8,0,0,1,200,64Z"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 256 256"><path fill="currentColor" d="M224,48H32a8,8,0,0,0-8,8V192a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V56A8,8,0,0,0,224,48ZM203.43,64,128,133.15,52.57,64ZM216,192H40V74.19l82.59,75.71a8,8,0,0,0,10.82,0L216,74.19V192Z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 256 256"><path fill="currentColor" d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 256 256"><path fill="currentColor" d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z"/></symbol>
+  <symbol id="i-github" viewBox="0 0 256 256"><path fill="currentColor" d="M208.31,75.68A59.78,59.78,0,0,0,202.93,28,8,8,0,0,0,196,24a59.75,59.75,0,0,0-48,24H124A59.75,59.75,0,0,0,76,24a8,8,0,0,0-6.93,4,59.78,59.78,0,0,0-5.38,47.68A58.14,58.14,0,0,0,56,104v8a56.06,56.06,0,0,0,48.44,55.47A39.8,39.8,0,0,0,96,192v8H72a24,24,0,0,1-24-24A40,40,0,0,0,8,136a8,8,0,0,0,0,16,24,24,0,0,1,24,24,40,40,0,0,0,40,40H96v16a8,8,0,0,0,16,0V192a24,24,0,0,1,48,0v40a8,8,0,0,0,16,0V192a39.8,39.8,0,0,0-8.44-24.53A56.06,56.06,0,0,0,216,112v-8A58.14,58.14,0,0,0,208.31,75.68ZM200,112a40,40,0,0,1-40,40H112a40,40,0,0,1-40-40v-8a41.74,41.74,0,0,1,6.9-22.48A8,8,0,0,0,80,73.83a43.81,43.81,0,0,1,.79-33.58,43.88,43.88,0,0,1,32.32,20.06A8,8,0,0,0,119.82,64h32.35a8,8,0,0,0,6.74-3.69,43.87,43.87,0,0,1,32.32-20.06A43.81,43.81,0,0,1,192,73.83a8.09,8.09,0,0,0,1,7.65A41.72,41.72,0,0,1,200,104Z"/></symbol>
+  <symbol id="i-linkedin" viewBox="0 0 256 256"><path fill="currentColor" d="M216,24H40A16,16,0,0,0,24,40V216a16,16,0,0,0,16,16H216a16,16,0,0,0,16-16V40A16,16,0,0,0,216,24Zm0,192H40V40H216V216ZM96,112v64a8,8,0,0,1-16,0V112a8,8,0,0,1,16,0Zm88,28v36a8,8,0,0,1-16,0V140a20,20,0,0,0-40,0v36a8,8,0,0,1-16,0V112a8,8,0,0,1,15.79-1.78A36,36,0,0,1,184,140ZM100,84A12,12,0,1,1,88,72,12,12,0,0,1,100,84Z"/></symbol>
+  <symbol id="i-replay" viewBox="0 0 256 256"><path fill="currentColor" d="M224,128a96,96,0,0,1-94.71,96H128A95.38,95.38,0,0,1,62.1,197.8a8,8,0,0,1,11-11.63A80,80,0,1,0,71.43,71.39a3.07,3.07,0,0,1-.26.25L44.59,96H72a8,8,0,0,1,0,16H24a8,8,0,0,1-8-8V56a8,8,0,0,1,16,0V85.8L60.25,60A96,96,0,0,1,224,128Z"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 256 256"><path fill="currentColor" d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/></symbol>
+</svg>
+
 <a class="skip" href="#main">Ir al contenido</a>
-<div id="top-sentinel" aria-hidden="true"></div>
-<header class="top">
+<div class="progress" aria-hidden="true"></div>
+
+<header class="site-head">
   <div class="wrap">
-    <a class="brand" href="#main">Jarby<span class="mid"> Jessid</span> Cosme</a>
-    <nav class="nav" aria-label="Secciones">
-      <a href="#perfil">Perfil</a>
-      <a href="#rag">La historia del RAG</a>
-      <a href="#proyectos">Proyectos</a>
-      <a href="#contacto">Contacto</a>
+    <a class="brand" href="#top">Jarby Jessid Cosme</a>
+    <nav class="nav" aria-label="Principal">
+      <a class="hide-sm" href="#ch1">Historia</a>
+      <a class="hide-sm" href="#projects">Proyectos</a>
+      <a class="hide-sm" href="#experience">Experiencia</a>
+      <a class="hide-sm" href="#contact">Contacto</a>
+      <a class="cv" href="../assets/jarby-cosme-hoja-de-vida.pdf" download="Jarby-Jessid-Cosme-Hoja-de-vida.pdf"><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg><span class="cv-t">Hoja de vida</span></a>
+      <a class="lang" href="../" hreflang="en" lang="en" aria-label="Read in English">EN</a>
+      <button class="theme" type="button" aria-label="Cambiar modo oscuro">
+        <svg class="icon i-sun" aria-hidden="true"><use href="#i-sun"/></svg>
+        <svg class="icon i-moon" aria-hidden="true"><use href="#i-moon"/></svg>
+      </button>
     </nav>
-    <div class="tools">
-      <a class="chip-btn" href="../assets/jarby-cosme-hoja-de-vida.pdf">Hoja de vida</a>
-      <a class="chip-btn" href="../" hreflang="en" lang="en" aria-label="View in English">EN</a>
-      <button class="chip-btn" id="theme" type="button" data-dark="Oscuro" data-light="Claro" aria-label="Cambiar modo oscuro">Oscuro</button>
-    </div>
   </div>
 </header>
 
 <main id="main">
-  <section class="hero" aria-labelledby="name">
-    <div class="wrap">
-      <div>
-        <h1 id="name" data-reveal data-d="0">Jarby Jessid Cosme</h1>
-        <p class="role" data-reveal data-d="1">Ingeniero de software e IA. Construí y opero la IA que atiende el chat de soporte del ERP de SIESA, unas 1.000 conversaciones al día.</p>
-        <div class="cta" data-reveal data-d="2">
-          <a class="btn btn-primary" href="#rag">Leer la historia del RAG</a>
-          <a class="btn btn-ghost" href="#proyectos">Ver los proyectos</a>
-        </div>
-      </div>
-      <dl class="now" data-reveal data-d="3">
-        <dt>Ahora</dt>
-        <dd>Opero el RAG de soporte de SIESA en 15 módulos del ERP, y Jarvis encima de él</dd>
-        <dt>Construyendo</dt>
-        <dd>El triage en línea que será el primer contacto de todos los clientes</dd>
-        <dt>Busco</dt>
-        <dd>Un cargo remoto de tiempo completo, desde Cali, <span class="nw">GMT-5</span></dd>
-      </dl>
-    </div>
-  </section>
 
-  <section class="sec" id="perfil" aria-labelledby="perfil-t">
-    <div class="wrap">
-      <h2 class="sec-title" id="perfil-t">Perfil</h2>
-      <div class="sec-body">
-        <p class="lead" data-reveal>Llevo siete años haciendo software. Primero full-stack en .NET y ahora la IA del soporte al cliente de SIESA, uno de los ERP más grandes de Colombia.</p>
-        <div class="prose" data-reveal>
-          <p>Me gusta hacerme cargo de un sistema desde la primera mirada a los datos hasta el día en que corre sin mí. En SIESA eso fue estudiar 90 días de conversaciones, llevarle un plan a la dirección, construir el motor y salir a producción módulo por módulo. El lenguaje es el que pida el sistema. Sobre todo Python, C# y TypeScript, con SQL en todas partes.</p>
-          <p>También enseño y explico. Formé a 16 personas, acompañé a 3 equipos mientras empezaban a usar IA en su trabajo y, cuando cambia el sistema de soporte, se lo presento a los agentes, unos 90, con lo que cambia para ellos.</p>
-        </div>
-        <dl class="facts" data-reveal>
-          <div><dt>Hoy</dt><dd><b>Único responsable técnico de la plataforma de IA de soporte</b>, SIESA. La diseñé, la construí y la opero en producción. En SIESA desde marzo de 2022.</dd></div>
-          <div><dt>Antes</dt><dd><b>Desarrollador full-stack independiente</b>, 2019 a 2022. Seis aplicaciones web para pymes colombianas, entre ellas una tienda con PayU que vendió más de US$25 mil el primer año.</dd></div>
-          <div><dt>Stack</dt><dd>Python, FastAPI, C# y .NET 8, TypeScript, React, SQL Server, PostgreSQL con pgvector, AWS Bedrock, LangGraph, n8n.</dd></div>
-          <div><dt>Por mi cuenta</dt><dd><b>Tocaturno</b>, mi propio producto, además de clases de IA y automatizaciones para clientes.</dd></div>
-          <div><dt>Estudios</dt><dd>Ingeniería de Sistemas, UNAD, en curso hasta 2027. Tecnólogo en Análisis y Desarrollo de Sistemas, SENA, 2022.</dd></div>
-          <div><dt>Idiomas</dt><dd>Español nativo. Inglés B2, que uso todos los días en el trabajo.</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="rag" aria-labelledby="rag-t">
-    <div class="wrap">
-      <div class="sec-side">
-        <h2 class="sec-title" id="rag-t">La historia del RAG</h2>
-        <nav class="rail" aria-label="Capítulos de la historia del RAG">
-          <ol>
-            <li><a href="#rag-data"><span class="rn">01</span><span class="rl">Los datos</span><span class="bar"></span></a></li>
-            <li><a href="#rag-engine"><span class="rn">02</span><span class="rl">El motor</span><span class="bar"></span></a></li>
-            <li><a href="#rag-rollout"><span class="rn">03</span><span class="rl">La salida</span><span class="bar"></span></a></li>
-            <li><a href="#rag-changed"><span class="rn">04</span><span class="rl">Lo que cambió</span><span class="bar"></span></a></li>
-            <li><a href="#rag-content"><span class="rn">05</span><span class="rl">El contenido</span><span class="bar"></span></a></li>
-            <li><a href="#rag-loop"><span class="rn">06</span><span class="rl">El ciclo de mejora</span><span class="bar"></span></a></li>
-          </ol>
-        </nav>
-      </div>
-      <div class="sec-body">
-        <p class="lead" data-reveal>El chat de soporte de SIESA funcionaba con un chatbot de terceros cuyas respuestas no podíamos medir ni controlar. Construí un motor que es de la empresa. Hoy atiende unas 1.000 conversaciones al día en 15 módulos del ERP.</p>
-
-        <div class="chapter" id="rag-data" data-reveal>
-          <h3>Empezó por los datos</h3>
-          <div class="prose">
-            <p>Estudié 90 días de conversaciones de producción, más de 55.000 chats, para ver lo que de verdad vivían los clientes. No había forma de saber si una respuesta era correcta, y el modelo y las fuentes estaban del lado del proveedor, así que no podíamos hacer cumplir una regla contra respuestas inventadas. El traspaso a una persona necesitaba un rediseño tanto como el bot.</p>
-            <p>Con eso le llevé a la dirección un plan con seis decisiones ordenadas por impacto y costo. La principal fue construir un motor propio y rediseñar el traspaso al mismo tiempo.</p>
-          </div>
-        </div>
-
-        <div class="chapter" id="rag-engine" data-reveal>
-          <h3>El motor</h3>
-          <ul class="decisions">
-            <li><h4>Sin framework en el camino de cada pregunta</h4><p>Python y FastAPI directo contra la API del modelo, para poder rastrear cada milisegundo y cada token.</p></li>
-            <li><h4>Claude en AWS Bedrock</h4><p>SIESA ya estaba en AWS, así que la facturación y los permisos quedaron en la cuenta que ya tenía. Sonnet responde, Haiku reescribe las preguntas de seguimiento y lee las páginas escaneadas.</p></li>
-            <li><h4>Buscar amplio, reordenar fino</h4><p>Búsqueda en pgvector filtrada por módulo del ERP y luego Cohere Rerank deja los cinco pasajes que lee el modelo.</p></li>
-            <li><h4>Revisada antes de salir</h4><p>Cada cita tiene que estar en lo que se recuperó. Un número que no aparece en las fuentes pasa el chat a una persona.</p></li>
-            <li><h4>Reglas antes del modelo</h4><p>Unas 170 reglas fijas atienden saludos, riesgos y pedidos de hablar con alguien antes de cualquier llamada al LLM.</p></li>
-            <li><h4>El mismo contrato del bot anterior</h4><p>El portal de soporte no cambió. Cada módulo podía pasar al motor nuevo, o devolverse, con un solo ajuste.</p></li>
-          </ul>
-        </div>
-
-        <div class="chapter" id="rag-rollout" data-reveal>
-          <h3>Un módulo a la vez</h3>
-          <ol class="timeline">
-            <li><time>Antes de salir</time><b>Modo sombra</b><span>772 conversaciones reales, sin mostrar las respuestas. Un juez independiente prefirió el motor nuevo el 44% de las veces y el anterior el 40%.</span></li>
-            <li><time>Ola 1</time><b>Nómina</b><span>Primero el módulo con más volumen. Los clientes siguieron con la misma ventana de chat.</span></li>
-            <li><time>Ola 2</time><b>Financiero</b><span>Un módulo por ventana de salida.</span></li>
-            <li><time>Ola 3</time><b>Comercial y Zeus</b><span>Además de facturación electrónica, contabilidad y los demás.</span></li>
-            <li class="here"><time>Hoy</time><b>15 módulos del ERP</b><span>Unas 1.000 conversaciones al día.</span></li>
-          </ol>
-          <p class="prose after-tl">Ningún módulo pasó sin un puntaje de su golden set calificado por un juez LLM, pruebas de humo en el chat real y una reversa de un solo ajuste.</p>
-        </div>
-
-        <div class="chapter" id="rag-changed" data-reveal>
-          <h3>Lo que cambió</h3>
-          <p class="prose">Nómina salió primero, así que tiene la serie más larga y es la que pasé por una prueba de significancia. Financiero, Comercial y Zeus, las otras líneas críticas, van en la misma dirección y se miden con las mismas métricas. La baja de Comercial vino sobre todo del ciclo de mejora que aparece más abajo.</p>
-          <div class="figures">
-            <div class="first"><div class="n"><span class="from">40,2%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">32,7%</span></div><p>Escalación a humano por chat en Nómina, el primer módulo en producción. Estadísticamente significativa, p = 0,0005.</p></div>
-            <div><div class="n"><span class="from">6,95%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">0,25%</span></div><p>Respuestas que mandan al cliente a contactar a soporte.</p></div>
-            <div><div class="n"><span class="from">71,6%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">89,6%</span></div><p>Respuestas correctas entre cortes de evaluación, calificadas por un juez LLM validado con personas.</p></div>
-            <div><div class="n"><span class="to">-16%</span></div><p>Costo por turno después de agregar caché de prompts.</p></div>
-            <div><div class="n"><span class="from">30%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">64%</span></div><p>CSAT de servicio al cliente después de rediseñar el traspaso a los agentes.</p></div>
-          </div>
-        </div>
-
-        <div class="chapter" id="rag-content" data-reveal>
-          <h3>La solución estaba en el contenido</h3>
-          <div class="prose">
-            <p>La búsqueda híbrida parecía la mejora obvia. La construí, la medí dos veces con preguntas reales de clientes y la apagué. En español, una consulta por palabras clave se comporta como un Y lógico y vacía los candidatos, así que recuperó 0 de 5 casos que fallaban, y todas las variantes quedaron a menos de 3,6 puntos entre sí. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 12,5 puntos. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
-            <p>Entonces el esfuerzo se fue al contenido. Reprocesé 1.027 documentos con OCR multimodal, aislando la quinta parte del índice que un OCR anterior había dañado, y monté un ciclo para que el contenido siga creciendo solo.</p>
-            <p>Desde entonces todo cambio sale igual. Un golden set por módulo calificado por un juez LLM, una repetición A/B sobre trazas reales y una prueba de significancia antes y después. Ese método lo rehíce en abierto como rag-eval-bench.</p>
-          </div>
-        </div>
-
-        <div class="chapter" id="rag-loop" data-reveal>
-          <h3>Aprende de los agentes cada semana</h3>
-          <p class="prose">Cuando el motor le pasa un chat a una persona, la respuesta del agente es la mejor pista de lo que le faltaba. Un proceso aparte convierte esas respuestas en conocimiento nuevo, y un experto decide qué entra.</p>
-          <div class="loop2">
-            <div class="pipe-box">
-              <button class="replay" type="button">Repetir</button>
-            <ol class="pipe">
-              <li><b>El agente cierra el chat</b><span>Las resoluciones llegan al motor por un puente de datos desde el portal de soporte cada 30 minutos.</span></li>
-              <li><b>Solo siguen los vacíos reales</b><span>Los traspasos por falta de personal, frustración o riesgo se descartan antes de cualquier llamada a un modelo.</span></li>
-              <li><b>Un juez lee los turnos del agente</b><span>Es de una familia de modelos distinta a la que responde. Reconstruye la pregunta y la respuesta reutilizable con su evidencia, y descarta lo que no se puede documentar, como "abra un ticket".</span></li>
-              <li><b>Se compara con lo que el motor ya sabe</b><span>Lo que ya está cubierto se salta. Una repetición le suma demanda al pendiente. Una respuesta que contradice lo indexado queda marcada como desactualizada.</span></li>
-              <li class="key"><b>Un experto la aprueba o la edita</b><span>Desde la consola de curación. Lo aprobado se usa de inmediato, sin reindexar.</span></li>
-            </ol>
-            </div>
-            <aside class="guards" aria-label="Controles">
-              <h4>Lo que nunca hace</h4>
-              <ul>
-                <li>Publicar algo que un experto no haya aprobado</li>
-                <li>Dejar que el modelo que responde califique su propio trabajo</li>
-                <li>Pagar dos veces por juzgar el mismo contenido, gracias a una huella por contenido</li>
-                <li>Aprender de traspasos que fueron un problema de personal</li>
-              </ul>
-              <p class="mono-note">Entre 30 y 60 minutos desde que se cierra un chat hasta que hay un candidato en la cola.</p>
-            </aside>
-          </div>
-          <div class="loop-result">
-            <div class="n"><span class="from">50%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">40%</span></div>
-            <p>Escalación a humano en Comercial, en números redondos, desde que el ciclo empezó a alimentarlo.</p>
-          </div>
-          <div class="prose">
-            <p>Suma unas 150 respuestas aprobadas por semana por unos US$10 al mes de modelo, y 44 cuentas de agentes curan desde la consola con roles y permisos por módulo. Es la razón principal de que el motor siga mejorando entre una salida y otra. Lo rehíce en abierto como <a href="#learnloop">support-learning-loop</a>.</p>
-          </div>
-        </div>
-
-        <p class="note" data-reveal>La plataforma es de SIESA. Aquí no hay datos de clientes ni código. Las cifras son resultados agregados de informes internos del proyecto, y la arquitectura la puedo explicar en detalle en una entrevista.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="sec" id="proyectos" aria-labelledby="proyectos-t">
-    <div class="wrap">
-      <h2 class="sec-title" id="proyectos-t">Proyectos</h2>
-      <div class="sec-body">
-
-        <article class="proj" id="bench" data-reveal>
-          <a class="shot" href="../bench/" aria-label="Abrir el informe de rag-eval-bench"><img src="../assets/img/rag-eval-bench.webp" width="1920" height="1200" alt="Informe de rag-eval-bench que compara cinco configuraciones de búsqueda en exactitud, respuestas erradas mostradas, escalación, costo y latencia." loading="lazy"></a>
-          <div>
-            <span class="status live"><i></i>Código público</span>
-            <h3>rag-eval-bench</h3>
-            <p>Un banco de pruebas que decide si un cambio a un RAG sale a producción. Tiene un golden set con preguntas que la documentación no responde, un juez LLM, un validador que detecta citas y números inventados y una prueba de McNemar pareada detrás de una compuerta en CI. Corre sobre la documentación pública de Odoo 18.</p>
-            <p>Lo que encontró. La búsqueda híbrida le ganó a la densa por 12,5 puntos, p = 0,02. Un reranker sumó 1,4 puntos y subió la latencia p95 de 2,5 s a 8,3 s, así que no sale.</p>
-            <ul class="tags"><li>Python</li><li>BM25 + RRF</li><li>LLM-as-judge</li><li>GitHub Actions</li></ul>
-            <div class="links"><a href="https://github.com/JessidC/rag-eval-bench">Código</a><a href="../bench/">Informe</a></div>
-          </div>
-        </article>
-
-        <article class="stacked" id="learnloop" data-reveal>
-          <span class="status live"><i></i>Código público</span>
-          <h3>support-learning-loop</h3>
-          <p class="prose">El ciclo de mejora del motor de SIESA, rehecho con datos públicos. Un bot de soporte le pasa a una persona los chats que no puede resolver. Un juez de otra familia de modelos convierte las respuestas de los agentes en candidatos, una verificación descarta lo que el agente no dijo y un experto aprueba cada uno antes de que el bot lo use.</p>
-          <div class="strip" role="group" aria-label="Resultados en 330 chats de prueba">
-            <div><div class="n"><span class="from">19%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">61%</span></div><p>Chats resueltos correctamente</p></div>
-            <div><div class="n"><span class="from">68%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">21%</span></div><p>Chats pasados a una persona</p></div>
-            <div><div class="n"><span class="from">41%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">23%</span></div><p>Parciales o erróneos entre los mostrados</p></div>
-          </div>
-          <p class="prose">Medido con 330 chats de prueba del dataset ABCD, el mismo bot y solo la base de conocimiento cambia. El README también muestra qué salió mal sin revisor: el bot empezó a contestar 5 de 80 casos que necesitaban a una persona.</p>
-          <ul class="tags"><li>Python</li><li>LLM-as-judge</li><li>fastembed</li><li>McNemar</li></ul>
-          <div class="links"><a href="https://github.com/JessidC/support-learning-loop">Código</a></div>
-        </article>
-
-        <article class="proj flip" data-reveal>
-          <a class="shot" href="https://tocaturno.com" aria-label="Visitar tocaturno.com"><img src="../assets/img/tocaturno.webp" width="1920" height="1200" alt="Página de inicio de Tocaturno, una recepción por WhatsApp para consultorios, veterinarias, salones, barberías y droguerías." loading="lazy"></a>
-          <div>
-            <span class="status live"><i></i>En línea</span>
-            <h3>Tocaturno</h3>
-            <p>Mi propio producto. Una recepción por WhatsApp para negocios que trabajan con citas. Contesta a toda hora con plantillas que aprueba el dueño, agenda en los espacios libres, manda recordatorios y le pasa a una persona las conversaciones delicadas.</p>
-            <ul class="tags"><li>WhatsApp</li><li>LLM</li><li>Agenda</li></ul>
-            <div class="links"><a href="https://tocaturno.com">tocaturno.com</a></div>
-          </div>
-        </article>
-
-        <article class="jarvis" data-reveal>
-            <div>
-              <div class="big">US$0,002</div>
-              <p class="big-cap">Lo que cuesta juzgar una conversación con Claude Haiku. Las lee todas, todos los días.</p>
-            </div>
-            <div>
-              <span class="status live"><i></i>En producción</span>
-              <h3>Jarvis</h3>
-              <p>El juez del servicio de soporte. Cada día lee todas las conversaciones y decide quién resolvió cada una, la IA, un agente o nadie, con la misma regla para los dos. Al cierre tipifica el ticket y reemplaza a un tipificador cuya atribución no aguantaba una auditoría ticket por ticket.</p>
-              <p>Es la evolución del juez de conversaciones que ya corría sobre los datos del RAG. El mismo motor, ahora orquestado en LangGraph con jueces en paralelo, checkpoints en PostgreSQL y pausas para revisión humana. Sus resultados alimentan Power BI y un informe diario que el equipo de soporte lee en Teams.</p>
-              <ul class="tags"><li>Claude Haiku</li><li>LangGraph</li><li>Power BI</li><li>n8n</li></ul>
-              <span class="private">Interno de SIESA</span>
-            </div>
-        </article>
-
-        <h3 class="wip-head" data-reveal>Lo que sigue en la plataforma de soporte</h3>
-        <p class="wip-sub" data-reveal>Dos piezas que se montan sobre el RAG. Una está en construcción y la otra está diseñada para más adelante.</p>
-        <div class="pair">
-          <article data-reveal>
-            <span class="status part"><i></i>En construcción</span>
-            <h3>Triage en línea</h3>
-            <p>Hoy el cliente tiene que escoger un módulo del ERP antes de empezar el chat, y ahí empieza el peloteo entre canales. El triage pasa a ser la única entrada. Entiende el problema, revisa los tickets abiertos del cliente y manda el caso al RAG o a un agente de L1, L2 o L3 con un resumen, para que nadie empiece de cero.</p>
-            <div class="flow" role="group" aria-label="Flujo del triage">
-              <div class="box"><b>Cliente</b>Escribe el problema con sus palabras</div>
-              <div class="arrow">luego</div>
-              <div class="box key"><b>Triage</b>Clasifica el pedido y revisa los tickets abiertos</div>
-              <div class="arrow">lo manda a</div>
-              <div class="fan"><div class="box">RAG</div><div class="box">L1</div><div class="box">L2</div><div class="box">L3</div></div>
-            </div>
-            <p>Antes de prometer nada calculé el techo con datos, unos 6 puntos menos de escalación.</p>
-          </article>
-          <article class="blocked" data-reveal>
-            <span class="status plan"><i></i>Diseñado, para más adelante</span>
-            <h3>RAG v2, herramientas sobre los sistemas del cliente</h3>
-            <p>Hoy el RAG explica la solución y el cliente la aplica. La segunda versión la ejecuta en la instalación del cliente, un reinicio de servicio o una actualización, y cada acción tiene su propio nivel de permiso.</p>
-            <div class="flow" role="group" aria-label="Flujo del RAG v2">
-              <div class="box"><b>Problema del cliente</b>Llega por el chat</div>
-              <div class="arrow">luego</div>
-              <div class="box"><b>El RAG encuentra la solución</b>En la documentación, como hoy</div>
-              <div class="arrow">luego</div>
-              <div class="box key"><b>Permiso para esa acción</b>Cada acción tiene su nivel</div>
-              <div class="arrow">luego</div>
-              <div class="box dashed"><b>Se ejecuta en el sistema del cliente</b>Reiniciar un servicio, aplicar una actualización</div>
-            </div>
-            <p>El diseño está terminado. La construcción viene más adelante.</p>
-          </article>
-        </div>
-
-        <div class="small small-gap" data-reveal>
-          <h3>Trabajos más pequeños</h3>
-          <div class="small-list">
-            <div>
-              <h4>Pipeline de indicadores de servicio</h4>
-              <div class="where">SIESA</div>
-              <p>Reemplacé una exportación manual con Excel y nueve scripts SQL, que alguien corría dos o tres veces al día, por un pipeline desde la API de Freshdesk hasta Power BI. Comparado con la carga manual, 9.607 filas contra 9.606.</p>
-            </div>
-            <div>
-              <h4>App empresarial en .NET</h4>
-              <div class="where">Código público</div>
-              <p>Un monorepo de referencia. ASP.NET Core por capas, JWT con roles, PostgreSQL, React con Vite, pruebas, Docker Compose y CI.</p>
-              <div class="links"><a href="https://github.com/JessidC/enterprise-fullstack-dotnet">Código</a></div>
-            </div>
-            <div>
-              <h4>Plataforma interna de servicio</h4>
-              <div class="where">SIESA</div>
-              <p>La plataforma tipo Jira que usan más de 500 empleados. Lidero su desarrollo y le integré tres aplicaciones internas.</p>
-            </div>
-            <div>
-              <h4>Asistente interno de IA</h4>
-              <div class="where">SIESA, 2024 a 2025</div>
-              <p>Soportistas, consultores y operaciones preguntaban en lenguaje natural sobre SQL Server, la plataforma de servicio y los tickets de Freshdesk. OpenAI con tool calling, prototipado en LangChain.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <section class="contact" id="contacto" aria-labelledby="contacto-t">
-    <div class="wrap">
-      <h2 id="contacto-t" data-reveal>Abierto a cargos remotos de tiempo completo.</h2>
-      <p data-reveal>Donde pueda hacerme cargo de un sistema de punta a punta, en IA, backend o datos. Estoy en Cali, Colombia, GMT-5, con el mismo horario de la costa este y el centro de EE. UU.</p>
-      <a class="mail" href="mailto:jessidc95@gmail.com" data-reveal>jessidc95@gmail.com</a>
-      <div class="cta" data-reveal>
-        <a class="btn btn-primary" href="mailto:jessidc95@gmail.com">Escríbeme</a>
-        <a class="btn btn-ghost" href="https://www.linkedin.com/in/jarbyjessidcosme">LinkedIn</a>
-        <a class="btn btn-ghost" href="https://github.com/JessidC">GitHub</a>
-        <a class="btn btn-ghost" href="../assets/jarby-cosme-hoja-de-vida.pdf">Hoja de vida</a>
-      </div>
-    </div>
-  </section>
-</main>
-
-<footer>
+<section class="hero" id="top">
   <div class="wrap">
-    <span>&copy; 2026 Jarby Jessid Cosme</span>
-    <a href="../" hreflang="en" lang="en">English version</a>
+    <div>
+      <p class="hero-kicker" data-reveal>Ingeniero de software e IA, más de 7 años. Remoto, <span class="nw">GMT-5</span></p>
+      <h1 data-reveal data-d="1">Una plataforma de IA, <span class="accent">decisión por decisión.</span></h1>
+      <p class="hero-sub" data-reveal data-d="2">Diseñé, construí y opero la IA del chat de soporte del ERP de SIESA. Aquí está cada decisión y el porqué.</p>
+      <div class="hero-cta" data-reveal data-d="3">
+        <a class="btn btn-primary" href="#ch1">Leer la historia <svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></a>
+        <a class="btn btn-ghost" href="#projects">Ver los proyectos</a>
+      </div>
+    </div>
+    <nav aria-label="Capítulos">
+      <ol class="map">
+        <li><a href="#ch1"><span class="n">1</span><span><span class="t">Leer los datos</span><span class="s">90 días de conversaciones reales</span></span></a></li>
+        <li><a href="#ch2"><span class="n">2</span><span><span class="t">Diseñar el motor</span><span class="s">Siete decisiones, cada una con su porqué</span></span></a></li>
+        <li><a href="#ch3"><span class="n">3</span><span><span class="t">Un módulo a la vez</span><span class="s">Hoy en 15 módulos del ERP</span></span></a></li>
+        <li><a href="#ch4"><span class="n">4</span><span><span class="t">Contenido antes que método</span><span class="s">La idea de búsqueda que medí y apagué</span></span></a></li>
+        <li><a href="#ch5"><span class="n">5</span><span><span class="t">Medir cada salida</span><span class="s">Escalación en Nómina de 40,2% a 32,7%</span></span></a></li>
+        <li><a href="#ch6"><span class="n">6</span><span><span class="t">Que los agentes le enseñen</span><span class="s">Escalación en Comercial de 50% a 40%</span></span></a></li>
+        <li><a href="#ch7"><span class="n">7</span><span><span class="t">Medir todo el servicio</span><span class="s">El traspaso y Jarvis</span></span></a></li>
+        <li><a href="#ch8"><span class="n">8</span><span><span class="t">Una sola puerta para cada cliente</span><span class="s"><span class="accent">En construcción</span></span></span></a></li>
+      </ol>
+    </nav>
   </div>
-</footer>
-<script src="../assets/site.js"></script>
+</section>
+
+<section class="glance" aria-labelledby="glance-t">
+  <div class="wrap">
+    <h2 class="sr" id="glance-t">Lo esencial</h2>
+    <dl class="glance-grid" data-reveal>
+      <div><dt class="label">Experiencia</dt><dd>Más de 7 años haciendo software: full-stack en .NET desde 2019, en SIESA desde 2022.</dd></div>
+      <div><dt class="label">A cargo</dt><dd>La plataforma de IA de soporte de SIESA: 15 módulos del ERP, unas 1.000 conversaciones al día.</dd></div>
+      <div><dt class="label">Resultados</dt><dd>Escalación en Nómina de 40,2% a 32,7% (p = 0,0005). Comercial de 50% a 40%. CSAT de 30% a 64%.</dd></div>
+      <div><dt class="label">Stack</dt><dd>Python, C#/.NET, TypeScript, SQL, AWS Bedrock, PostgreSQL con pgvector, LangGraph.</dd></div>
+    </dl>
+  </div>
+</section>
+
+<div class="story">
+  <div class="wrap">
+    <aside class="rail" aria-label="Avance por capítulos">
+      <ol>
+        <li><a href="#ch1"><span class="mono">01</span><span>Leer los datos</span><span class="bar"></span></a></li>
+        <li><a href="#ch2"><span class="mono">02</span><span>Diseñar el motor</span><span class="bar"></span></a></li>
+        <li><a href="#ch3"><span class="mono">03</span><span>Un módulo a la vez</span><span class="bar"></span></a></li>
+        <li><a href="#ch4"><span class="mono">04</span><span>Contenido antes que método</span><span class="bar"></span></a></li>
+        <li><a href="#ch5"><span class="mono">05</span><span>Medir cada salida</span><span class="bar"></span></a></li>
+        <li><a href="#ch6"><span class="mono">06</span><span>Que los agentes le enseñen</span><span class="bar"></span></a></li>
+        <li><a href="#ch7"><span class="mono">07</span><span>Medir el servicio</span><span class="bar"></span></a></li>
+        <li><a href="#ch8"><span class="mono">08</span><span>Una sola puerta</span><span class="bar"></span></a></li>
+      </ol>
+    </aside>
+
+    <div class="chapters">
+
+      <section class="chapter" id="ch1" aria-labelledby="ch1-t">
+        <p class="ch-num">01</p>
+        <h2 id="ch1-t" data-reveal>Leer los datos antes de confiar en un modelo.</h2>
+        <div class="stakes" data-reveal data-d="1">
+          <div><span class="v">10.000+</span><span class="label">empresas clientes, en Colombia y otros países</span></div>
+          <div>
+            <p><strong>Lo que estaba en juego.</strong> SIESA es uno de los ERP más grandes de Colombia para empresas grandes. Su software mueve la nómina, las finanzas y la operación de sus clientes, así que cuando uno se traba, el chat de soporte decide si ese día la empresa avanza o se detiene.</p>
+            <p>La calidad del soporte pesa en cada renovación. Soy el responsable de la plataforma que atiende esos chats, así que mejorar ese servicio era mi trabajo.</p>
+          </div>
+        </div>
+        <p class="lead" data-reveal data-d="2">Ese chat funcionaba con un chatbot de terceros cuyas respuestas no podíamos medir ni controlar. Empecé por sacar sus conversaciones de producción y leer lo que de verdad vivían los clientes.</p>
+
+        <div class="stats" data-reveal data-d="2">
+          <div class="stat"><span class="v">90 días</span><span class="label">de datos de producción</span></div>
+          <div class="stat"><span class="v">55.000+</span><span class="label">chats analizados</span></div>
+          <div class="stat"><span class="v">6</span><span class="label">decisiones llevadas a la dirección</span></div>
+        </div>
+
+        <div class="findings">
+          <h3 data-reveal>Lo que mostraron los datos</h3>
+          <ol>
+            <li data-reveal><p><strong>Una caja negra.</strong> No había forma de saber si una respuesta era correcta. La calidad no se podía gestionar, solo adivinar.</p></li>
+            <li data-reveal data-d="1"><p><strong>Sin control de las fuentes.</strong> El modelo y las fuentes estaban del lado del proveedor, así que una regla contra respuestas inventadas no se podía hacer cumplir desde afuera.</p></li>
+            <li data-reveal data-d="2"><p><strong>El traspaso pesaba tanto como el bot.</strong> Cuando el cliente pedía una persona, el traspaso a los agentes necesitaba su propio rediseño.</p></li>
+          </ol>
+        </div>
+
+        <div class="decision" data-reveal>
+          <p><b>Decisión</b>Construir un motor que sea de la empresa y que se pueda medir, y rediseñar el traspaso a las personas al mismo tiempo.</p>
+          <p>Lo llevé a la dirección como un plan basado en esos 90 días, con seis decisiones ordenadas por impacto y costo.</p>
+        </div>
+      </section>
+
+      <section class="chapter" id="ch2" aria-labelledby="ch2-t">
+        <p class="ch-num">02</p>
+        <h2 id="ch2-t" data-reveal>Diseñar un motor donde cada capa se pueda medir.</h2>
+        <p class="lead" data-reveal data-d="1">Siete decisiones de diseño. Cada una responde a un problema que mostraron los datos: sin visibilidad, sin control y un traspaso que necesitaba trabajo.</p>
+
+        <div class="log" data-reveal data-d="2">
+          <details name="log" open>
+            <summary><span class="mono">01</span><h3>Sin framework en el camino de cada pregunta</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="body">
+              <div><span class="label">Por qué</span><p>Necesitaba control total sobre la latencia, el costo por token y la trazabilidad. Cada capa entre el modelo y yo es algo que no puedo medir ni depurar.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>Python y FastAPI directo contra la API del modelo. Los frameworks sirven para orquestar lo que rodea al motor, y Jarvis usa LangGraph, pero el camino de la respuesta tenía que poder auditarse línea por línea.</p></div>
+            </div>
+          </details>
+          <details name="log">
+            <summary><span class="mono">02</span><h3>Claude en AWS Bedrock, corriendo en EC2</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="body">
+              <div><span class="label">Por qué</span><p>SIESA ya estaba en AWS. La facturación, los permisos y los secretos quedaron en la cuenta que la empresa ya tenía, sin sumar otro proveedor.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>Claude Sonnet le responde al cliente. Claude Haiku reescribe las preguntas de seguimiento, escribe contexto al indexar y lee las páginas escaneadas. Una comparación entre Sonnet y Haiku en calidad, latencia, costo y escalación respalda esa división.</p></div>
+            </div>
+          </details>
+          <details name="log">
+            <summary><span class="mono">03</span><h3>Detrás del mismo contrato del bot anterior</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="body">
+              <div><span class="label">Por qué</span><p>El portal de soporte no tuvo que cambiar. Los clientes siguieron con la misma ventana de chat; solo cambió el motor de atrás.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>El servicio expone la misma interfaz que tenía el chatbot anterior, así que cada módulo puede pasar al motor nuevo, o devolverse, con un solo ajuste.</p></div>
+            </div>
+          </details>
+          <details name="log">
+            <summary><span class="mono">04</span><h3>Búsqueda densa y luego un reranker</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="body">
+              <div><span class="label">Por qué</span><p>Buscar es barato y amplio; un cross-encoder es caro y preciso. Buscar amplio y dejar que Cohere Rerank elija lo que el modelo de verdad lee.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>pgvector con índice HNSW, los 20 primeros filtrados por módulo del ERP y reordenados a los 5 mejores, con cupos reservados para respuestas curadas y plantillas de proceso. El capítulo 4 cuenta la alternativa que construí y apagué.</p></div>
+            </div>
+          </details>
+          <details name="log">
+            <summary><span class="mono">05</span><h3>Revisar cada respuesta antes de que salga</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="body">
+              <div><span class="label">Por qué</span><p>Es la respuesta directa a la caja negra. Nada le llega al cliente hasta que pasa los controles.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>Las fuentes citadas tienen que estar en lo que se recuperó. Un número que no aparece en los pasajes recuperados pasa el chat a una persona. Hay frases bloqueadas, y los módulos que lo necesitan tienen una verificación extra.</p></div>
+            </div>
+          </details>
+          <details name="log">
+            <summary><span class="mono">06</span><h3>Pasar a una persona en vez de inventar</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="body">
+              <div><span class="label">Por qué</span><p>Una respuesta errada dicha con seguridad es peor que un traspaso limpio. Cuando la evidencia es débil, el motor lo dice.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>Unas 170 reglas fijas deciden antes del modelo: pide una persona, despedida, riesgo, fuera de tema. Por debajo de un piso de confianza, el motor rescata desde el último turno útil, usa una plantilla de proceso u ofrece un asesor, y el modelo puede pasar el chat con una razón.</p></div>
+            </div>
+          </details>
+          <details name="log">
+            <summary><span class="mono">07</span><h3>Modo sombra antes del cambio</h3><span class="tog" aria-hidden="true"><svg class="icon"><use href="#i-plus"/></svg></span></summary>
+            <div class="body">
+              <div><span class="label">Por qué</span><p>Ningún cliente debía ser la prueba. El motor nuevo respondió tráfico real en paralelo, sin mostrar las respuestas, y un juez independiente comparó los dos.</p></div>
+              <div class="note"><span class="label">En la práctica</span><p>772 conversaciones reales antes de salir: el juez prefirió el motor nuevo el 44% de las veces y el anterior el 40%.</p></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="chapter" id="ch3" aria-labelledby="ch3-t">
+        <p class="ch-num">03</p>
+        <h2 id="ch3-t" data-reveal>Salir a producción un módulo a la vez.</h2>
+        <p class="lead" data-reveal data-d="1">Este es el camino que sigue la pregunta de un cliente. Cada paso deja una traza con latencia, tokens y costo.</p>
+
+        <div class="build">
+          <div class="trace" data-reveal data-d="2">
+            <div class="trace-head">
+              <span class="label">Una pregunta, de punta a punta</span>
+              <button class="replay" type="button"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Repetir</button>
+            </div>
+            <ol class="steps">
+              <li class="step"><span class="dot"></span><span class="k">Reglas</span><span class="d">Reglas fijas atienden saludos, despedidas, riesgos y pedidos de hablar con alguien antes de cualquier llamada al modelo.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Reescribir</span><span class="d">Haiku convierte un seguimiento como "sigue fallando" en una pregunta completa.</span></li>
+              <li class="step branch"><span class="dot"></span><span class="k">Respuesta curada</span><span class="d">Si hay una respuesta aprobada por un experto muy cercana, sale tal cual, sin generar.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Buscar</span><span class="d">Búsqueda en <span class="mono">pgvector</span> filtrada por módulo del ERP.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Reordenar</span><span class="d">Cohere Rerank deja los 5 mejores. Por debajo de un piso de confianza, el motor rescata o pasa el chat en vez de adivinar.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Generar</span><span class="d">Sonnet responde desde las fuentes, con caché de prompts y una herramienta para pasar el chat a una persona.</span></li>
+              <li class="step"><span class="dot"></span><span class="k">Revisar</span><span class="d">Se verifican las citas, los números y que todo salga de lo recuperado.</span></li>
+            </ol>
+            <div class="outs">
+              <div class="out"><span class="mono">respuesta</span>Fundamentada, con sus fuentes.</div>
+              <div class="out"><span class="mono">traspaso(razón)</span>A una persona, ya clasificado.</div>
+            </div>
+          </div>
+
+          <div class="side">
+            <div data-reveal data-d="2">
+              <h3>Ingesta</h3>
+              <p>Lectura de PDF y DOCX, con OCR multimodal para páginas escaneadas. Fragmentación semántica y una línea de contexto del documento en cada fragmento antes de indexarlo. Los documentos son idempotentes por hash, los fragmentos tienen versión y las cifras con fecha llevan una marca de vigencia para no servir valores vencidos.</p>
+              <div class="chips"><span class="chip">Titan Embeddings</span><span class="chip">Contextual retrieval</span></div>
+            </div>
+            <div data-reveal data-d="3">
+              <h3>Infraestructura</h3>
+              <p>Servicios en Python sobre AWS, desplegados con systemd. PostgreSQL guarda los vectores.</p>
+              <div class="chips"><span class="chip">FastAPI</span><span class="chip">asyncpg</span><span class="chip">Bedrock</span><span class="chip">EC2</span><span class="chip">S3</span><span class="chip">IAM</span><span class="chip">pgvector</span></div>
+            </div>
+          </div>
+        </div>
+
+        <ol class="timeline" data-reveal>
+          <li><span class="when">Antes de salir</span><span class="what">Modo sombra</span><span class="why">Tráfico real, sin mostrar las respuestas.</span></li>
+          <li><span class="when">Ola 1</span><span class="what">Nómina</span><span class="why">Primero el módulo con más volumen. Los clientes siguieron con el mismo chat.</span></li>
+          <li><span class="when">Ola 2</span><span class="what">Financiero</span><span class="why">Un módulo por ventana de salida.</span></li>
+          <li><span class="when">Ola 3</span><span class="what">Comercial y Zeus</span><span class="why">Además de facturación electrónica, contabilidad y los demás.</span></li>
+          <li><span class="when">Hoy</span><span class="what">15 módulos del ERP</span><span class="why">Unas 1.000 conversaciones al día.</span></li>
+        </ol>
+
+        <div class="exec" data-reveal>
+          <span class="label">Compuerta de salida</span>
+          <p>Ningún módulo pasó sin un puntaje de su golden set calificado por un juez LLM, pruebas de humo en el chat real y una reversa de un solo ajuste.</p>
+        </div>
+      </section>
+
+      <section class="chapter" id="ch4" aria-labelledby="ch4-t">
+        <p class="ch-num">04</p>
+        <h2 id="ch4-t" data-reveal>La palanca era el contenido, no el método.</h2>
+        <p class="lead" data-reveal data-d="1">La búsqueda híbrida parecía la mejora obvia. La construí, la medí dos veces y la apagué. Los datos apuntaban a otro lado.</p>
+
+        <div class="lever">
+          <div class="pane method-pane" data-reveal>
+            <h3>El método</h3>
+            <span class="label">Híbrida BM25 + vectores, fusionada con RRF</span>
+            <p>Con preguntas reales de clientes recuperó 0 de 5 casos que fallaban: en español, una consulta por palabras clave se comporta como un Y lógico y vacía los candidatos.</p>
+            <span class="big">3,6 puntos</span>
+            <p>Todas las variantes de búsqueda cupieron en ese margen. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 12,5 puntos. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
+          </div>
+          <div class="pane content-pane" data-reveal data-d="1">
+            <h3>El contenido</h3>
+            <span class="label">A dónde se fue el esfuerzo</span>
+            <ul>
+              <li><p><strong>1.027 documentos reprocesados</strong> con OCR multimodal, aislando la quinta parte del índice que un OCR anterior había dañado.</p></li>
+              <li><p><strong>Un ciclo de mejora</strong> que convierte cada semana las respuestas de los agentes en conocimiento nuevo. El <a href="#ch6">capítulo 6</a> cuenta cómo funciona.</p></li>
+              <li><p><strong>Una consola de curación</strong> con roles y permisos por módulo, que usan 44 cuentas de agentes.</p></li>
+              <li><p><strong>Arreglos encontrados con repeticiones.</strong> Corregir un parámetro de búsqueda del índice subió el puntaje medio del reranker en 0,054 y volvió respondibles el 15% de los traspasos por baja confianza, sin que ningún caso empeorara.</p></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" id="ch5" aria-labelledby="ch5-t">
+        <p class="ch-num">05</p>
+        <h2 id="ch5-t" data-reveal>Medir cada salida como un producto.</h2>
+        <p class="lead" data-reveal data-d="1">Nada sale a producción sin una línea base, una repetición y una forma de devolverse. Nómina salió primero, así que tiene la serie más larga y es la que pasé por una prueba de significancia. Financiero, Comercial y Zeus, las otras líneas críticas, van en la misma dirección.</p>
+
+        <div class="score">
+          <div class="cell big" data-reveal data-d="1">
+            <div>
+              <span class="from">40,2% <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+              <span class="v"><span aria-hidden="true" data-count data-from="40.2" data-to="32.7" data-dec="1" data-sep="," data-suffix="%">32,7%</span><span class="sr">32,7%</span></span>
+            </div>
+            <p>Escalación a humano por chat en Nómina, el primer módulo en producción. Estadísticamente significativa, p = 0,0005.</p>
+          </div>
+          <div class="cell" data-reveal data-d="2">
+            <span class="v">0,25%</span>
+            <p>De las respuestas mandan al cliente a "contactar a soporte", antes era 6,95%.</p>
+          </div>
+          <div class="cell" data-reveal data-d="3">
+            <span class="v">89,6%</span>
+            <p>Respuestas correctas, desde 71,6% entre cortes de evaluación, calificadas por un juez LLM validado con personas.</p>
+          </div>
+          <div class="cell wide" data-reveal data-d="4">
+            <span class="v">&minus;16%</span>
+            <p>Costo por turno después de agregar caché de prompts. Cada llamada al modelo queda medida.</p>
+          </div>
+        </div>
+
+        <div class="method">
+          <h3 data-reveal>Cómo se mide</h3>
+          <div data-reveal data-d="1">
+            <p>Cada módulo tiene un golden set de 30 casos calificado por un juez LLM, y ese puntaje decide la salida. Cada cambio se repite en A/B sobre trazas reales, y las comparaciones de antes y después llevan prueba de significancia.</p>
+            <p>Dos jueces, a propósito: uno a ciegas de otra familia de modelos, para que el que genera nunca califique a su propia familia, y otro anclado en la evidencia recuperada. Ese método lo rehíce en abierto como <a href="#bench">rag-eval-bench</a>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" id="ch6" aria-labelledby="ch6-t">
+        <p class="ch-num">06</p>
+        <h2 id="ch6-t" data-reveal>Que los agentes le enseñen al motor.</h2>
+        <p class="lead" data-reveal data-d="1">Cuando el motor le pasa un chat a una persona, la respuesta del agente es la mejor pista de lo que le faltaba. Un proceso aparte convierte esas respuestas en conocimiento nuevo, y un experto decide qué entra.</p>
+
+        <div class="loop2">
+          <div class="pipe-box" data-reveal data-d="2">
+            <div class="trace-head">
+              <span class="label">De un traspaso a conocimiento nuevo</span>
+              <button class="replay" type="button"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Repetir</button>
+            </div>
+            <ol class="pipe">
+              <li><span><b>El agente cierra el chat</b>Las resoluciones llegan al motor por un puente de datos desde el portal de soporte cada 30 minutos.</span></li>
+              <li><span><b>Solo siguen los vacíos reales</b>Los traspasos por falta de personal, frustración o riesgo se descartan antes de cualquier llamada a un modelo.</span></li>
+              <li><span><b>Un juez lee los turnos del agente</b>Es de una familia de modelos distinta a la que responde. Reconstruye la pregunta y la respuesta reutilizable con su evidencia, y descarta lo que no se puede documentar, como "abra un ticket".</span></li>
+              <li><span><b>Se compara con lo que el motor ya sabe</b>Lo cubierto se salta. Una repetición le suma demanda al pendiente. Una respuesta que contradice lo indexado queda marcada como desactualizada.</span></li>
+              <li><span><b>Un experto la aprueba o la edita</b>Desde la consola de curación. Lo aprobado se usa de inmediato, sin reindexar.</span></li>
+            </ol>
+          </div>
+          <aside class="guards" data-reveal data-d="3" aria-label="Lo que el ciclo nunca hace">
+            <h3>Lo que nunca hace</h3>
+            <ul>
+              <li>Publicar algo que un experto no haya aprobado</li>
+              <li>Dejar que el modelo que responde califique su propio trabajo</li>
+              <li>Pagar dos veces por juzgar el mismo contenido, gracias a una huella por contenido</li>
+              <li>Aprender de traspasos que fueron un problema de personal</li>
+            </ul>
+            <span class="label">Entre 30 y 60 minutos desde que se cierra un chat hasta que hay un candidato en la cola.</span>
+          </aside>
+        </div>
+
+        <div class="loop-result">
+          <div class="big-n" data-reveal>
+            <span class="from">50%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><span class="accent">40%</span>
+            <span class="label">escalación a humano en Comercial, en números redondos</span>
+          </div>
+          <div data-reveal data-d="1">
+            <p>La baja de Comercial vino sobre todo de este ciclo. Suma unas 150 respuestas aprobadas por semana por unos US$10 al mes de modelo, y 44 cuentas de agentes curan desde la consola con roles y permisos por módulo.</p>
+            <p>Es la razón principal de que el motor siga mejorando entre una salida y otra. Lo rehíce en abierto como <a href="#learnloop">support-learning-loop</a>.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="chapter" id="ch7" aria-labelledby="ch7-t">
+        <p class="ch-num">07</p>
+        <h2 id="ch7-t" data-reveal>Medir el servicio completo, más allá del bot.</h2>
+        <p class="lead" data-reveal data-d="1">Un motor es una pieza del servicio. Con el RAG en producción, fui por lo que pasa alrededor de cada conversación.</p>
+
+        <div class="ops">
+          <div class="big-n" data-reveal>
+            <span class="from">30%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg><span class="accent">64%</span>
+            <span class="label">CSAT de servicio al cliente</span>
+          </div>
+          <div data-reveal data-d="1">
+            <h3>Rediseñar el traspaso</h3>
+            <p>Un tope de chats simultáneos por agente, orden real de llegada y balanceo de carga entre equipos. El CSAT pasó de 30% a 64%, medido con la encuesta semanal que salió con el piloto.</p>
+            <p>El ruteo primario a agentes bajó la primera respuesta de 20,2 a 15,2 minutos y la carga máxima por agente de 27 a 20 chats.</p>
+          </div>
+        </div>
+
+        <div class="jarvis">
+          <h3 data-reveal>Jarvis</h3>
+          <p data-reveal data-d="1">El juez del servicio de soporte, en producción. Cada día lee todas las conversaciones y decide quién resolvió cada una, la IA, un agente o nadie, con la misma regla para los dos. Al cierre tipifica el ticket y reemplaza a un tipificador cuya atribución no aguantaba una auditoría ticket por ticket.</p>
+          <div class="jarvis-grid">
+            <div class="attr" data-reveal>
+              <span class="v">US$0,002</span>
+              <p>Lo que cuesta juzgar una conversación. Las lee todas, todos los días.</p>
+            </div>
+            <div data-reveal data-d="1">
+              <p>Es la evolución del juez de conversaciones que ya corría sobre los datos del RAG. El mismo motor, ahora orquestado en LangGraph con estado tipado, jueces en paralelo, checkpoints en PostgreSQL y pausas para revisión humana. Los resultados van a Power BI y a un informe diario que el equipo de soporte lee en Teams.</p>
+              <div class="facts-inline"><span class="chip">LLM-as-judge</span><span class="chip">LangGraph</span><span class="chip">Power BI</span><span class="chip">n8n + Teams</span></div>
+            </div>
+          </div>
+          <p class="also-ops" data-reveal><span class="chip">n8n + Teams</span>Otro flujo avisa a los agentes de L2 y L3 sobre sus tickets en la plataforma interna de servicio, según las metas de SLA, TTR y FCR de las que dependen sus bonificaciones.</p>
+        </div>
+      </section>
+
+      <section class="chapter" id="ch8" aria-labelledby="ch8-t">
+        <p class="ch-num">08</p>
+        <h2 id="ch8-t" data-reveal>Lo que sigue: una sola puerta para cada cliente.</h2>
+        <p class="status" data-reveal data-d="1"><span class="live" aria-hidden="true"></span>En construcción</p>
+        <p class="lead" data-reveal data-d="2">Hoy el cliente abre el chat y tiene que escoger un módulo primero. Esa sola elección es donde empieza casi todo el peloteo entre canales.</p>
+
+        <div class="compare">
+          <div class="pane today" data-reveal>
+            <h3>Hoy</h3>
+            <ul>
+              <li>El cliente escoge mal el módulo.</li>
+              <li>Los casos de L2 o L3 gastan turnos primero en el RAG.</li>
+              <li>Las escalaciones llegan a las personas sin contexto.</li>
+              <li>Un ticket abierto se ignora y la historia empieza de cero.</li>
+            </ul>
+          </div>
+          <div class="pane next" data-reveal data-d="1">
+            <h3>Lo que estoy construyendo</h3>
+            <div class="route">
+              <div class="node"><span class="mono">todos los clientes</span>Una sola entrada, de día o de noche</div>
+              <span class="wire" aria-hidden="true"></span>
+              <div class="node recruiter"><strong>Triage en línea</strong><small>Al llegar, entiende el problema y revisa los tickets abiertos del cliente, y manda el caso a donde corresponde con un resumen, para que nadie empiece de cero.</small></div>
+              <span class="wire" aria-hidden="true"></span>
+              <ul class="fan">
+                <li class="node">RAG</li>
+                <li class="node">L1</li>
+                <li class="node">L2</li>
+                <li class="node">L3</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <p class="goal" data-reveal>La meta: que el cliente resuelva en un solo contacto, con menos escalaciones y sin peloteo. Antes de prometer nada calculé el techo con datos, unos 6 puntos menos de escalación.</p>
+
+        <div class="after" data-reveal>
+          <p class="status later"><span class="live" aria-hidden="true"></span>Diseñado, para más adelante</p>
+          <div>
+            <h3>Después: herramientas sobre los sistemas del cliente</h3>
+            <p>Hoy el RAG explica la solución y el cliente la aplica. La siguiente versión la ejecuta en la instalación del cliente, un reinicio de servicio o una actualización, y cada acción tiene su propio nivel de permiso. El diseño está terminado. La construcción viene más adelante.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<section class="outlast" aria-label="Construido para que otros sigan">
+  <div class="wrap">
+    <p data-reveal>Construido para que otros sigan construyendo encima. Formé a <span class="accent">16 personas</span>, acompañé a <span class="accent">3 equipos</span> mientras adoptaban IA y presento los cambios del sistema a unos <span class="accent">90 agentes</span> de soporte.</p>
+    <ol class="built-on" data-reveal data-d="1">
+      <li><strong>Jarvis</strong>Medición del servicio sobre los datos del RAG.</li>
+      <li><strong>Ciclo de mejora</strong>Los agentes le enseñan al motor cada semana.</li>
+      <li><strong>Pasarela de modelos</strong>Otros equipos de SIESA llaman a Claude por ella, con imágenes incluidas.</li>
+      <li><strong>Triage en línea</strong>La siguiente capa, sobre la misma base.</li>
+    </ol>
+    <small data-reveal data-d="2">El lenguaje es el medio: Python, C#/.NET, TypeScript, SQL. La meta es un sistema que escale y que la siguiente persona pueda operar.</small>
+  </div>
+</section>
+
+<section class="projects" id="projects" aria-labelledby="projects-t">
+  <div class="wrap">
+    <h2 id="projects-t" data-reveal>Proyectos</h2>
+
+    <article class="proj" id="bench" data-reveal>
+      <a class="shot" href="../bench/" aria-label="Abrir el informe de rag-eval-bench"><img src="../assets/img/rag-eval-bench.webp" width="1920" height="1200" alt="Informe de rag-eval-bench que compara cinco configuraciones de búsqueda en exactitud, respuestas erradas mostradas, escalación, costo y latencia." loading="lazy"></a>
+      <div>
+        <span class="badge"><i></i>Código público</span>
+        <h3>rag-eval-bench</h3>
+        <p>Un banco de pruebas que decide si un cambio a un RAG sale a producción: un golden set con preguntas que la documentación no responde, un juez LLM, un validador que detecta citas y números inventados y una prueba de McNemar pareada detrás de una compuerta en CI. Corre sobre la documentación pública de Odoo 18.</p>
+        <p>Lo que encontró: la búsqueda híbrida le ganó a la densa por 12,5 puntos, p = 0,02. Un reranker sumó 1,4 puntos y subió la latencia p95 de 2,5 s a 8,3 s, así que no sale.</p>
+        <div class="facts"><span class="chip">Python</span><span class="chip">BM25 + RRF</span><span class="chip">LLM-as-judge</span><span class="chip">GitHub Actions</span></div>
+        <a class="link" href="https://github.com/JessidC/rag-eval-bench" target="_blank" rel="noopener">Código <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
+        <a class="link" href="../bench/">Informe <svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
+    </article>
+
+    <article class="stacked" id="learnloop" data-reveal>
+      <span class="badge"><i></i>Código público</span>
+      <h3>support-learning-loop</h3>
+      <p>El ciclo de mejora del capítulo 6, rehecho con datos públicos. Un bot de soporte le pasa a una persona los chats que no puede resolver, un juez de otra familia de modelos convierte las respuestas de los agentes en candidatos, una verificación descarta lo que el agente no dijo y un experto aprueba cada uno antes de que el bot lo use.</p>
+      <div class="strip" role="group" aria-label="Resultados en 330 chats de prueba">
+        <div><span class="v"><span class="from">19%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>61%</span><span class="label">chats resueltos correctamente</span></div>
+        <div><span class="v"><span class="from">68%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>21%</span><span class="label">chats pasados a una persona</span></div>
+        <div><span class="v"><span class="from">41%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>23%</span><span class="label">parciales o erróneos entre los mostrados</span></div>
+      </div>
+      <p>Medido con 330 chats de prueba del dataset ABCD; el mismo bot, y solo cambia la base de conocimiento. El README también muestra qué salió mal sin revisor: el bot empezó a contestar 5 de 80 casos que necesitaban a una persona.</p>
+      <div class="facts"><span class="chip">Python</span><span class="chip">LLM-as-judge</span><span class="chip">fastembed</span><span class="chip">McNemar</span></div>
+      <a class="link" href="https://github.com/JessidC/support-learning-loop" target="_blank" rel="noopener">Código <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
+    </article>
+
+    <article class="proj flip" data-reveal>
+      <a class="shot" href="https://tocaturno.com" target="_blank" rel="noopener" aria-label="Visitar tocaturno.com"><img src="../assets/img/tocaturno.webp" width="1920" height="1200" alt="Página de inicio de Tocaturno, una recepción por WhatsApp para consultorios, veterinarias, salones, barberías y droguerías." loading="lazy"></a>
+      <div>
+        <span class="badge"><i></i>En línea</span>
+        <h3>Tocaturno</h3>
+        <p>Mi propio producto. Una recepción por WhatsApp para negocios que trabajan con citas: contesta a toda hora con plantillas que aprueba el dueño, agenda en los espacios libres, manda recordatorios y le pasa a una persona las conversaciones delicadas.</p>
+        <div class="facts"><span class="chip">WhatsApp</span><span class="chip">LLM</span><span class="chip">Agenda</span></div>
+        <a class="link" href="https://tocaturno.com" target="_blank" rel="noopener">tocaturno.com <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="career" id="experience" aria-labelledby="exp-t">
+  <div class="wrap">
+    <h2 id="exp-t" data-reveal>Experiencia</h2>
+    <ol class="career-list">
+      <li data-reveal>
+        <span class="when now">Actual</span>
+        <div><h3>Único responsable técnico, plataforma de IA de soporte</h3><span class="label">SIESA</span>
+        <p>Diseñé, construí y opero el RAG en producción de la <a href="#ch1">historia de arriba</a>, junto con la medición y las herramientas construidas encima.</p></div>
+      </li>
+      <li data-reveal>
+        <span class="when now">Desde mar. 2022</span>
+        <div><h3>Desarrollador de software</h3><span class="label">SIESA, Cali</span>
+        <p>Migré 3 aplicaciones monolíticas a microservicios en .NET 8 en un equipo ágil de 8. Lidero la plataforma interna de servicio que usan más de 500 empleados y construyo los pipelines de datos detrás de los informes del servicio.</p></div>
+      </li>
+      <li data-reveal>
+        <span class="when">Medio tiempo</span>
+        <div><h3>Consultor e instructor de IA independiente</h3><span class="label">Remoto</span>
+        <p>Agentes de IA y automatizaciones de WhatsApp para clientes con n8n y servidores MCP, clases prácticas de IA y mi propio producto, Tocaturno.</p></div>
+      </li>
+      <li data-reveal>
+        <span class="when">Jun. 2019 a feb. 2022</span>
+        <div><h3>Desarrollador de software independiente</h3><span class="label">Remoto</span>
+        <p>Más de 6 aplicaciones web full-stack para pymes colombianas con .NET Core y React, con más de 1.500 usuarios finales, entre ellas una tienda con PayU que vendió más de US$25 mil el primer año.</p></div>
+      </li>
+      <li data-reveal>
+        <span class="when">Estudios</span>
+        <div><h3>Ingeniería de Sistemas, UNAD</h3><span class="label">En curso, hasta 2027</span>
+        <p>Tecnólogo en Análisis y Desarrollo de Sistemas, SENA, 2022.</p></div>
+      </li>
+    </ol>
+    <a class="link" href="../assets/jarby-cosme-hoja-de-vida.pdf" download="Jarby-Jessid-Cosme-Hoja-de-vida.pdf" data-reveal>Descargar hoja de vida <svg class="icon" aria-hidden="true"><use href="#i-down"/></svg></a>
+  </div>
+</section>
+
+<section class="work" id="work" aria-labelledby="work-t">
+  <div class="wrap">
+    <h2 id="work-t" data-reveal>Otros trabajos</h2>
+    <div class="work-grid">
+      <div class="work-main">
+        <article class="item" data-reveal>
+          <h3>Pipeline de indicadores de servicio</h3>
+          <span class="label role">SIESA. Python, SQL Server, Power BI</span>
+          <p>Reemplacé un proceso manual que alguien corría dos o tres veces al día, una exportación de Freshdesk, Excel, nueve scripts SQL y seis tableros de gestión, por un pipeline: API de Freshdesk, carga transaccional con verificación por hash, actualización de Power BI por su API REST y controles de volumen y frescura antes de cualquier escritura. Comparado con la carga manual, 9.607 filas contra 9.606. Corre cuatro veces al día.</p>
+          <div class="facts"><span class="chip">API de Freshdesk</span><span class="chip">SQL Server</span><span class="chip">Power BI REST</span><span class="chip">Carga SQL de 16,7 a 7,6 min</span></div>
+        </article>
+        <article class="item" data-reveal data-d="1">
+          <h3>App empresarial full-stack en .NET</h3>
+          <span class="label role">Código público. .NET 8, React, TypeScript</span>
+          <p>Un monorepo de referencia: API en ASP.NET Core por capas, autenticación JWT con roles, PostgreSQL, frontend en React con Vite, pruebas unitarias y de integración, Docker Compose y CI en GitHub Actions.</p>
+          <a class="link" href="https://github.com/JessidC/enterprise-fullstack-dotnet" target="_blank" rel="noopener">Ver el código en GitHub <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
+        </article>
+      </div>
+      <div class="work-side">
+        <article class="item" data-reveal data-d="1">
+          <h3>Plataforma interna de servicio y proyectos</h3>
+          <span class="label role">SIESA, la lidero. .NET, React y Angular</span>
+          <p>La plataforma tipo Jira que usan más de 500 empleados. Llevé su evolución full-stack y le integré tres aplicaciones internas.</p>
+        </article>
+        <article class="item" data-reveal data-d="2">
+          <h3>Asistente interno de IA</h3>
+          <span class="label role">SIESA. OpenAI, tool calling</span>
+          <p>Soportistas, consultores y operaciones preguntaban en lenguaje natural sobre SQL Server, la plataforma de servicio y los tickets de Freshdesk. Prototipado en LangChain y luego construido directo sobre la API.</p>
+        </article>
+      </div>
+    </div>
+
+    <div class="tools">
+      <div data-reveal><h3>Sistemas de IA</h3><p>RAG, agentes de IA, tool calling, MCP, Claude en AWS Bedrock, LangGraph, embeddings, pgvector, reranking, contextual retrieval, caché de prompts, evaluación de LLM (LLM-as-judge, golden sets, repetición A/B), LLMOps, OCR multimodal, n8n</p></div>
+      <div data-reveal data-d="1"><h3>Backend y datos</h3><p>Python, FastAPI, C#, .NET 8, ASP.NET Core, APIs REST, microservicios, pruebas (xUnit, NUnit, pytest), PostgreSQL, SQL Server, Power BI, pipelines ETL, Linux (systemd, cron), Docker</p></div>
+      <div data-reveal data-d="2"><h3>Frontend, nube y operación</h3><p>TypeScript, React, Angular, Jinja, AWS (Bedrock, EC2, S3, IAM, secretos), GCP Cloud Run, observabilidad (trazas, latencia, costo), Git, CI/CD</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact" aria-labelledby="contact-t">
+  <div class="wrap">
+    <h2 id="contact-t" data-reveal>Busco el siguiente sistema para construir.</h2>
+    <a class="mail" href="mailto:jessidc95@gmail.com" data-reveal data-d="1">jessidc95@gmail.com</a>
+    <p class="sub" data-reveal data-d="2">Abierto a cargos remotos de tiempo completo donde me haga cargo de sistemas de punta a punta: IA, backend y datos. Estoy en Cali, Colombia, GMT-5, con el mismo horario de la costa este y el centro de EE. UU.</p>
+    <div class="links" data-reveal data-d="3">
+      <a href="mailto:jessidc95@gmail.com"><svg class="icon" aria-hidden="true"><use href="#i-mail"/></svg>Escríbeme</a>
+      <a href="https://www.linkedin.com/in/jarbyjessidcosme" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-linkedin"/></svg>LinkedIn</a>
+      <a href="https://github.com/JessidC" target="_blank" rel="noopener"><svg class="icon" aria-hidden="true"><use href="#i-github"/></svg>GitHub</a>
+      <a href="../assets/jarby-cosme-hoja-de-vida.pdf" download="Jarby-Jessid-Cosme-Hoja-de-vida.pdf"><svg class="icon" aria-hidden="true"><use href="#i-down"/></svg>Descargar hoja de vida</a>
+    </div>
+    <footer class="foot">
+      <p>La plataforma es de SIESA. Aquí no hay datos de clientes ni código; las cifras son resultados agregados de informes internos del proyecto, y la arquitectura la puedo explicar en una entrevista.</p>
+      <p>&copy; 2026 Jarby Jessid Cosme · <a href="../" hreflang="en" lang="en">English version</a></p>
+    </footer>
+  </div>
+</section>
+
+</main>
+<script src="../assets/site.js" defer></script>
 </body>
 </html>

@@ -1,88 +1,104 @@
+// Page behavior. No scroll listeners: everything runs on IntersectionObserver.
 (function () {
+  window.siteReady = true;
   var root = document.documentElement;
-  root.classList.add('js');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Theme: system by default, the button overrides it for this viewer.
-  var btn = document.getElementById('theme');
-  function current() {
-    var t = root.getAttribute('data-theme');
-    if (t) return t;
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-  function label() {
-    if (!btn) return;
-    var dark = current() === 'dark';
-    btn.textContent = dark ? btn.getAttribute('data-light') : btn.getAttribute('data-dark');
-    btn.setAttribute('aria-pressed', dark ? 'true' : 'false');
-  }
-  if (btn) {
-    btn.addEventListener('click', function () {
-      var next = current() === 'dark' ? 'light' : 'dark';
+  // Theme: light or dark, remembered for this visitor.
+  var themeBtn = document.querySelector('.theme');
+  if (themeBtn) {
+    themeBtn.addEventListener('click', function () {
+      var current = root.getAttribute('data-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = current === 'dark' ? 'light' : 'dark';
       root.setAttribute('data-theme', next);
       try { localStorage.setItem('theme', next); } catch (e) {}
-      label();
     });
-    label();
   }
 
-  // Border under the top bar once the page has moved.
-  var top = document.querySelector('.top');
-  var sentinel = document.getElementById('top-sentinel');
-  if (top && sentinel && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (e) {
-      top.classList.toggle('scrolled', !e[0].isIntersecting);
-    }).observe(sentinel);
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('[data-reveal], .map').forEach(function (el) { el.classList.add('in'); });
+    document.querySelectorAll('.trace, .pipe').forEach(function (el) { el.classList.add('lit'); });
+    return;
   }
 
-  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Entrance on scroll.
+  var revealIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); revealIO.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+  document.querySelectorAll('[data-reveal], .map').forEach(function (el) { revealIO.observe(el); });
 
   // Chapter rail: marks the chapter being read.
   var railLinks = {};
   document.querySelectorAll('.rail a').forEach(function (a) { railLinks[a.getAttribute('href').slice(1)] = a; });
-  if ('IntersectionObserver' in window && Object.keys(railLinks).length) {
-    var chapterIO = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        Object.keys(railLinks).forEach(function (id) { railLinks[id].removeAttribute('aria-current'); });
-        var link = railLinks[e.target.id];
-        if (link) link.setAttribute('aria-current', 'true');
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    Object.keys(railLinks).forEach(function (id) { var el = document.getElementById(id); if (el) chapterIO.observe(el); });
-  }
+  var chapterIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      Object.keys(railLinks).forEach(function (id) { railLinks[id].removeAttribute('aria-current'); });
+      var link = railLinks[e.target.id];
+      if (link) link.setAttribute('aria-current', 'true');
+    });
+  }, { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('.chapter').forEach(function (c) { chapterIO.observe(c); });
 
-  // Improvement loop: the steps light up in order once, with a replay button.
-  var pipe = document.querySelector('.pipe');
-  if (pipe) {
-    if (reduce || !('IntersectionObserver' in window)) {
-      pipe.classList.add('lit');
-    } else {
-      var pipeIO = new IntersectionObserver(function (entries) {
-        if (entries[0].isIntersecting) { pipe.classList.add('run'); pipeIO.disconnect(); }
-      }, { threshold: 0.45 });
-      pipeIO.observe(pipe);
-    }
-    var replay = document.querySelector('.replay');
+  // Step-by-step diagrams (the request trace and the improvement loop):
+  // they light up in order the first time they are seen, with a replay button.
+  function stepper(box, target) {
+    if (!box || !target) return;
+    if (reduce) { target.classList.add('lit'); return; }
+    var io = new IntersectionObserver(function (entries) {
+      if (entries[0].isIntersecting) { target.classList.add('run'); io.disconnect(); }
+    }, { threshold: 0.45 });
+    io.observe(box);
+    var replay = box.querySelector('.replay');
     if (replay) {
       replay.addEventListener('click', function () {
-        if (reduce) return;
-        pipe.classList.remove('run');
-        void pipe.offsetWidth;
-        pipe.classList.add('run');
+        target.classList.remove('run');
+        void target.offsetWidth;
+        target.classList.add('run');
       });
     }
   }
+  var trace = document.querySelector('.trace');
+  stepper(trace, trace);
+  var pipeBox = document.querySelector('.pipe-box');
+  stepper(pipeBox, pipeBox && pipeBox.querySelector('.pipe'));
 
-  // Reveal blocks as they enter the viewport.
-  var items = document.querySelectorAll('[data-reveal]');
-  if (!('IntersectionObserver' in window)) {
-    items.forEach(function (el) { el.classList.add('in'); });
-    return;
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (en) {
-      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+  // Before-and-after figures count once when they enter.
+  var fmtFor = function (el) {
+    var dec = parseInt(el.dataset.dec || '0', 10);
+    var sep = el.dataset.sep || '.';
+    var suffix = el.dataset.suffix || '';
+    return function (v) { return v.toFixed(dec).replace('.', sep) + suffix; };
+  };
+  var countIO = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      countIO.unobserve(e.target);
+      var el = e.target;
+      var from = parseFloat(el.dataset.from), to = parseFloat(el.dataset.to);
+      var fmt = fmtFor(el);
+      if (reduce) { el.textContent = fmt(to); return; }
+      var start = null, dur = 1400;
+      var tick = function (t) {
+        if (start === null) start = t;
+        var p = Math.min((t - start) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 4);
+        el.textContent = fmt(from + (to - from) * eased);
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
     });
-  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
-  items.forEach(function (el) { io.observe(el); });
+  }, { threshold: 0.6 });
+  document.querySelectorAll('[data-count]').forEach(function (el) {
+    if (!reduce) el.textContent = fmtFor(el)(parseFloat(el.dataset.from));
+    countIO.observe(el);
+  });
+
+  // When printing, open every decision in the log.
+  window.addEventListener('beforeprint', function () {
+    document.querySelectorAll('.log details').forEach(function (d) { d.open = true; });
+  });
 })();

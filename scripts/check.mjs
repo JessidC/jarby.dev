@@ -37,7 +37,8 @@ for (const file of htmls) {
 
   // 2. No inline script, no event handler attributes, no javascript: URLs.
   for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script>/gi)) {
-    if (!/\bsrc=/.test(m[1])) fail(rel, "inline <script> block");
+    // Structured data (JSON-LD) is not executed, so it is the one inline block allowed.
+    if (!/\bsrc=/.test(m[1]) && !/type="?application\/ld\+json/.test(m[1])) fail(rel, "inline <script> block");
   }
   if (/\son[a-z]+\s*=/i.test(html)) fail(rel, "inline event handler attribute");
   if (/javascript:/i.test(html)) fail(rel, "javascript: URL");
