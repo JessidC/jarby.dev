@@ -59,6 +59,23 @@ for (const item of PUBLIC) {
   }
 }
 
+// Cache busting: GitHub Pages lets browsers keep CSS and JS for 10 minutes, so a new page
+// could load with an old stylesheet. Each reference gets ?v=<content hash>, which changes
+// whenever the file does.
+const VERSIONED = ["assets/site.css", "assets/site.js", "assets/theme-init.js"];
+for (const [rel] of Object.entries(manifest).filter(([r]) => r.endsWith(".html"))) {
+  const file = path.join(OUT, rel);
+  let html = await fs.readFile(file, "utf8");
+  for (const asset of VERSIONED) {
+    if (!manifest[asset]) continue;
+    const v = manifest[asset].slice(0, 10);
+    const name = asset.replace(/^assets\//, "");
+    html = html.replace(new RegExp(`(assets/${name.replace(".", "\\.")})(?=["\\s>])`, "g"), `$1?v=${v}`);
+  }
+  await fs.writeFile(file, html);
+  manifest[rel] = crypto.createHash("sha256").update(html).digest("hex");
+}
+
 let commit = process.env.GITHUB_SHA || "";
 if (!commit) { try { commit = execSync("git rev-parse HEAD", { cwd: ROOT }).toString().trim(); } catch { commit = "unknown"; } }
 await fs.writeFile(path.join(OUT, "build-manifest.json"), JSON.stringify({ commit, files: manifest }, null, 2));
