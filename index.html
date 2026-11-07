@@ -88,11 +88,23 @@
 
   <section class="sec" id="rag" aria-labelledby="rag-t">
     <div class="wrap">
-      <h2 class="sec-title" id="rag-t">The RAG story</h2>
+      <div class="sec-side">
+        <h2 class="sec-title" id="rag-t">The RAG story</h2>
+        <nav class="rail" aria-label="Chapters of the RAG story">
+          <ol>
+            <li><a href="#rag-data">The data</a></li>
+            <li><a href="#rag-engine">The engine</a></li>
+            <li><a href="#rag-rollout">Rollout</a></li>
+            <li><a href="#rag-changed">What changed</a></li>
+            <li><a href="#rag-content">The content</a></li>
+            <li><a href="#rag-loop">The improvement loop</a></li>
+          </ol>
+        </nav>
+      </div>
       <div class="sec-body">
         <p class="lead" data-reveal>SIESA's support chat ran on a third-party chatbot whose answers we couldn't measure or control. I built an engine the company owns. It now answers about 1,000 conversations a day across 15 ERP modules.</p>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-data" data-reveal>
           <h3>It started with the data</h3>
           <div class="prose">
             <p>I studied 90 days of production conversations, more than 55,000 chats, to see what customers actually went through. There was no way to tell whether an answer was right, and the model and the sources sat with the vendor, so we couldn't enforce a rule against invented answers. The handoff to a person needed a redesign as much as the bot did.</p>
@@ -100,7 +112,7 @@
           </div>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-engine" data-reveal>
           <h3>The engine</h3>
           <ul class="decisions">
             <li><h4>No framework in the request path</h4><p>Python and FastAPI straight on the model API, so every millisecond and every token can be traced.</p></li>
@@ -112,7 +124,7 @@
           </ul>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-rollout" data-reveal>
           <h3>One module at a time</h3>
           <ol class="timeline">
             <li><time>Before launch</time><b>Shadow run</b><span>772 real conversations, answers hidden. An independent judge preferred the new engine 44% of the time, the old one 40%.</span></li>
@@ -124,7 +136,7 @@
           <p class="prose after-tl">No module switched without a golden-set score from an LLM judge, smoke tests on the live chat and a rollback that takes one setting.</p>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-changed" data-reveal>
           <h3>What changed</h3>
           <p class="prose">Payroll went first, so it has the longest series and the one I tested for significance. Financial, Commercial and Zeus, the other critical lines, have moved the same way and are tracked with the same metrics. Commercial's drop came mostly from the improvement loop further down.</p>
           <div class="figures">
@@ -136,7 +148,7 @@
           </div>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-content" data-reveal>
           <h3>The fix was in the content</h3>
           <div class="prose">
             <p>Hybrid retrieval looked like the obvious upgrade. I built it, measured it twice on real customer queries and switched it off. In Spanish, a keyword query behaves like an AND and empties the candidate pool, so it recovered 0 of 5 failing cases, and every retrieval variant landed within 3.6 points of the others. On the English Odoo docs in <a href="#bench">rag-eval-bench</a> the same technique won by 12.5 points. Same idea, opposite result, which is why every change gets measured on its own data.</p>
@@ -145,10 +157,12 @@
           </div>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-loop" data-reveal>
           <h3>It learns from the agents every week</h3>
           <p class="prose">When the engine hands a chat to a person, the agent's answer is the best signal of what it was missing. A separate pipeline turns those answers into new knowledge, with an expert deciding what goes in.</p>
           <div class="loop2">
+            <div class="pipe-box">
+              <button class="replay" type="button">Replay</button>
             <ol class="pipe">
               <li><b>An agent closes the chat</b><span>Resolutions reach the engine through a data bridge from the support portal every 30 minutes.</span></li>
               <li><b>Only real gaps continue</b><span>Handoffs caused by staffing, frustration or risk are dropped before any model call.</span></li>
@@ -156,6 +170,7 @@
               <li><b>Compared with what the engine knows</b><span>Already covered is skipped. A repeat adds demand to the pending item. An answer that contradicts indexed content is flagged as outdated.</span></li>
               <li class="key"><b>An expert approves or edits it</b><span>From the curation console. Approved answers are served right away, with no reindex.</span></li>
             </ol>
+            </div>
             <aside class="guards" aria-label="Guards">
               <h4>What it never does</h4>
               <ul>

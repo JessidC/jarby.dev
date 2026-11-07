@@ -88,11 +88,23 @@
 
   <section class="sec" id="rag" aria-labelledby="rag-t">
     <div class="wrap">
-      <h2 class="sec-title" id="rag-t">La historia del RAG</h2>
+      <div class="sec-side">
+        <h2 class="sec-title" id="rag-t">La historia del RAG</h2>
+        <nav class="rail" aria-label="Capítulos de la historia del RAG">
+          <ol>
+            <li><a href="#rag-data">Los datos</a></li>
+            <li><a href="#rag-engine">El motor</a></li>
+            <li><a href="#rag-rollout">La salida</a></li>
+            <li><a href="#rag-changed">Lo que cambió</a></li>
+            <li><a href="#rag-content">El contenido</a></li>
+            <li><a href="#rag-loop">El ciclo de mejora</a></li>
+          </ol>
+        </nav>
+      </div>
       <div class="sec-body">
         <p class="lead" data-reveal>El chat de soporte de SIESA funcionaba con un chatbot de terceros cuyas respuestas no podíamos medir ni controlar. Construí un motor que es de la empresa. Hoy atiende unas 1.000 conversaciones al día en 15 módulos del ERP.</p>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-data" data-reveal>
           <h3>Empezó por los datos</h3>
           <div class="prose">
             <p>Estudié 90 días de conversaciones de producción, más de 55.000 chats, para ver lo que de verdad vivían los clientes. No había forma de saber si una respuesta era correcta, y el modelo y las fuentes estaban del lado del proveedor, así que no podíamos hacer cumplir una regla contra respuestas inventadas. El traspaso a una persona necesitaba un rediseño tanto como el bot.</p>
@@ -100,7 +112,7 @@
           </div>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-engine" data-reveal>
           <h3>El motor</h3>
           <ul class="decisions">
             <li><h4>Sin framework en el camino de cada pregunta</h4><p>Python y FastAPI directo contra la API del modelo, para poder rastrear cada milisegundo y cada token.</p></li>
@@ -112,7 +124,7 @@
           </ul>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-rollout" data-reveal>
           <h3>Un módulo a la vez</h3>
           <ol class="timeline">
             <li><time>Antes de salir</time><b>Modo sombra</b><span>772 conversaciones reales, sin mostrar las respuestas. Un juez independiente prefirió el motor nuevo el 44% de las veces y el anterior el 40%.</span></li>
@@ -124,7 +136,7 @@
           <p class="prose after-tl">Ningún módulo pasó sin un puntaje de su golden set calificado por un juez LLM, pruebas de humo en el chat real y una reversa de un solo ajuste.</p>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-changed" data-reveal>
           <h3>Lo que cambió</h3>
           <p class="prose">Nómina salió primero, así que tiene la serie más larga y es la que pasé por una prueba de significancia. Financiero, Comercial y Zeus, las otras líneas críticas, van en la misma dirección y se miden con las mismas métricas. La baja de Comercial vino sobre todo del ciclo de mejora que aparece más abajo.</p>
           <div class="figures">
@@ -136,7 +148,7 @@
           </div>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-content" data-reveal>
           <h3>La solución estaba en el contenido</h3>
           <div class="prose">
             <p>La búsqueda híbrida parecía la mejora obvia. La construí, la medí dos veces con preguntas reales de clientes y la apagué. En español, una consulta por palabras clave se comporta como un Y lógico y vacía los candidatos, así que recuperó 0 de 5 casos que fallaban, y todas las variantes quedaron a menos de 3,6 puntos entre sí. Con la documentación de Odoo en inglés, en <a href="#bench">rag-eval-bench</a>, la misma técnica ganó por 12,5 puntos. La misma idea dio el resultado contrario, y por eso cada cambio se mide sobre sus propios datos.</p>
@@ -145,10 +157,12 @@
           </div>
         </div>
 
-        <div class="chapter" data-reveal>
+        <div class="chapter" id="rag-loop" data-reveal>
           <h3>Aprende de los agentes cada semana</h3>
           <p class="prose">Cuando el motor le pasa un chat a una persona, la respuesta del agente es la mejor pista de lo que le faltaba. Un proceso aparte convierte esas respuestas en conocimiento nuevo, y un experto decide qué entra.</p>
           <div class="loop2">
+            <div class="pipe-box">
+              <button class="replay" type="button">Repetir</button>
             <ol class="pipe">
               <li><b>El agente cierra el chat</b><span>Las resoluciones llegan al motor por un puente de datos desde el portal de soporte cada 30 minutos.</span></li>
               <li><b>Solo siguen los vacíos reales</b><span>Los traspasos por falta de personal, frustración o riesgo se descartan antes de cualquier llamada a un modelo.</span></li>
@@ -156,6 +170,7 @@
               <li><b>Se compara con lo que el motor ya sabe</b><span>Lo que ya está cubierto se salta. Una repetición le suma demanda al pendiente. Una respuesta que contradice lo indexado queda marcada como desactualizada.</span></li>
               <li class="key"><b>Un experto la aprueba o la edita</b><span>Desde la consola de curación. Lo aprobado se usa de inmediato, sin reindexar.</span></li>
             </ol>
+            </div>
             <aside class="guards" aria-label="Controles">
               <h4>Lo que nunca hace</h4>
               <ul>
