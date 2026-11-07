@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarby Jessid Cosme | Software and AI engineer</title>
+<meta name="description" content="Software and AI engineer in Cali, Colombia. I own the AI that answers SIESA's ERP support chat, about 1,000 conversations a day.">
+<link rel="canonical" href="https://jarby.dev/">
+<link rel="alternate" hreflang="en" href="https://jarby.dev/">
+<link rel="alternate" hreflang="es" href="https://jarby.dev/es/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Jarby Jessid Cosme | Software and AI engineer">
+<meta property="og:description" content="I own the AI that answers SIESA's ERP support chat. The story of that RAG, and the projects around it.">
+<meta property="og:url" content="https://jarby.dev/">
+<meta property="og:image" content="https://jarby.dev/assets/og-en.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#f3f4f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121416" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/schibsted-grotesk-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div id="top-sentinel" aria-hidden="true"></div>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#main">Jarby<span class="mid"> Jessid</span> Cosme</a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#profile">Profile</a>
+      <a href="#rag">The RAG story</a>
+      <a href="#projects">Projects</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="tools">
+      <a class="chip-btn" href="assets/jarby-cosme-resume.pdf">Resume</a>
+      <a class="chip-btn" href="es/index.html" hreflang="es" lang="es" aria-label="Ver en español">ES</a>
+      <button class="chip-btn" id="theme" type="button" data-dark="Dark" data-light="Light" aria-label="Toggle dark mode">Dark</button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" aria-labelledby="name">
+    <div class="wrap">
+      <div>
+        <h1 id="name" data-reveal style="--d:0">Jarby Jessid Cosme</h1>
+        <p class="role" data-reveal style="--d:1">Software and AI engineer. I own the AI that answers SIESA's ERP support chat, about 1,000 conversations a day.</p>
+        <div class="cta" data-reveal style="--d:2">
+          <a class="btn btn-primary" href="#rag">Read the RAG story</a>
+          <a class="btn btn-ghost" href="#projects">See the projects</a>
+        </div>
+      </div>
+      <dl class="now" data-reveal style="--d:3">
+        <dt>Now</dt>
+        <dd>Running SIESA's support RAG in production, 15 ERP modules</dd>
+        <dt>Building</dt>
+        <dd>The online triage that will be every customer's first contact</dd>
+        <dt>Looking for</dt>
+        <dd>A full-time remote role, from Cali, Colombia, <span class="nw">GMT-5</span></dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="sec" id="profile" aria-labelledby="profile-t">
+    <div class="wrap">
+      <h2 class="sec-title" id="profile-t">Profile</h2>
+      <div class="sec-body">
+        <p class="lead" data-reveal>I've built software for seven years. Full-stack .NET first, and since 2025 the AI behind customer support at SIESA, one of the largest ERP vendors in Colombia.</p>
+        <div class="prose" data-reveal>
+          <p>I like owning a system from the first look at the data to the day it runs without me. At SIESA that meant reading 90 days of chats, taking a business case to leadership, building the engine, shipping it and running it since. The language is whatever the system needs. Mostly Python, C# and TypeScript, with SQL everywhere.</p>
+          <p>I also teach. I trained 16 people and worked with 3 teams as they started using AI in their own work.</p>
+        </div>
+        <dl class="facts" data-reveal>
+          <div><dt>Now</dt><dd><b>Sole technical owner, AI support platform</b>, SIESA, since May 2026. Software developer at SIESA since March 2022.</dd></div>
+          <div><dt>Before</dt><dd><b>Freelance full-stack developer</b>, 2019 to 2022. Six web apps for Colombian small businesses, one of them a PayU store with US$25K+ in first-year sales.</dd></div>
+          <div><dt>Stack</dt><dd>Python, FastAPI, C# and .NET 8, TypeScript, React, SQL Server, PostgreSQL with pgvector, AWS Bedrock, LangGraph, n8n.</dd></div>
+          <div><dt>On the side</dt><dd><b>Tocaturno</b>, my own product, plus AI classes and automations for clients.</dd></div>
+          <div><dt>Education</dt><dd>B.Sc. in Systems Engineering, UNAD, expected 2027. Technologist in Systems Analysis and Development, SENA, 2022.</dd></div>
+          <div><dt>Languages</dt><dd>Spanish native. English B2, and I work in it every day.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="rag" aria-labelledby="rag-t">
+    <div class="wrap">
+      <h2 class="sec-title" id="rag-t">The RAG story</h2>
+      <div class="sec-body">
+        <p class="lead" data-reveal>SIESA's support chat ran on a third-party chatbot nobody could audit. I replaced it with an engine the company owns and can measure. It now answers about 1,000 conversations a day.</p>
+
+        <div class="chapter" data-reveal>
+          <h3>It started with the data</h3>
+          <div class="prose">
+            <p>I pulled 90 days of production conversations, 55,350 chats and about 964K messages, and read what customers actually went through. There was no way to tell whether an answer was right. The model, the retrieval and the citations belonged to the vendor, so a no-invention policy couldn't be enforced from outside. And the worst moment came after the bot, when a customer asked for a person and the handoff stalled.</p>
+            <p>I took that to leadership as a business case with six decisions ranked by impact and cost. The main one was to build our own engine and fix the handoff in the same move.</p>
+          </div>
+        </div>
+
+        <div class="chapter" data-reveal>
+          <h3>The engine</h3>
+          <ul class="decisions">
+            <li><h4>No framework in the request path</h4><p>Python and FastAPI straight on the model API, so every millisecond and every token can be traced.</p></li>
+            <li><h4>Claude on AWS Bedrock</h4><p>SIESA already ran on AWS, so billing and permissions stayed in the account it had. Sonnet answers, Haiku rewrites follow-ups and reads scanned pages.</p></li>
+            <li><h4>Retrieve wide, rerank narrow</h4><p>pgvector search filtered by ERP module, then Cohere Rerank keeps the five passages the model reads.</p></li>
+            <li><h4>Checked before it goes out</h4><p>Every citation has to exist in what was retrieved. A number that isn't in the sources sends the chat to a person.</p></li>
+            <li><h4>Rules before the model</h4><p>About 170 deterministic rules handle greetings, risk and requests for a person before any LLM call.</p></li>
+            <li><h4>Same contract as the old bot</h4><p>The support portal didn't change, so switching over and rolling back were both routine operations.</p></li>
+          </ul>
+        </div>
+
+        <div class="chapter" data-reveal>
+          <h3>Shipping it, twice</h3>
+          <ol class="timeline">
+            <li><time>Jul 4 to 6</time><b>Shadow run</b><span>772 real conversations, answers hidden. A separate judge preferred the new engine 44% of the time, the old one 40%.</span></li>
+            <li><time>Jul 9</time><b>Switch</b><span>Customers kept the same chat window.</span></li>
+            <li class="back"><time>Jul 14</time><b>Rollback</b><span>Back to the vendor after a complaint from the support desk.</span></li>
+            <li><time>Jul 16</time><b>Switch again</b><span>With the root cause fixed.</span></li>
+            <li class="here"><time>Today</time><b>15 ERP modules</b><span>About 1,000 conversations a day. Reported to leadership and to the CEO.</span></li>
+          </ol>
+        </div>
+
+        <div class="chapter" data-reveal>
+          <h3>What changed</h3>
+          <div class="figures">
+            <div class="first"><div class="n"><span class="from">40.2%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">32.7%</span></div><p>Human escalation per chat in Payroll, the busiest module. Statistically significant, p = 0.0005.</p></div>
+            <div><div class="n"><span class="from">6.95%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">0.25%</span></div><p>Replies that tell the customer to contact support.</p></div>
+            <div><div class="n"><span class="from">71.6%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">89.6%</span></div><p>Answer correctness between evaluation cuts, scored by a human-validated LLM judge.</p></div>
+            <div><div class="n"><span class="to">-16%</span></div><p>Cost per turn after adding prompt caching.</p></div>
+            <div><div class="n"><span class="from">30%</span><span class="arr" aria-hidden="true">&rarr;</span><span class="to">64%</span></div><p>Customer-service CSAT after redesigning the handoff to agents.</p></div>
+          </div>
+        </div>
+
+        <div class="chapter" data-reveal>
+          <h3>The fix was in the content</h3>
+          <div class="prose">
+            <p>Hybrid retrieval looked like the obvious upgrade. I built it, measured it twice on real customer queries and switched it off. It recovered 0 of 5 failing cases, and every retrieval variant I tried landed within 3.6 points of the others.</p>
+            <p>So the effort went to the documents. I reprocessed 1,027 of them with multimodal OCR and set up a curation loop where agents approve about 150 new answers a week, from a console 44 agent accounts use.</p>
+            <p>Every change now ships the same way. A golden set per module scored by an LLM judge, an A/B replay on real traces and a significance test before and after. I rebuilt that method in the open as <a href="#bench">rag-eval-bench</a>.</p>
+          </div>
+        </div>
+
+        <p class="note" data-reveal>The platform belongs to SIESA. Figures come from project reports to leadership, July to October 2026. I can walk through the architecture in an interview.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="projects" aria-labelledby="projects-t">
+    <div class="wrap">
+      <h2 class="sec-title" id="projects-t">Projects</h2>
+      <div class="sec-body">
+
+        <article class="proj" id="bench" data-reveal>
+          <a class="shot" href="bench/index.html" aria-label="Open the rag-eval-bench report"><img src="assets/img/rag-eval-bench.webp" width="1920" height="1200" alt="rag-eval-bench report comparing five retrieval configurations on accuracy, wrong answers shown, escalation, cost and latency." loading="lazy"></a>
+          <div>
+            <span class="status live"><i></i>Public code</span>
+            <h3>rag-eval-bench</h3>
+            <p>A bench that decides whether a RAG change ships. Golden set with questions the docs can't answer, an LLM judge, a validator that catches invented citations and numbers, and a paired McNemar test behind a CI gate. It runs on the public Odoo 18 docs.</p>
+            <p>What it found. Hybrid retrieval beat dense by 12.5 points, p = 0.02. A reranker added 1.4 points and pushed p95 latency from 2.5 s to 8.3 s, so it doesn't ship.</p>
+            <ul class="tags"><li>Python</li><li>BM25 + RRF</li><li>LLM-as-judge</li><li>GitHub Actions</li></ul>
+            <div class="links"><a href="https://github.com/JessidC/rag-eval-bench">Code</a><a href="bench/index.html">Report</a></div>
+          </div>
+        </article>
+
+        <article class="proj flip" data-reveal>
+          <a class="shot" href="https://tocaturno.com" aria-label="Visit tocaturno.com"><img src="assets/img/tocaturno.webp" width="1920" height="1200" alt="Tocaturno home page, a WhatsApp reception service for clinics, vets, salons, barbershops and pharmacies." loading="lazy"></a>
+          <div>
+            <span class="status live"><i></i>Live</span>
+            <h3>Tocaturno</h3>
+            <p>My own product. A WhatsApp reception for appointment-based businesses. It answers at any hour from templates the owner approves, books free slots, sends reminders and hands sensitive conversations to a person.</p>
+            <ul class="tags"><li>WhatsApp</li><li>LLM</li><li>Scheduling</li></ul>
+            <div class="links"><a href="https://tocaturno.com">tocaturno.com</a></div>
+          </div>
+        </article>
+
+        <article class="jarvis" data-reveal>
+            <div>
+              <div class="big">41.1%</div>
+              <p class="big-cap">How often the old bot's attribution matched a ticket-by-ticket audit. That gap is why Jarvis exists.</p>
+            </div>
+            <div>
+              <span class="status part"><i></i>In shadow</span>
+              <h3>Jarvis</h3>
+              <p>A daily LLM judge that reads every support conversation and decides who resolved it, the AI, an agent or no one, with the same rule for both. At closing it also types the ticket, replacing the old bot.</p>
+              <p>In shadow since October 21 at about US$0.002 per chat. I rewrote its closing engine in LangGraph with parallel judges, PostgreSQL checkpoints and pauses for human review.</p>
+              <ul class="tags"><li>Claude Haiku</li><li>LangGraph</li><li>Power BI</li><li>n8n</li></ul>
+              <span class="private">Internal to SIESA</span>
+            </div>
+        </article>
+
+        <h3 class="wip-head" data-reveal>Next on the support platform</h3>
+        <p class="wip-sub" data-reveal>Two pieces that build on the RAG. One is under construction, the other is designed and planned for later.</p>
+        <div class="pair">
+          <article data-reveal>
+            <span class="status part"><i></i>Under construction</span>
+            <h3>Online triage</h3>
+            <p>Today a customer picks an ERP module before the chat starts, and that choice is where the bouncing between channels begins. The triage becomes the single entrance. It reads the problem and the customer's open tickets, then sends the case to the RAG or to an L1, L2 or L3 agent with a summary, so nobody starts over.</p>
+            <div class="flow" aria-label="Triage flow">
+              <div class="box"><b>Customer</b>Writes the problem in their own words</div>
+              <div class="arrow">then</div>
+              <div class="box key"><b>Triage</b>Classifies the request and reads the open tickets</div>
+              <div class="arrow">routes to</div>
+              <div class="fan"><div class="box">RAG</div><div class="box">L1</div><div class="box">L2</div><div class="box">L3</div></div>
+            </div>
+            <p>Before promising anything I estimated the ceiling from data, about 6 points off escalation.</p>
+          </article>
+          <article class="blocked" data-reveal>
+            <span class="status plan"><i></i>Designed, planned for later</span>
+            <h3>RAG v2, tools on customer systems</h3>
+            <p>Today the RAG explains the fix and the customer applies it. The second version runs the fix on the customer's installation, a service restart or an update, and every action has its own permission level.</p>
+            <div class="flow" aria-label="RAG v2 flow">
+              <div class="box"><b>Customer problem</b>Arrives through the chat</div>
+              <div class="arrow">then</div>
+              <div class="box"><b>RAG finds the fix</b>From the docs, as it does today</div>
+              <div class="arrow">then</div>
+              <div class="box key"><b>Permission for that action</b>Each action has its own level</div>
+              <div class="arrow">then</div>
+              <div class="box dashed"><b>Runs on the customer's system</b>Restart a service, apply an update</div>
+            </div>
+            <p>The design is done. Building it comes later.</p>
+          </article>
+        </div>
+
+        <div class="small" data-reveal style="margin-top: clamp(64px, 8vw, 96px);">
+          <h3>Smaller things</h3>
+          <div class="small-list">
+            <div>
+              <h4>Service KPI pipeline</h4>
+              <div class="where">SIESA</div>
+              <p>Replaced a manual export with Excel and nine SQL scripts, run two or three times a day, with a pipeline from the Freshdesk API to Power BI. Checked against the manual load, 9,607 rows against 9,606.</p>
+            </div>
+            <div>
+              <h4>Enterprise .NET app</h4>
+              <div class="where">Public code</div>
+              <p>A reference monorepo. ASP.NET Core in layers, JWT with roles, PostgreSQL, React with Vite, tests, Docker Compose and CI.</p>
+              <div class="links"><a href="https://github.com/JessidC/enterprise-fullstack-dotnet">Code</a></div>
+            </div>
+            <div>
+              <h4>In-house service platform</h4>
+              <div class="where">SIESA</div>
+              <p>The Jira-style platform more than 500 employees use. I lead its development and merged three internal apps into it.</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact" aria-labelledby="contact-t">
+    <div class="wrap">
+      <h2 id="contact-t" data-reveal>Open to full-time remote roles.</h2>
+      <p data-reveal>Where I can own a system end to end, in AI, backend or data. I'm in Cali, Colombia, GMT-5, with full overlap with US Eastern and Central time.</p>
+      <a class="mail" href="mailto:jessidc95@gmail.com" data-reveal>jessidc95@gmail.com</a>
+      <div class="cta" data-reveal>
+        <a class="btn btn-primary" href="mailto:jessidc95@gmail.com">Email me</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/jarbyjessidcosme">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/JessidC">GitHub</a>
+        <a class="btn btn-ghost" href="assets/jarby-cosme-resume.pdf">Resume</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>&copy; 2026 Jarby Jessid Cosme</span>
+    <a href="es/index.html" hreflang="es" lang="es">Versión en español</a>
+  </div>
+</footer>
+<script src="assets/site.js"></script>
+</body>
+</html>
