@@ -54,7 +54,7 @@
       </div>
       <dl class="now" data-reveal style="--d:3">
         <dt>Ahora</dt>
-        <dd>Opero el RAG de soporte de SIESA, en 15 módulos del ERP desde julio de 2026</dd>
+        <dd>Opero el RAG de soporte de SIESA en 15 módulos del ERP, y Jarvis encima de él</dd>
         <dt>Construyendo</dt>
         <dd>El triage en línea que será el primer contacto de todos los clientes</dd>
         <dt>Busco</dt>
@@ -67,13 +67,13 @@
     <div class="wrap">
       <h2 class="sec-title" id="perfil-t">Perfil</h2>
       <div class="sec-body">
-        <p class="lead" data-reveal>Llevo siete años haciendo software. Primero full-stack en .NET y, en 2026, la IA del soporte al cliente de SIESA, uno de los ERP más grandes de Colombia.</p>
+        <p class="lead" data-reveal>Llevo siete años haciendo software. Primero full-stack en .NET y ahora la IA del soporte al cliente de SIESA, uno de los ERP más grandes de Colombia.</p>
         <div class="prose" data-reveal>
           <p>Me gusta hacerme cargo de un sistema desde la primera mirada a los datos hasta el día en que corre sin mí. En SIESA eso fue estudiar 90 días de conversaciones, llevarle un plan a la dirección, construir el motor y salir a producción módulo por módulo. El lenguaje es el que pida el sistema. Sobre todo Python, C# y TypeScript, con SQL en todas partes.</p>
           <p>También enseño. Formé a 16 personas y acompañé a 3 equipos mientras empezaban a usar IA en su trabajo.</p>
         </div>
         <dl class="facts" data-reveal>
-          <div><dt>Hoy</dt><dd><b>Único responsable técnico de la plataforma de IA de soporte</b>, SIESA. La construí desde mayo de 2026 y está en producción desde julio de 2026. Desarrollador de software en SIESA desde marzo de 2022.</dd></div>
+          <div><dt>Hoy</dt><dd><b>Único responsable técnico de la plataforma de IA de soporte</b>, SIESA. La diseñé, la construí y la opero en producción. En SIESA desde marzo de 2022.</dd></div>
           <div><dt>Antes</dt><dd><b>Desarrollador full-stack independiente</b>, 2019 a 2022. Seis aplicaciones web para pymes colombianas, entre ellas una tienda con PayU que vendió más de US$25 mil el primer año.</dd></div>
           <div><dt>Stack</dt><dd>Python, FastAPI, C# y .NET 8, TypeScript, React, SQL Server, PostgreSQL con pgvector, AWS Bedrock, LangGraph, n8n.</dd></div>
           <div><dt>Por mi cuenta</dt><dd><b>Tocaturno</b>, mi propio producto, además de clases de IA y automatizaciones para clientes.</dd></div>
@@ -113,10 +113,10 @@
         <div class="chapter" data-reveal>
           <h3>Un módulo a la vez</h3>
           <ol class="timeline">
-            <li><time>4 al 6 jul</time><b>Modo sombra</b><span>772 conversaciones reales, sin mostrar las respuestas. Un juez independiente prefirió el motor nuevo el 44% de las veces y el anterior el 40%.</span></li>
-            <li><time>9 jul</time><b>Sale Nómina</b><span>Primero el módulo con más volumen. Los clientes siguieron con la misma ventana de chat.</span></li>
-            <li><time>Agosto</time><b>Financiero</b><span>Luego la segunda ola, un módulo por ventana.</span></li>
-            <li><time>Sep a oct</time><b>Comercial y Zeus</b><span>Además de facturación electrónica, contabilidad y los demás.</span></li>
+            <li><time>Antes de salir</time><b>Modo sombra</b><span>772 conversaciones reales, sin mostrar las respuestas. Un juez independiente prefirió el motor nuevo el 44% de las veces y el anterior el 40%.</span></li>
+            <li><time>Ola 1</time><b>Nómina</b><span>Primero el módulo con más volumen. Los clientes siguieron con la misma ventana de chat.</span></li>
+            <li><time>Ola 2</time><b>Financiero</b><span>Un módulo por ventana de salida.</span></li>
+            <li><time>Ola 3</time><b>Comercial y Zeus</b><span>Además de facturación electrónica, contabilidad y los demás.</span></li>
             <li class="here"><time>Hoy</time><b>15 módulos del ERP</b><span>Unas 1.000 conversaciones al día.</span></li>
           </ol>
           <p class="prose after-tl">Ningún módulo pasó sin un puntaje de su golden set calificado por un juez LLM, pruebas de humo en el chat real y una reversa de un solo ajuste.</p>
@@ -143,7 +143,7 @@
           </div>
         </div>
 
-        <p class="note" data-reveal>La plataforma es de SIESA. Aquí no hay datos de clientes ni código. Las cifras son resultados agregados de informes internos del proyecto, de julio a octubre de 2026, y la arquitectura la puedo explicar en detalle en una entrevista.</p>
+        <p class="note" data-reveal>La plataforma es de SIESA. Aquí no hay datos de clientes ni código. Las cifras son resultados agregados de informes internos del proyecto, y la arquitectura la puedo explicar en detalle en una entrevista.</p>
       </div>
     </div>
   </section>
@@ -182,10 +182,10 @@
               <p class="big-cap">Lo que cuesta juzgar una conversación con Claude Haiku. Las lee todas, todos los días.</p>
             </div>
             <div>
-              <span class="status part"><i></i>En sombra</span>
+              <span class="status live"><i></i>En producción</span>
               <h3>Jarvis</h3>
-              <p>Un juez LLM diario que lee cada conversación de soporte y decide quién la resolvió, la IA, un agente o nadie, con la misma regla para los dos. Al cierre también tipifica el ticket. Existe porque la atribución que teníamos no aguantaba una auditoría ticket por ticket.</p>
-              <p>En sombra desde el 21 de octubre. Reescribí su motor de cierre en LangGraph con jueces en paralelo, checkpoints en PostgreSQL y pausas para revisión humana.</p>
+              <p>El juez del servicio de soporte. Cada día lee todas las conversaciones y decide quién resolvió cada una, la IA, un agente o nadie, con la misma regla para los dos. Al cierre tipifica el ticket y reemplaza a un tipificador cuya atribución no aguantaba una auditoría ticket por ticket.</p>
+              <p>Es la evolución del juez de conversaciones que ya corría sobre los datos del RAG. El mismo motor, ahora orquestado en LangGraph con jueces en paralelo, checkpoints en PostgreSQL y pausas para revisión humana. Sus resultados alimentan Power BI y un informe diario que el equipo de soporte lee en Teams.</p>
               <ul class="tags"><li>Claude Haiku</li><li>LangGraph</li><li>Power BI</li><li>n8n</li></ul>
               <span class="private">Interno de SIESA</span>
             </div>

@@ -54,7 +54,7 @@
       </div>
       <dl class="now" data-reveal style="--d:3">
         <dt>Now</dt>
-        <dd>Running SIESA's support RAG, live in 15 ERP modules since July 2026</dd>
+        <dd>Running SIESA's support RAG across 15 ERP modules, and Jarvis on top of it</dd>
         <dt>Building</dt>
         <dd>The online triage that will be every customer's first contact</dd>
         <dt>Looking for</dt>
@@ -67,13 +67,13 @@
     <div class="wrap">
       <h2 class="sec-title" id="profile-t">Profile</h2>
       <div class="sec-body">
-        <p class="lead" data-reveal>I've built software for seven years. Full-stack .NET first, and in 2026 the AI behind customer support at SIESA, one of the largest ERP vendors in Colombia.</p>
+        <p class="lead" data-reveal>I've built software for seven years. Full-stack .NET first, and now the AI behind customer support at SIESA, one of the largest ERP vendors in Colombia.</p>
         <div class="prose" data-reveal>
           <p>I like owning a system from the first look at the data to the day it runs without me. At SIESA that meant studying 90 days of conversations, taking a plan to leadership, building the engine and rolling it out one module at a time. The language is whatever the system needs. Mostly Python, C# and TypeScript, with SQL everywhere.</p>
           <p>I also teach. I trained 16 people and worked with 3 teams as they started using AI in their own work.</p>
         </div>
         <dl class="facts" data-reveal>
-          <div><dt>Now</dt><dd><b>Sole technical owner, AI support platform</b>, SIESA. Built from May 2026, in production since July 2026. Software developer at SIESA since March 2022.</dd></div>
+          <div><dt>Now</dt><dd><b>Sole technical owner, AI support platform</b>, SIESA. I designed it, built it and run it in production. At SIESA since March 2022.</dd></div>
           <div><dt>Before</dt><dd><b>Freelance full-stack developer</b>, 2019 to 2022. Six web apps for Colombian small businesses, one of them a PayU store with US$25K+ in first-year sales.</dd></div>
           <div><dt>Stack</dt><dd>Python, FastAPI, C# and .NET 8, TypeScript, React, SQL Server, PostgreSQL with pgvector, AWS Bedrock, LangGraph, n8n.</dd></div>
           <div><dt>On the side</dt><dd><b>Tocaturno</b>, my own product, plus AI classes and automations for clients.</dd></div>
@@ -113,11 +113,11 @@
         <div class="chapter" data-reveal>
           <h3>One module at a time</h3>
           <ol class="timeline">
-            <li><time>Jul 4 to 6</time><b>Shadow run</b><span>772 real conversations, answers hidden. An independent judge preferred the new engine 44% of the time, the old one 40%.</span></li>
-            <li><time>Jul 9</time><b>Payroll goes live</b><span>The busiest module first. Customers kept the same chat window.</span></li>
-            <li><time>August</time><b>Financial</b><span>Then the second wave, one module per window.</span></li>
-            <li><time>Sep to Oct</time><b>Commercial and Zeus</b><span>Plus e-invoicing, accounting and the rest.</span></li>
-            <li class="here"><time>Today</time><b>15 ERP modules</b><span>About 1,000 conversations a day.</span></li>
+            <li><time>Before launch</time><b>Shadow run</b><span>772 real conversations, answers hidden. An independent judge preferred the new engine 44% of the time, the old one 40%.</span></li>
+            <li><time>Wave 1</time><b>Payroll</b><span>The busiest module first. Customers kept the same chat window.</span></li>
+            <li><time>Wave 2</time><b>Financial</b><span>One module per release window.</span></li>
+            <li><time>Wave 3</time><b>Commercial and Zeus</b><span>Plus e-invoicing, accounting and the rest.</span></li>
+            <li class="here"><time>Now</time><b>15 ERP modules</b><span>About 1,000 conversations a day.</span></li>
           </ol>
           <p class="prose after-tl">No module switched without a golden-set score from an LLM judge, smoke tests on the live chat and a rollback that takes one setting.</p>
         </div>
@@ -143,7 +143,7 @@
           </div>
         </div>
 
-        <p class="note" data-reveal>The platform belongs to SIESA. Nothing here includes customer data or code. Figures are aggregate results from internal project reports, July to October 2026, and I can walk through the architecture in an interview.</p>
+        <p class="note" data-reveal>The platform belongs to SIESA. Nothing here includes customer data or code. Figures are aggregate results from internal project reports, and I can walk through the architecture in an interview.</p>
       </div>
     </div>
   </section>
@@ -182,10 +182,10 @@
               <p class="big-cap">What it costs to judge one conversation with Claude Haiku. It reads all of them, every day.</p>
             </div>
             <div>
-              <span class="status part"><i></i>In shadow</span>
+              <span class="status live"><i></i>In production</span>
               <h3>Jarvis</h3>
-              <p>A daily LLM judge that reads every support conversation and decides who resolved it, the AI, an agent or no one, with the same rule for both. At closing it also types the ticket. It exists because the attribution we had didn't hold up against a ticket-by-ticket audit.</p>
-              <p>In shadow since October 21. I rewrote its closing engine in LangGraph with parallel judges, PostgreSQL checkpoints and pauses for human review.</p>
+              <p>The judge of the support service. Every day it reads each conversation and decides who resolved it, the AI, an agent or no one, with the same rule for both. At closing it types the ticket, replacing a classifier whose attribution didn't hold up against a ticket-by-ticket audit.</p>
+              <p>It grew out of the conversation judge I already ran on the RAG's data. Same engine, now orchestrated in LangGraph with parallel judges, PostgreSQL checkpoints and pauses for human review. Its results feed Power BI and a daily report the support team reads in Teams.</p>
               <ul class="tags"><li>Claude Haiku</li><li>LangGraph</li><li>Power BI</li><li>n8n</li></ul>
               <span class="private">Internal to SIESA</span>
             </div>
