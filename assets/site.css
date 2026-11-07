@@ -613,3 +613,6 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
   .proof > div { grid-template-columns: 96px minmax(0, 1fr); padding: 14px 16px; gap: 12px; }
   .proof dt { font-size: 1.2rem; }
 }
+
+/* What a public rebuild changes compared with production */
+.vs-prod { margin-top: 14px; padding-left: 14px; border-left: 2px solid var(--line); color: var(--ink-2); font-size: 0.925rem; line-height: 1.55; }
