@@ -83,7 +83,7 @@
         <div><dt>7+ years</dt><dd>Building software. Full-stack .NET since 2019, at SIESA since 2022.</dd></div>
         <div><dt>Every module</dt><dd>The ERP support chat runs on the RAG I designed, built and operate.</dd></div>
         <div><dt>Measured</dt><dd>Every release passes a golden set, an A/B replay on real traces and a significance test.</dd></div>
-        <div><dt>19% &rarr; 61%</dt><dd>Chats resolved correctly in my public rebuild of the learning loop, on open data anyone can rerun.</dd></div>
+        <div><dt>19% &rarr; 59%</dt><dd>Chats resolved correctly in my public rebuild of the learning loop, on open data anyone can rerun.</dd></div>
         <div><dt>Stack</dt><dd>Python, AWS Bedrock, PostgreSQL + pgvector, LangGraph, C#/.NET, TypeScript.</dd></div>
     </dl>
   </div>
@@ -157,11 +157,11 @@
       <h3>support-learning-loop</h3>
       <p>The improvement loop from chapter 6, rebuilt on public data. A support bot hands the chats it can't solve to people, a judge from another model family turns the agents' answers into candidate entries, a grounding check rejects anything the agent didn't say, and an expert approves each one before the bot can use it.</p>
       <div class="strip" role="group" aria-label="Results on 330 held-out chats">
-        <div><span class="v"><span class="from">19%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>61%</span><span class="label">chats resolved correctly</span></div>
-        <div><span class="v"><span class="from">68%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>21%</span><span class="label">chats handed to a person</span></div>
+        <div><span class="v"><span class="from">19%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>59%</span><span class="label">chats resolved correctly</span></div>
+        <div><span class="v"><span class="from">68%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>24%</span><span class="label">chats handed to a person</span></div>
         <div><span class="v"><span class="from">41%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>23%</span><span class="label">partial or wrong among answers shown</span></div>
       </div>
-      <p class="vs-prod">Measured on 330 held-out chats from the ABCD dataset, with the same bot and only the knowledge base changing. No person read the learned entries, so the loop runs an automatic account check that rejects any entry asking the customer for account details. With it, resolution holds at 59% and the bot no longer offers to look up an account.</p>
+      <p class="vs-prod">Measured on 330 held-out chats from the ABCD dataset, with the same bot and only the knowledge base changing. No person read the learned entries, so the loop runs an automatic account check that rejects any entry asking the customer for account details. These numbers include that check. Without it resolution reached 61%, but the bot started offering to look up accounts it can't reach.</p>
       <div class="facts"><span class="chip">Python</span><span class="chip">LLM-as-judge</span><span class="chip">fastembed</span><span class="chip">McNemar</span></div>
       <a class="link" href="https://github.com/JessidC/support-learning-loop" target="_blank" rel="noopener">Code <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
     </article>

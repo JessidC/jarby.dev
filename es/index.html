@@ -83,7 +83,7 @@
         <div><dt>7+ años</dt><dd>Haciendo software. Full-stack en .NET desde 2019, en SIESA desde 2022.</dd></div>
         <div><dt>Todos los módulos</dt><dd>El chat de soporte del ERP funciona con el RAG que diseñé, construí y opero.</dd></div>
         <div><dt>Medido</dt><dd>Cada salida pasa un golden set, una repetición A/B sobre trazas reales y una prueba de significancia.</dd></div>
-        <div><dt>19% &rarr; 61%</dt><dd>Chats resueltos correctamente en mi versión pública del ciclo de aprendizaje, con datos abiertos que cualquiera puede volver a correr.</dd></div>
+        <div><dt>19% &rarr; 59%</dt><dd>Chats resueltos correctamente en mi versión pública del ciclo de aprendizaje, con datos abiertos que cualquiera puede volver a correr.</dd></div>
         <div><dt>Stack</dt><dd>Python, AWS Bedrock, PostgreSQL + pgvector, LangGraph, C#/.NET, TypeScript.</dd></div>
     </dl>
   </div>
@@ -157,11 +157,11 @@
       <h3>support-learning-loop</h3>
       <p>El ciclo de mejora del capítulo 6, rehecho con datos públicos. Un bot de soporte le pasa a una persona los chats que no puede resolver, un juez de otra familia de modelos convierte las respuestas de los agentes en candidatos, una verificación descarta lo que el agente no dijo y un experto aprueba cada uno antes de que el bot lo use.</p>
       <div class="strip" role="group" aria-label="Resultados en 330 chats de prueba">
-        <div><span class="v"><span class="from">19%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>61%</span><span class="label">chats resueltos correctamente</span></div>
-        <div><span class="v"><span class="from">68%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>21%</span><span class="label">chats pasados a una persona</span></div>
+        <div><span class="v"><span class="from">19%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>59%</span><span class="label">chats resueltos correctamente</span></div>
+        <div><span class="v"><span class="from">68%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>24%</span><span class="label">chats pasados a una persona</span></div>
         <div><span class="v"><span class="from">41%</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg>23%</span><span class="label">parciales o erróneos entre los mostrados</span></div>
       </div>
-      <p class="vs-prod">Medido con 330 chats de prueba del dataset ABCD, con el mismo bot y solo cambiando la base de conocimiento. Como ninguna persona leyó las entradas aprendidas, el ciclo pasa un filtro automático que rechaza cualquier entrada que le pida al cliente datos de su cuenta. Con ese filtro la resolución se mantiene en 59% y el bot ya no ofrece revisar cuentas.</p>
+      <p class="vs-prod">Medido con 330 chats de prueba del dataset ABCD, con el mismo bot y solo cambiando la base de conocimiento. Como ninguna persona leyó las entradas aprendidas, el ciclo pasa un filtro automático que rechaza cualquier entrada que le pida al cliente datos de su cuenta. Las cifras ya incluyen ese filtro. Sin él la resolución llegaba a 61%, pero el bot empezaba a ofrecer revisar cuentas a las que no tiene acceso.</p>
       <div class="facts"><span class="chip">Python</span><span class="chip">LLM-as-judge</span><span class="chip">fastembed</span><span class="chip">McNemar</span></div>
       <a class="link" href="https://github.com/JessidC/support-learning-loop" target="_blank" rel="noopener">Código <svg class="icon" aria-hidden="true"><use href="#i-out"/></svg></a>
     </article>
