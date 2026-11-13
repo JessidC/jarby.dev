@@ -19,6 +19,7 @@ Email jessidc95@gmail.com. The same contact is published in [`/.well-known/secur
 | Personal data | No phone number on any public page or PDF. Contact is by email only. | `scripts/check.mjs` |
 | Secrets | gitleaks scans the full history on every push and pull request. | `.github/workflows/deploy.yml` |
 | Dependencies | Build tools are pinned in `package-lock.json` and `npm audit` runs in CI. Every GitHub Action in the workflow is pinned to a full commit SHA, with the release noted in a comment, so a moved tag cannot change what runs. Dependabot proposes updates for npm and Actions weekly. | `.github/dependabot.yml`, `.github/workflows/deploy.yml` |
+| Third-party code in the browser | One library: anime.js 4.5.0 (MIT), used by the diagrams of the story pages. It is not fetched from npm or a CDN. An unchanged copy of its ES modules is in the repository, with the upstream tag, the commit and a hash to verify it, and the build bundles it into `assets/flows.js`, served from this origin under the same CSP. It uses no `eval` and sends nothing anywhere. | `vendor/animejs/README.md`, `scripts/build.mjs` |
 | Integrity | Each build writes `build-manifest.json` with the commit and a SHA-256 for every published file. | `https://jarby.dev/build-manifest.json` |
 | Release gate | The site is deployed by GitHub Actions only after the secret scan, the audit, the build, the security checks and HTML validation pass. | Actions tab |
 
@@ -26,4 +27,5 @@ Email jessidc95@gmail.com. The same contact is published in [`/.well-known/secur
 
 - GitHub Pages does not allow custom response headers. That rules out `frame-ancestors` and `X-Frame-Options`, which only work as headers. The pages have no actions a framing attack could trigger. If that changes, the plan is to put the site behind a proxy that sets headers.
 - There is no `Strict-Transport-Security` header. GitHub Pages does not send one on custom domains, and it does not allow custom headers. The `.dev` preload covers browsers. A client that ignores the preload list can still make its first request over `http`. It gets the 301, and with no cookies on the site, that request exposes nothing but the path.
+- The vendored copy of anime.js is outside what Dependabot and `npm audit` watch. A new release has to be checked and copied by hand; `vendor/animejs/README.md` says how.
 - The served HTML, CSS and JS are minified, not obfuscated. The source is public in this repository, so obfuscation would add nothing; the controls above are what protect the site.
