@@ -1,12 +1,13 @@
 // Builds the deployable site into _site/.
 // Copies an explicit allowlist of public files (nothing else from the repo is published),
-// minifies HTML, CSS and JS, and writes build-manifest.json with a SHA-256 per file
-// so anyone can check that what is served matches this commit.
+// minifies HTML, CSS and JS, bundles the animation layer from src/, and writes
+// build-manifest.json with a SHA-256 per file so anyone can check that what is served
+// matches this commit.
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
 import { execSync } from "node:child_process";
-import { transform } from "esbuild";
+import { transform, build } from "esbuild";
 import { minify as minifyHtml } from "html-minifier-terser";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "..");
@@ -59,10 +60,42 @@ for (const item of PUBLIC) {
   }
 }
 
+// Animation layer. The pages work without it: site.js fetches these two files after load,
+// and only on devices that can afford them.
+//   assets/motion.js  entrances for every page, no library
+//   assets/flows.js   the animated diagrams of the story pages, drawn with anime.js
+// anime.js is not installed from npm. Its ES modules live in vendor/animejs (see the README
+// there for the tag, the commit and how to verify the copy). esbuild keeps only what
+// src/flows.js imports. The license travels with the bundle, as MIT asks.
+const ANIME = path.join(ROOT, "vendor", "animejs");
+const ANIME_LICENSE = "assets/animejs.LICENSE.txt";
+const BUNDLES = [
+  { entry: "src/motion.js", out: "assets/motion.js" },
+  { entry: "src/flows.js", out: "assets/flows.js", banner: `/*! Includes anime.js v4.5.0, (c) Julian Garnier, MIT License: /${ANIME_LICENSE} */` },
+];
+for (const b of BUNDLES) {
+  const dst = path.join(OUT, b.out);
+  await build({
+    entryPoints: [path.join(ROOT, b.entry)],
+    outfile: dst,
+    bundle: true,
+    format: "iife",
+    minify: true,
+    legalComments: "none",
+    target: "es2018",
+    alias: { animejs: ANIME },
+    banner: b.banner ? { js: b.banner } : {},
+    logLevel: "warning",
+  });
+  manifest[b.out] = crypto.createHash("sha256").update(await fs.readFile(dst)).digest("hex");
+}
+await fs.copyFile(path.join(ANIME, "LICENSE.md"), path.join(OUT, ANIME_LICENSE));
+manifest[ANIME_LICENSE] = crypto.createHash("sha256").update(await fs.readFile(path.join(OUT, ANIME_LICENSE))).digest("hex");
+
 // Cache busting: GitHub Pages lets browsers keep CSS and JS for 10 minutes, so a new page
 // could load with an old stylesheet. Each reference gets ?v=<content hash>, which changes
 // whenever the file does.
-const VERSIONED = ["assets/site.css", "assets/site.js", "assets/theme-init.js"];
+const VERSIONED = ["assets/site.css", "assets/site.js", "assets/theme-init.js", "assets/motion.js", "assets/flows.js"];
 for (const [rel] of Object.entries(manifest).filter(([r]) => r.endsWith(".html"))) {
   const file = path.join(OUT, rel);
   let html = await fs.readFile(file, "utf8");

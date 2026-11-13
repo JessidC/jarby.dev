@@ -184,18 +184,23 @@
         <p class="lead" data-reveal data-d="1">This is the path a customer question takes. Every step leaves a trace with latency, tokens and cost.</p>
 
         <div class="build">
-          <div class="trace" data-reveal data-d="2">
+          <div class="trace" data-reveal data-d="2" data-ask="it still fails" data-full="Why does the payroll export fail?">
             <div class="trace-head">
               <span class="label">One request, end to end</span>
               <button class="replay" type="button"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Replay</button>
             </div>
+            <div class="paths" role="group" aria-label="Paths a request can take" hidden>
+              <button class="path" type="button" data-stop="7" data-out="0" aria-pressed="true">Answered from sources</button>
+              <button class="path" type="button" data-stop="3" data-out="0" aria-pressed="false">Curated match</button>
+              <button class="path" type="button" data-stop="5" data-out="1" aria-pressed="false">Low confidence</button>
+            </div>
             <ol class="steps">
-              <li class="step"><span class="dot"></span><span class="k">Rules</span><span class="d">Deterministic intent rules handle greetings, closings, risk and requests for a person before any model call.</span></li>
+              <li class="step" data-dwell="90"><span class="dot"></span><span class="k">Rules</span><span class="d">Deterministic intent rules handle greetings, closings, risk and requests for a person before any model call.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Rewrite</span><span class="d">A small model turns a follow-up like "it still fails" into a standalone question.</span></li>
               <li class="step branch"><span class="dot"></span><span class="k">Curated answer</span><span class="d">A close match with an expert-approved answer is returned as written, with no generation.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Retrieve</span><span class="d">Vector search, filtered by ERP module.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Rerank</span><span class="d">A reranker keeps the best few. Below a confidence floor, the engine rescues or hands over instead of guessing.</span></li>
-              <li class="step"><span class="dot"></span><span class="k">Generate</span><span class="d">The main model answers from the sources, with prompt caching and a tool to hand over to a person.</span></li>
+              <li class="step" data-dwell="520"><span class="dot"></span><span class="k">Generate</span><span class="d">The main model answers from the sources, with prompt caching and a tool to hand over to a person.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Validate</span><span class="d">Citations, numbers and grounding are checked against what was retrieved.</span></li>
             </ol>
             <div class="outs">
@@ -302,7 +307,7 @@
               <span class="label">From a handoff to new knowledge</span>
               <button class="replay" type="button"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Replay</button>
             </div>
-            <ol class="pipe">
+            <ol class="pipe" data-beads="10" data-drop="0,4,2,1,0">
               <li><span><b>An agent closes the chat</b>Resolutions reach the engine through a scheduled data bridge from the support portal.</span></li>
               <li><span><b>Only real gaps continue</b>Handoffs caused by staffing, frustration or risk are dropped before any model call.</span></li>
               <li><span><b>A judge reads the agent's turns</b>From a different model family than the one that answers. It rebuilds the question and the reusable answer with its evidence, and rejects what can't be documented, like "open a ticket".</span></li>
@@ -446,6 +451,6 @@
 </section>
 
 </main>
-<script src="../assets/site.js" defer></script>
+<script src="../assets/site.js" defer data-motion="../assets/motion.js" data-flows="../assets/flows.js"></script>
 </body>
 </html>

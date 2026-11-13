@@ -56,8 +56,9 @@ for (const file of htmls) {
     else if (!ALLOWED_ORIGINS.some((o) => url.startsWith(o))) fail(rel, `link to unexpected origin: ${url}`);
   }
 
-  // 5. Every local reference resolves to a file in the build.
-  for (const m of html.matchAll(/\b(?:src|href)="?([^"\s>]+)/gi)) {
+  // 5. Every local reference resolves to a file in the build. data-motion and data-flows
+  //    name the animation scripts that site.js fetches after load.
+  for (const m of html.matchAll(/\b(?:src|href|data-motion|data-flows)="?([^"\s>]+)/gi)) {
     let ref = m[1];
     if (/^(https?:|mailto:|#|data:)/.test(ref)) continue;
     ref = ref.split("#")[0].split("?")[0];

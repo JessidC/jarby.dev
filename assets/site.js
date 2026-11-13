@@ -52,60 +52,55 @@
 
   // Step-by-step diagrams (the request trace and the improvement loop):
   // they light up in order the first time they are seen, with a replay button.
+  // On the story pages assets/flows.js (anime.js) takes over the ones that have not played yet.
+  var diagrams = [];
   function stepper(box, target) {
     if (!box || !target) return;
     if (reduce) { target.classList.add('lit'); return; }
+    var d = { box: box, target: target, ran: false, fx: null };
+    diagrams.push(d);
+    var run = function () {
+      if (d.fx) { d.fx.play(); return; }
+      d.ran = true;
+      target.classList.remove('run');
+      void target.offsetWidth;
+      target.classList.add('run');
+    };
     var io = new IntersectionObserver(function (entries) {
-      if (entries[0].isIntersecting) { target.classList.add('run'); io.disconnect(); }
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      if (!d.fx) run();
     }, { threshold: 0.45 });
     io.observe(box);
     var replay = box.querySelector('.replay');
-    if (replay) {
-      replay.addEventListener('click', function () {
-        target.classList.remove('run');
-        void target.offsetWidth;
-        target.classList.add('run');
-      });
-    }
+    if (replay) replay.addEventListener('click', run);
   }
   var trace = document.querySelector('.trace');
   stepper(trace, trace);
   var pipeBox = document.querySelector('.pipe-box');
   stepper(pipeBox, pipeBox && pipeBox.querySelector('.pipe'));
 
-  // Before-and-after figures count once when they enter.
-  var fmtFor = function (el) {
-    var dec = parseInt(el.dataset.dec || '0', 10);
-    var sep = el.dataset.sep || '.';
-    var suffix = el.dataset.suffix || '';
-    return function (v) { return v.toFixed(dec).replace('.', sep) + suffix; };
-  };
-  var countIO = new IntersectionObserver(function (entries) {
-    entries.forEach(function (e) {
-      if (!e.isIntersecting) return;
-      countIO.unobserve(e.target);
-      var el = e.target;
-      var from = parseFloat(el.dataset.from), to = parseFloat(el.dataset.to);
-      var fmt = fmtFor(el);
-      if (reduce) { el.textContent = fmt(to); return; }
-      var start = null, dur = 1400;
-      var tick = function (t) {
-        if (start === null) start = t;
-        var p = Math.min((t - start) / dur, 1);
-        var eased = 1 - Math.pow(1 - p, 4);
-        el.textContent = fmt(from + (to - from) * eased);
-        if (p < 1) requestAnimationFrame(tick);
+  // The animations are not part of loading the page. motion.js (the short gestures, no library) and,
+  // on the story, flows.js (the scenes, anime.js) are fetched when the page is done and the browser is
+  // idle, and not at all with reduced motion or on a device marked as small (see theme-init.js).
+  var me = document.querySelector('script[data-motion]');
+  if (!reduce && !root.classList.contains('lite')) {
+    window.siteDiagrams = diagrams;
+    if (me) {
+      var fetchScripts = function () {
+        [me.getAttribute('data-motion'), me.getAttribute('data-flows')].forEach(function (src) {
+          if (!src) return;
+          var el = document.createElement('script');
+          el.src = src;
+          el.async = false;   // in order: flows.js uses what motion.js sets up
+          document.head.appendChild(el);
+        });
       };
-      requestAnimationFrame(tick);
-    });
-  }, { threshold: 0.6 });
-  document.querySelectorAll('[data-count]').forEach(function (el) {
-    if (!reduce) el.textContent = fmtFor(el)(parseFloat(el.dataset.from));
-    countIO.observe(el);
-  });
-
-  // When printing, open every decision in the log.
-  window.addEventListener('beforeprint', function () {
-    document.querySelectorAll('.log details').forEach(function (d) { d.open = true; });
-  });
+      var whenIdle = function () {
+        if (window.requestIdleCallback) window.requestIdleCallback(fetchScripts, { timeout: 2000 });
+        else setTimeout(fetchScripts, 300);
+      };
+      if (document.readyState === 'complete') whenIdle(); else window.addEventListener('load', whenIdle);
+    }
+  }
 })();
