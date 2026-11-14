@@ -181,6 +181,14 @@ const sceneBox = (before, w, h) => {
   return { wrap, svg, text, say, fit, caption, panner, visible: () => wrap.getClientRects().length > 0 };
 };
 
+// How long a caption stays before the scene moves on: enough to read it while watching, never
+// less than the motion of its step. LEAD is the beat between a new caption and the motion it names.
+const LEAD = 280;
+const readTime = (line) => {
+  const words = line.join(' ').split(/\s+/).filter(Boolean).length;
+  return 700 + words * 170;
+};
+
 // Chapter 3, the scene. The same request, drawn: the question is rewritten, the index is searched,
 // the passages are reranked and the answer is written from them. Coordinates are viewBox units.
 const VIEW = [1060, 316];
@@ -300,8 +308,12 @@ function buildStage(box, steps, outs, before) {
   }
 
   // Adds the scene to the timeline. Returns when each step starts and when the request leaves.
-  function compose(t, kind) {
+  function compose(t, kind, read) {
     const m = [];
+    // free: the earliest moment the next step may start, once the caption of this one has been read.
+    let free = 0;
+    const wait = () => { now = Math.max(now, free); };
+    const step = (i, lead) => { wait(); m[i] = now; free = now + read(i); now += lead; };
     const on = (n, cls, when) => t.call(() => n.classList.add(cls || 'on'), when);
     const move = (x1, y1, x2, y2, when, duration) => t.add(req, { cx: [x1, x2], cy: [y1, y2], duration }, when);
     const lines = halves(full);
@@ -309,31 +321,32 @@ function buildStage(box, steps, outs, before) {
     let now = 0;
 
     on(qBox, 'on', now);
-    write(t, qText, ['', ''], [ask, ''], now, 420);
-    now += 480;
+    write(t, qText, ['', ''], [ask, ''], now, 520);
+    now += 900;
 
-    m[0] = now; on(labels[0], 'on', now);
+    step(0, LEAD); on(labels[0], 'on', m[0]);
     checks.forEach((c, i) => {
-      const when = now + i * 80;
+      const when = now + i * 160;
       on(c.box, 'on', when);
       t.add(c.box, { scale: [{ to: 1.3, duration: 90 }, { to: 1, duration: 180 }] }, when);
       draw(t, c.tick, when + 40, 200);
     });
-    now += 560;
+    now += 760;
 
-    m[1] = now; on(labels[1], 'on', now);
-    write(t, qText, [ask, ''], lines, now, 760);
-    now += 840;
+    step(1, LEAD); on(labels[1], 'on', m[1]);
+    write(t, qText, [ask, ''], lines, now, 1100);
+    now += 1180;
 
+    wait();
     t.add(req, { opacity: [0, 1], duration: 100 }, now);
     move(232, 131, 256, mid, now, 240);
     draw(t, pens.a, now, 240);
     now += 240;
 
-    m[2] = now; on(labels[2], 'on', now); pan(288, now - 200);
-    t.add(scan, { y1: [122, 190], y2: [122, 190], duration: 440 }, now);
-    t.add(scan, { opacity: [{ to: 1, duration: 60 }, { to: 1, duration: 300 }, { to: 0, duration: 80 }] }, now);
-    now += 460;
+    step(2, LEAD); on(labels[2], 'on', m[2]); pan(288, m[2] - 200);
+    t.add(scan, { y1: [122, 190], y2: [122, 190], duration: 700 }, now);
+    t.add(scan, { opacity: [{ to: 1, duration: 80 }, { to: 1, duration: 520 }, { to: 0, duration: 100 }] }, now);
+    now += 760;
     if (kind === 'curated') {
       // A close match: the approved answer goes straight to the customer, nothing is generated.
       t.add(req, { opacity: [1, 0], duration: 120 }, now);
@@ -349,15 +362,17 @@ function buildStage(box, steps, outs, before) {
       t.add(card, { opacity: [1, 0], duration: 160 }, now);
       on(wrap, 'asis', now); on(aBox, 'done', now); on(exitA, 'on', now);
       t.add(tokens, { opacity: [0, 1], duration: 260, delay: stagger(8) }, now);
-      return { marks: m, end: now + 300 };
+      return { marks: m, end: Math.max(now + 300, free) };
     }
     cards.forEach((c) => on(c, 'miss', now));
+    now += 300;
+    wait();
     move(320, mid, 406, mid, now, 240);
     draw(t, pens.b, now, 240);
     move(406, mid, qx, qy, now + 240, 200);
     now += 440;
 
-    m[3] = now - 200; on(labels[3], 'on', m[3]); pan(506, m[3] - 240);
+    m[3] = now - 200; free = m[3] + read(3); on(labels[3], 'on', m[3]); pan(506, m[3] - 240);
     t.add(req, { opacity: [1, 0], duration: 140 }, now);
     t.add(pulse, { opacity: [0.8, 0], scale: [1, 5], duration: 620, ease: 'out(3)' }, now);
     t.add(outside, { opacity: [1, 0.25], duration: 320 }, now - 120);
@@ -371,6 +386,7 @@ function buildStage(box, steps, outs, before) {
     hits.forEach((h, k) => on(h, 'hit', now + k * 45));
     t.add(hits, { scale: [1, 1.75], duration: 280, ease: EASE, delay: stagger(45) }, now);
     now += 520;
+    wait();
 
     // The passages leave the index and land as bars, in the order the search returned them.
     hits.forEach((h, k) => {
@@ -383,17 +399,17 @@ function buildStage(box, steps, outs, before) {
     });
     now += 5 * 55 + 420;
 
-    m[4] = now; on(labels[4], 'on', now); pan(720, now - 500);
-    now += 380;
+    step(4, LEAD + 300); on(labels[4], 'on', m[4]); pan(720, m[4] - 500);
     const scores = kind === 'weak' ? BARS.weak : BARS.ranked;
     const order = scores.map((s, i) => i).sort((a, b) => scores[b] - scores[a]);
     order.forEach((i, rank) => {
-      t.add(bars[i], { translateY: [0, (rank - i) * BARS.pitch], width: [BARS.found[i], scores[i]], duration: 640, ease: EASE }, now + rank * 40);
+      t.add(bars[i], { translateY: [0, (rank - i) * BARS.pitch], width: [BARS.found[i], scores[i]], duration: 820, ease: EASE }, now + rank * 70);
     });
-    now += 640 + 200;
+    // The confidence floor gets its own beat: it appears, then the passages under it fade one by one.
+    now += 820 + 5 * 70 + 500;
     on(floor, 'go', now);
-    order.forEach((i, rank) => { if (scores[i] < BARS.floor) on(bars[i], 'low', now + 180 + rank * 40); });
-    now += 560;
+    order.forEach((i, rank) => { if (scores[i] < BARS.floor) on(bars[i], 'low', now + 500 + rank * 160); });
+    now += 500 + 6 * 160 + 400;
     if (kind === 'weak') {
       // Nothing clears the floor: the chat goes to a person instead of a guess.
       t.add(req, { opacity: [0, 1], duration: 100 }, now);
@@ -403,7 +419,7 @@ function buildStage(box, steps, outs, before) {
       now += 640;
       t.add(req, { opacity: [1, 0], duration: 160 }, now);
       on(person, 'on', now); on(exitB, 'on', now);
-      return { marks: m, end: now + 200 };
+      return { marks: m, end: Math.max(now + 200, free) };
     }
     order.slice(0, 3).forEach((i, rank) => {
       const y = slot(rank) + BARS.h / 2, ty = mid - 12 + rank * 12, x = BARS.x + scores[i] + 5;
@@ -412,19 +428,19 @@ function buildStage(box, steps, outs, before) {
     });
     now += 460;
 
-    m[5] = now; on(labels[5], 'on', now); on(aBox, 'on', now); pan(940, now - 400);
+    step(5, LEAD); on(labels[5], 'on', m[5]); on(aBox, 'on', m[5]); pan(940, m[5] - 400);
     if (lite) t.add(tokens, { opacity: [0, 1], duration: 400 }, now);
-    else t.add(tokens, { opacity: [0, 1], scaleX: [0, 1], duration: 220, ease: EASE, delay: stagger(40) }, now);
-    now += lite ? 500 : (tokens.length - 1) * 40 + 300;
+    else t.add(tokens, { opacity: [0, 1], scaleX: [0, 1], duration: 260, ease: EASE, delay: stagger(70) }, now);
+    now += lite ? 500 : (tokens.length - 1) * 70 + 360;
 
-    m[6] = now; on(labels[6], 'on', now);
-    t.add(cites, { scale: [{ to: 1.7, duration: 140 }, { to: 1, duration: 280 }], delay: stagger(120) }, now);
-    t.add(order.slice(0, 3).map((i) => bars[i]), { opacity: [{ to: 0.35, duration: 140 }, { to: 1, duration: 280 }], delay: stagger(120) }, now);
-    now += 620;
+    step(6, LEAD); on(labels[6], 'on', m[6]);
+    t.add(cites, { scale: [{ to: 1.7, duration: 180 }, { to: 1, duration: 340 }], delay: stagger(260) }, now);
+    t.add(order.slice(0, 3).map((i) => bars[i]), { opacity: [{ to: 0.35, duration: 180 }, { to: 1, duration: 340 }], delay: stagger(260) }, now);
+    now += 1100;
     t.add(badge, { opacity: [0, 1], scale: [0.2, 1], duration: 340, ease: 'outBack(1.8)' }, now);
     draw(t, badgeTick, now + 160, 260);
     on(aBox, 'done', now); on(exitA, 'on', now + 200);
-    return { marks: m, end: now + 420 };
+    return { marks: m, end: Math.max(now + 420, free) };
   }
 
   reset();
@@ -479,8 +495,10 @@ function buildLoop(items, fate, before) {
     set(rings.concat([scan]), { opacity: 0 });
   }
 
-  function compose(t) {
+  function compose(t, read) {
     const m = [], pan = scene.panner(t);
+    let free = 0;
+    const step = (g) => { now = Math.max(now, free); m[g] = now; free = now + read(g); };
     const on = (el, cls, when) => t.call(() => el.classList.add(cls), when);
     // A card that is dropped stays where it was stopped, greyed, so the finished scene reads as a funnel.
     const out = (k, when) => {
@@ -490,7 +508,7 @@ function buildLoop(items, fate, before) {
     const left = (step) => cards.map((c, k) => k).filter((k) => fate[k] < 0 || fate[k] >= step);
     let now = 0;
 
-    m[0] = 0; on(labels[0], 'on', 0);
+    step(0); on(labels[0], 'on', 0);
     cards.forEach((c, k) => {
       set(c.g, { translateX: X[0] - 44, translateY: row(k) });
       t.add(c.g, { translateX: [X[0] - 44, X[0]], opacity: [0, 1], duration: 440, ease: EASE }, k * 45);
@@ -499,7 +517,7 @@ function buildLoop(items, fate, before) {
     now = (n - 1) * 45 + 620;
 
     // Staffing, frustration or risk: stopped at the gate, before any model call.
-    m[1] = now; on(labels[1], 'on', now); pan(LOOP.gate, now - 200);
+    step(1); on(labels[1], 'on', now); pan(LOOP.gate, now - 200); now += LEAD;
     left(1).forEach((k, j) => {
       const when = now + j * 40;
       if (fate[k] === 1) { t.add(cards[k].g, { translateX: [X[0], LOOP.gate - 62], duration: 420 }, when); out(k, when + 420); }
@@ -508,7 +526,7 @@ function buildLoop(items, fate, before) {
     now += left(1).length * 40 + 760;
 
     // The judge reads each one and rebuilds it as a question and a reusable answer.
-    m[2] = now; on(labels[2], 'on', now); pan(X[2] + 30, now - 200);
+    step(2); on(labels[2], 'on', now); pan(X[2] + 30, now - 200); now += LEAD;
     left(2).forEach((k, j) => t.add(cards[k].g, { translateX: [X[1], X[2]], duration: 520 }, now + j * 40));
     now += left(2).length * 40 + 560;
     const sweep = 760, y1 = top - 8, y2 = row(n - 1) + 18;
@@ -523,7 +541,7 @@ function buildLoop(items, fate, before) {
     now += sweep + 360;
 
     // Compared with what the engine already knows: covered ones are skipped, the rest point at a gap.
-    m[3] = now; on(labels[3], 'on', now); pan(X[3] + 110, now - 200);
+    step(3); on(labels[3], 'on', now); pan(X[3] + 110, now - 200); now += LEAD;
     left(3).forEach((k, j) => t.add(cards[k].g, { translateX: [X[2], X[3]], duration: 520 }, now + j * 50));
     now += left(3).length * 50 + 540;
     let gap = 0, seen = 0;
@@ -543,7 +561,7 @@ function buildLoop(items, fate, before) {
     now += left(3).length * 130 + 700;
 
     // An expert approves: the answer is in the index right away.
-    m[4] = now; on(labels[4], 'on', now); pan(LOOP.x + 70, now - 200);
+    step(4); on(labels[4], 'on', now); pan(LOOP.x + 70, now - 200); now += LEAD;
     left(4).forEach((k, j) => {
       const when = now + j * 200, target = cards[k].target;
       if (fate[k] === 4 || !target) { out(k, when); return; }
@@ -557,7 +575,7 @@ function buildLoop(items, fate, before) {
       rings[k].setAttribute('cx', x2); rings[k].setAttribute('cy', ty);
       t.add(rings[k], { opacity: [0.8, 0], scale: [1, 4.5], duration: 640, ease: 'out(3)' }, when + 740);
     });
-    return { marks: m, end: now + left(4).length * 200 + 1100 };
+    return { marks: m, end: Math.max(now + left(4).length * 200 + 1100, free) };
   }
 
   reset();
@@ -723,16 +741,17 @@ function mountTrace(box) {
     played = true;
     const cfg = paths[active], scene = stage && stage.visible() ? kind(cfg) : null;
     const t = tl = createTimeline({
-      autoplay: false, playbackRate: scene ? 1.1 : 1, defaults: { ease: 'inOut(2)' },
+      autoplay: false, defaults: { ease: 'inOut(2)' },
       // The page can change size while the scene plays, so the list is marked from fresh measures.
       onComplete: () => { running = false; if (scene) { measure(); finish(cfg); } if (done) done(); },
     });
     if (scene) {
       probe();
-      const s = stage.compose(t, scene);
+      const s = stage.compose(t, scene, (i) => readTime(lines[i]));
       for (let i = 0; i < cfg.stop; i++) stage.caption(t, lines[i], s.marks[i]);
       stage.caption(t, lines[n + cfg.out], s.end);
-      t.add({}, { duration: 1 }, s.end + 700);   // the last caption gets a moment before the list is marked
+      // The exit caption is read too before the list is marked.
+      t.add({}, { duration: 1 }, s.end + readTime(lines[n + cfg.out]));
     } else travel(t, cfg);
     running = true;
     t.play();
@@ -871,7 +890,7 @@ function mountPipe(box, pipe) {
     });
     if (scene) {
       probe();
-      const s = stage.compose(t);
+      const s = stage.compose(t, (g) => readTime(lines[g]));
       lines.forEach((l, g) => stage.caption(t, l, s.marks[g]));
       t.add({}, { duration: 1 }, s.end);
     } else travel(t);

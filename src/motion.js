@@ -292,6 +292,17 @@ function gestures(floor) {
     });
   });
 
+  // Portada, "built so others can keep building on it": the paragraph arrives and the people and teams
+  // count up from data-from to data-to, one after the other, before the base below is drawn.
+  const counted = one('[data-count]');
+  take(counted && counted.closest('p'), (el) => {
+    enter([el], 0, 0, 0, 12);
+    return each(all('[data-count]', el).map((n, i) => {
+      const to = parseFloat(n.dataset.to);
+      return isNaN(to) ? null : count(n, to, '', 300 + i * 450, 0, parseFloat(n.dataset.from) || 0);
+    }));
+  });
+
   // Portada, "built so others can keep building on it": the base line is drawn and the four pieces are laid on it.
   take(one('.built-on'), (el) => {
     el.classList.add('fx');

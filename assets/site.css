@@ -479,6 +479,7 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
   body { background: #fff; color: #111; }
   [data-reveal], .map li { opacity: 1 !important; transform: none !important; }
   .log details > .body { display: grid !important; }
+  .log details::details-content { block-size: auto !important; transition: none !important; }
   .chapter, .work, .contact, .outlast, .career { padding-block: 32px; }
 }
 
