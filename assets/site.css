@@ -65,14 +65,19 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .skip { position: absolute; left: -999px; top: 8px; z-index: 30; background: var(--ink); color: var(--bg); padding: 8px 14px; border-radius: var(--radius); }
 .skip:focus { left: 12px; }
 
-/* Barra de progreso de lectura (CSS scroll-driven, sin listeners) */
-.progress { position: fixed; inset: 0 0 auto 0; height: 2px; background: var(--accent); transform: scaleX(0); transform-origin: left; z-index: 25; pointer-events: none; }
+/* Barra de progreso de lectura (CSS scroll-driven, sin listeners). The scroll position drives a
+   registered number and the bar reads it, instead of animating the transform itself. Animated
+   directly, the transform runs apart from the page, and on phones the bar flickered while scrolling,
+   most likely because the two disagree while the address bar slides in and out. Read from a number,
+   the bar is worked out with the rest of the page, once per frame. */
+@property --read { syntax: "<number>"; inherits: false; initial-value: 0; }
+.progress { position: fixed; inset: 0 0 auto 0; height: 2px; background: var(--accent); transform: scaleX(var(--read, 0)); transform-origin: left; z-index: 25; pointer-events: none; }
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .progress { animation: grow linear both; animation-timeline: scroll(root); }
+    .progress { animation: read linear both; animation-timeline: scroll(root); }
   }
 }
-@keyframes grow { to { transform: scaleX(1); } }
+@keyframes read { from { --read: 0; } to { --read: 1; } }
 
 /* Header */
 .site-head { position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .3s; }
@@ -208,7 +213,7 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .step .d { font-size: 0.95rem; color: var(--ink-2); line-height: 1.5; }
 .step .d .mono { font-size: 0.8125rem; color: var(--ink); }
 .step.branch .k { color: var(--ink-2); }
-.outs { margin-top: 10px; padding-left: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.outs { margin-top: 16px; padding-left: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .out { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; font-size: 0.9rem; color: var(--ink-2); transition: border-color .3s, color .3s; }
 .out .mono { display: block; color: var(--ink); font-size: 0.8125rem; margin-bottom: 4px; }
 .trace.lit .step .dot { border-color: var(--accent); background: var(--accent); }
@@ -652,3 +657,179 @@ ol, ul { margin: 0; padding: 0; list-style: none; }
 .lever .method-pane .big.w { white-space: normal; font-size: clamp(2rem, 3.6vw, 2.8rem); }
 .attr .v.w { font-size: clamp(2.4rem, 4.4vw, 3.4rem); }
 .big-n.w { font-size: clamp(2rem, 4vw, 3.2rem); }
+
+/* Flow diagrams drawn by assets/flows.js (anime.js). The script moves the markers and draws the
+   lines. Every color and state is a class here, so both themes and print need nothing from it. */
+.fx-lines { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; overflow: visible; pointer-events: none; }
+.fx-lines line, .fx-lines path { fill: none; stroke: var(--accent); stroke-width: 1; }
+.fx-lines .rail { stroke: var(--line); }
+.fx-lines .bridge { stroke-dasharray: 2 4; }
+.fx-pkt, .fx-ring, .fx-bead { position: absolute; left: 0; top: 0; border-radius: 50%; opacity: 0; pointer-events: none; }
+.fx-pkt { z-index: 2; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; background: var(--accent); box-shadow: 0 0 0 2px var(--surface); }
+.fx-ring { width: 15px; height: 15px; margin: -7.5px 0 0 -7.5px; border: 1px solid var(--accent); }
+.fx-bead { z-index: 2; width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--accent); box-shadow: 0 0 0 1.5px var(--surface); transition: background-color .25s; }
+.fx-bead.drop { background: var(--ink-3); }
+
+/* Cap. 3, the list. With a scene above it the list stays still and is only marked when the run ends:
+   on = ran, pass = checked and passed, idle = never ran. Without a scene, a step is muted until the
+   request reaches it. */
+.trace.fx .steps::before { content: none; }
+.trace.fx .step .k, .trace.fx .step .d { transition: color .35s, opacity .35s; }
+.trace.fx:not(.staged) .step:not(.on) .k, .trace.fx .step.idle .k { color: var(--ink-3); }
+.trace.fx:not(.staged) .step:not(.on) .d, .trace.fx .step.idle .d { opacity: .55; }
+.trace.fx .step.on .dot { background: var(--accent); border-color: var(--accent); }
+.trace.fx .step.pass .dot { background: var(--surface); }
+.trace.fx .step.idle .dot { border-style: dashed; }
+.trace.fx .out { transition: border-color .3s, background-color .3s, opacity .3s; }
+.trace.fx .out.on { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); background: var(--accent-soft); }
+.trace.fx .out.off { opacity: .5; }
+.paths { display: flex; flex-wrap: wrap; gap: 6px; margin: -4px 0 16px; }
+.paths[hidden] { display: none; }
+.path { font: 400 0.78rem/1 var(--f-mono); padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--radius); color: var(--ink-2); background: none; cursor: pointer; transition: border-color .2s, color .2s, background-color .2s; }
+.path:hover { color: var(--ink); border-color: var(--ink-3); }
+.path[aria-pressed="true"] { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); background: var(--accent-soft); }
+
+/* Cap. 3, the scene: the same request, drawn. On narrow screens it is wider than its window and the script pans it. */
+.stage { contain: content; margin-bottom: 14px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--bg); overflow-x: auto; scrollbar-width: none; }
+.stage::-webkit-scrollbar { display: none; }
+.stage-svg { width: 100%; min-width: 760px; height: auto; }
+.stage + .stage-cap { margin: -6px 0 22px; }
+.stage-cap { display: grid; grid-template-columns: 22px minmax(0, 140px) minmax(0, 1fr); gap: 2px 14px; align-items: baseline; align-content: start; font-size: 0.95rem; line-height: 1.5; color: var(--ink-2); }
+.stage-cap .n { grid-column: 1 / 3; grid-row: 1; font: 500 0.75rem/1.6 var(--f-mono); color: var(--accent); }
+.stage-cap .k { grid-column: 1 / 3; grid-row: 2; font: 500 0.875rem/1.4 var(--f-mono); color: var(--ink); }
+.stage-cap .t { grid-column: 3; grid-row: 1 / 3; align-self: center; }
+@media (max-width: 767px) {
+  .stage-cap { grid-template-columns: minmax(0, 1fr); }
+  .stage-cap .n, .stage-cap .k, .stage-cap .t { grid-column: 1; grid-row: auto; }
+}
+.stage-svg * { transform-box: fill-box; transform-origin: center; }
+.st-label { font: 500 14px var(--f-mono); fill: var(--ink-3); transition: fill .3s; }
+.st-label.on { fill: var(--ink); }
+.st-text { font: 400 14px var(--f-mono); fill: var(--ink); }
+.st-wire { fill: none; stroke: var(--line); }
+.st-wire.alt { stroke-dasharray: 2 5; }
+.st-flow { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+.st-box { fill: var(--surface); stroke: var(--line); transition: stroke .3s; }
+.st-box.on { stroke: var(--ink-3); }
+.st-box.done { stroke: var(--accent); }
+.st-check { fill: var(--surface); stroke: var(--ink-3); transition: fill .2s, stroke .2s; }
+.st-check.on { fill: var(--accent); stroke: var(--accent); }
+.st-tick { fill: none; stroke: var(--surface); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.st-card { fill: var(--surface); stroke: var(--ink-3); transition: opacity .3s, fill .3s, stroke .3s; }
+.st-card.miss { opacity: .4; }
+.st-card.on { fill: var(--accent); stroke: var(--accent); }
+.st-scan { stroke: var(--accent); stroke-width: 1.5; }
+.st-dot { fill: var(--ink-3); transition: fill .2s; }
+.st-dot.hit { fill: var(--accent); }
+.st-band { fill: none; stroke: var(--accent); }
+.st-pulse { fill: none; stroke: var(--accent); }
+.st-track { fill: var(--tint); }
+.st-bar { fill: var(--accent); transform-origin: left center; transition: fill .3s; }
+.st-bar.low { fill: var(--line); }
+.st-floor { stroke: var(--ink-2); stroke-dasharray: 3 4; opacity: 0; transition: opacity .3s; }
+.st-floor.go { opacity: 1; }
+.st-fly { fill: var(--accent); opacity: 0; }
+.st-fly.go { opacity: 1; }
+.st-tok { fill: var(--ink-3); transform-origin: left center; }
+.st-tok.cite { fill: var(--accent); transform-origin: center; }
+.stage.asis .st-tok.cite { fill: var(--ink-3); }
+.st-badge circle { fill: var(--accent); }
+.st-req { fill: var(--accent); stroke: var(--bg); stroke-width: 2; }
+.st-person { fill: none; stroke: var(--ink-3); stroke-width: 1.5; stroke-linecap: round; transition: stroke .3s; }
+.st-person.on { stroke: var(--accent); }
+@media (min-width: 768px) {
+  .build.wide { grid-template-columns: minmax(0, 1fr); }
+  .build.wide .side { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 40px; }
+}
+
+/* Cap. 6, the scene: closed chats go through the filters and what is approved fills a gap in the index. */
+.st-gate { stroke: var(--ink-3); stroke-dasharray: 3 4; }
+.st-q { fill: var(--ink-3); transition: fill .3s; }
+.st-a { fill: var(--accent); transform-origin: left center; transition: fill .3s; }
+.st-chat.low .st-q, .st-chat.low .st-a { fill: var(--ink-3); fill-opacity: .3; }
+.st-dot.hole { fill: none; stroke: var(--ink-3); stroke-dasharray: 1.6 1.6; }
+.st-dot.hole.aim { stroke: var(--accent); stroke-dasharray: none; }
+.st-dot.hole.hit { fill: var(--accent); stroke: var(--accent); stroke-dasharray: none; }
+.st-ok { fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.st-link { fill: none; stroke: var(--accent); }
+.pipe.staged { counter-reset: step; }
+.pipe.staged li { counter-increment: step; }
+.pipe.staged b::before { content: counter(step, decimal-leading-zero); margin-right: 10px; font: 500 0.8125rem/1 var(--f-mono); color: var(--accent); }
+@media (min-width: 768px) {
+  .loop2.wide { grid-template-columns: minmax(0, 1fr); }
+  .loop2.wide .guards ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 32px; }
+  .loop2.wide .guards li:nth-child(2) { border-top: 0; }
+}
+
+/* Cap. 6: same idea for the learning loop */
+.pipe.fx::before, .pipe.fx::after { content: none; }
+.pipe.fx li::before { transition: background-color .3s, border-color .3s; }
+.pipe.fx li.on::before { background: var(--accent); border-color: var(--accent); }
+.pipe.fx li > span { transition: opacity .35s; }
+.pipe.fx:not(.staged) li:not(.on) > span { opacity: .55; }
+
+/* One short gesture per block, played by assets/motion.js as Web Animations. A block it takes over
+   waits hidden until it has the floor. fx-ease is for the ones that are shown finished because they
+   did not get it in time. Lines are pseudo-elements the script draws; left alone, they are drawn. */
+.fx-wait { opacity: 0; }
+.fx-ease { transition: opacity .3s; }
+.fx-clip { display: inline-block; clip-path: inset(-0.12em -0.08em -0.26em); }
+.fx-free .fx-clip { clip-path: none; }
+.fx-in { display: inline-block; }
+.fx-word { display: inline-block; white-space: nowrap; }
+.timeline.fx { position: relative; border-top-color: transparent; }
+.timeline.fx::before { content: ""; position: absolute; left: 0; right: 0; top: -2px; height: 2px; background: var(--ink); transform-origin: left; }
+.timeline.fx::after { content: ""; position: absolute; top: -6px; left: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); opacity: 0; }
+.route.fx { position: relative; }
+.route.fx .wire { transform-origin: top; }
+.route.fx .fan::before { transform: scaleX(var(--bus, 1)); }
+.route.fx .fan .node::before { transform: scaleY(var(--bus, 1)); transform-origin: top; }
+.route.fx .node { transition: border-color .25s, background-color .25s; }
+.route.fx .node.think, .route.fx .fan .node.got { border-color: var(--accent); background: var(--accent-soft); }
+/* Portada gestures (see src/motion.js) */
+.js .map.fx::before { transform: none; transition: none; }
+.js .map.fx li { opacity: 1; transform: none; transition: none; }
+.map.fx::after { content: ""; position: absolute; left: 11px; top: 22px; width: 9px; height: 9px; margin-top: -4.5px; border-radius: 50%; background: var(--accent); opacity: 0; }
+.built-on.fx, .item.fx { position: relative; border-top-color: transparent; }
+.built-on.fx::before, .item.fx::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 1px; background: var(--line); transform-origin: left; }
+.item.fx::before { top: -2px; height: 2px; background: var(--ink); }
+.shot.fx { position: relative; }
+.fx-cover { position: absolute; inset: 0; background: var(--surface); }
+.fx-ghost { visibility: hidden; }
+.fx-ticket { position: absolute; left: 0; top: 0; z-index: 1; width: 8px; height: 8px; margin: -4px 0 0 -4px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--surface); opacity: 0; pointer-events: none; }
+
+@media print {
+  .fx-lines, .fx-pkt, .fx-ring, .fx-bead, .fx-ticket, .paths, .stage, .stage-cap { display: none !important; }
+  .trace.fx .steps::before, .pipe.fx::before { content: ""; }
+  .trace.fx .step .d, .trace.fx .out, .pipe.fx li > span { opacity: 1 !important; }
+  .fx-wait, .route.fx .node { opacity: 1 !important; }
+  .fx-in, .route.fx .node, .route.fx .wire, .route.fx .fan::before, .route.fx .fan .node::before { transform: none !important; }
+}
+
+
+/* Portada: one sequence when the page loads, in CSS so it costs no script and the text is painted
+   from the first frame. The sentence that says what I do is found, the way a search marks a passage,
+   and then the five facts beside it are cited one after another. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .js:not(.lite) .hero h1 .accent { background: linear-gradient(90deg, var(--accent) 50%, var(--ink) 50%) 100% 0 / 200% 100% no-repeat; -webkit-background-clip: text; background-clip: text; color: transparent; animation: found 1.2s cubic-bezier(.45, 0, .2, 1) .5s both; }
+  }
+  .js:not(.lite) .hero .proof dt { animation: cited .9s var(--ease) both; }
+  .js:not(.lite) .hero .proof > div:nth-child(1) dt { animation-delay: 1.55s; }
+  .js:not(.lite) .hero .proof > div:nth-child(2) dt { animation-delay: 1.7s; }
+  .js:not(.lite) .hero .proof > div:nth-child(3) dt { animation-delay: 1.85s; }
+  .js:not(.lite) .hero .proof > div:nth-child(4) dt { animation-delay: 2s; }
+  .js:not(.lite) .hero .proof > div:nth-child(5) dt { animation-delay: 2.15s; }
+}
+@keyframes found { from { background-position: 100% 0; } to { background-position: 0 0; } }
+@keyframes cited { 35% { color: var(--accent); } }
+@media (forced-colors: active) { .hero h1 .accent { background: none !important; color: inherit !important; animation: none !important; } }
+
+/* Small devices: theme-init.js adds .lite when the browser says the device has little memory or one or
+   two cores, and flows.js adds it when real frames come late. Lite drops what costs
+   the most and shows the least: the blur behind the header and the load sequence of the portada. */
+.lite .site-head { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in srgb, var(--bg) 96%, transparent); }
+.lite body { text-rendering: auto; }
+@media (prefers-reduced-transparency: reduce) {
+  .site-head { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in srgb, var(--bg) 96%, transparent); }
+}

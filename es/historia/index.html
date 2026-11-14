@@ -184,18 +184,23 @@
         <p class="lead" data-reveal data-d="1">Este es el camino que sigue la pregunta de un cliente. Cada paso deja una traza con latencia, tokens y costo.</p>
 
         <div class="build">
-          <div class="trace" data-reveal data-d="2">
+          <div class="trace" data-reveal data-d="2" data-ask="sigue fallando" data-full="¿Por qué falla la exportación de nómina?">
             <div class="trace-head">
               <span class="label">Una pregunta, de punta a punta</span>
               <button class="replay" type="button"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Repetir</button>
             </div>
+            <div class="paths" role="group" aria-label="Caminos que puede tomar una pregunta" hidden>
+              <button class="path" type="button" data-stop="7" data-out="0" aria-pressed="true">Con fuentes</button>
+              <button class="path" type="button" data-stop="3" data-out="0" aria-pressed="false">Coincidencia curada</button>
+              <button class="path" type="button" data-stop="5" data-out="1" aria-pressed="false">Baja confianza</button>
+            </div>
             <ol class="steps">
-              <li class="step"><span class="dot"></span><span class="k">Reglas</span><span class="d">Reglas fijas atienden saludos, despedidas, riesgos y pedidos de hablar con alguien antes de cualquier llamada al modelo.</span></li>
+              <li class="step" data-dwell="90"><span class="dot"></span><span class="k">Reglas</span><span class="d">Reglas fijas atienden saludos, despedidas, riesgos y pedidos de hablar con alguien antes de cualquier llamada al modelo.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Reescribir</span><span class="d">Un modelo pequeño convierte un seguimiento como "sigue fallando" en una pregunta completa.</span></li>
               <li class="step branch"><span class="dot"></span><span class="k">Respuesta curada</span><span class="d">Si hay una respuesta aprobada por un experto muy cercana, sale tal cual, sin generar.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Buscar</span><span class="d">Búsqueda vectorial filtrada por módulo del ERP.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Reordenar</span><span class="d">Un reranker deja los mejores pasajes. Por debajo de un piso de confianza, el motor rescata o pasa el chat en vez de adivinar.</span></li>
-              <li class="step"><span class="dot"></span><span class="k">Generar</span><span class="d">El modelo principal responde desde las fuentes, con caché de prompts y una herramienta para pasar el chat a una persona.</span></li>
+              <li class="step" data-dwell="520"><span class="dot"></span><span class="k">Generar</span><span class="d">El modelo principal responde desde las fuentes, con caché de prompts y una herramienta para pasar el chat a una persona.</span></li>
               <li class="step"><span class="dot"></span><span class="k">Revisar</span><span class="d">Se verifican las citas, los números y que todo salga de lo recuperado.</span></li>
             </ol>
             <div class="outs">
@@ -302,7 +307,7 @@
               <span class="label">De un traspaso a conocimiento nuevo</span>
               <button class="replay" type="button"><svg class="icon" aria-hidden="true"><use href="#i-replay"/></svg>Repetir</button>
             </div>
-            <ol class="pipe">
+            <ol class="pipe" data-beads="10" data-drop="0,4,2,1,0">
               <li><span><b>El agente cierra el chat</b>Las resoluciones llegan al motor por un puente de datos programado desde el portal de soporte.</span></li>
               <li><span><b>Solo siguen los vacíos reales</b>Los traspasos por falta de personal, frustración o riesgo se descartan antes de cualquier llamada a un modelo.</span></li>
               <li><span><b>Un juez lee los turnos del agente</b>Es de una familia de modelos distinta a la que responde. Reconstruye la pregunta y la respuesta reutilizable con su evidencia, y descarta lo que no se puede documentar, como "abra un ticket".</span></li>
@@ -446,6 +451,6 @@
 </section>
 
 </main>
-<script src="../../assets/site.js" defer></script>
+<script src="../../assets/site.js" defer data-motion="../../assets/motion.js" data-flows="../../assets/flows.js"></script>
 </body>
 </html>

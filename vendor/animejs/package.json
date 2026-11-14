@@ -1,0 +1,11 @@
+{
+  "name": "animejs",
+  "version": "4.5.0",
+  "private": true,
+  "description": "Not from upstream. Carries the tree-shaking hint of the anime.js package.json, with the path adapted to this folder, so the bundle matches the one built from the npm package.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "./adapters/**"
+  ]
+}
