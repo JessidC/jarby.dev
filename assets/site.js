@@ -80,6 +80,25 @@
   var pipeBox = document.querySelector('.pipe-box');
   stepper(pipeBox, pipeBox && pipeBox.querySelector('.pipe'));
 
+  // When printing, every decision in the log is open. They share name="log", which lets only one be
+  // open at a time, so the name is lifted while printing and everything is put back afterwards.
+  var printed = null;
+  window.addEventListener('beforeprint', function () {
+    if (printed) return;
+    printed = Array.prototype.map.call(document.querySelectorAll('.log details'), function (d) {
+      var state = { d: d, name: d.getAttribute('name'), open: d.open };
+      d.removeAttribute('name');
+      d.open = true;
+      return state;
+    });
+  });
+  window.addEventListener('afterprint', function () {
+    if (!printed) return;
+    printed.forEach(function (s) { s.d.open = s.open; });
+    printed.forEach(function (s) { if (s.name !== null) s.d.setAttribute('name', s.name); });
+    printed = null;
+  });
+
   // The animations are not part of loading the page. motion.js (the short gestures, no library) and,
   // on the story, flows.js (the scenes, anime.js) are fetched when the page is done and the browser is
   // idle, and not at all with reduced motion or on a device marked as small (see theme-init.js).
